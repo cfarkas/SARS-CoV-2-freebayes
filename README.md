@@ -111,17 +111,18 @@ git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cd SARS-CoV-2-freebayes
 samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
-./SARS-CoV-2_get_ngs.sh SRA_list Reference Threads
+./SARS-CoV-2_get_ngs.sh SRA_list covid19-refseq.fasta Threads
 ```
 This execution will do:
 
 - Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list
-- Align trimmed reads against SARS-CoV-2 reference genome () by using minimap2
+- Align trimmed reads against SARS-CoV-2 reference genome (NC_045512.2) by using minimap2
 - Call variants (viral frequency >= 0.5) by using freebayes as frequency-based pooled caller
 
 
-We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 worldwide datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to execute 
+We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 worldwide datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to collect variants from July_28_2020_North_America.txt datasets using 30 threads, do:
+
 
 ```
-./SARS-CoV-2_get_ngs.sh -h 
+./SARS-CoV-2_get_ngs.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
 ```
