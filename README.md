@@ -113,7 +113,7 @@ samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
 ./SARS-CoV-2_get_ngs.sh SRA_list Reference Threads
 ```
-We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_*.txt)
+We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 worldwide datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to execute 
 
 ```
 ./SARS-CoV-2_get_ngs.sh -h 
