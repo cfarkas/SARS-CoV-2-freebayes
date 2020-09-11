@@ -111,7 +111,7 @@ git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cd SARS-CoV-2-freebayes
 samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
-./SARS-CoV-2_get_ngs.sh SRA_list covid19-refseq.fasta Threads
+./SARS-CoV-2-freebayes.sh SRA_list covid19-refseq.fasta Threads
 ```
 This execution will:
 
@@ -125,5 +125,5 @@ We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated lis
 
 
 ```
-./SARS-CoV-2_get_ngs.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
+./SARS-CoV-2-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
 ```
