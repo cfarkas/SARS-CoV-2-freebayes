@@ -97,11 +97,11 @@ For information, please see :https://jacquard.readthedocs.io/en/v0.42/installati
 pip install jacquard
 ```
 
-# Steps for user-provided datasets from SARS-CoV-2
+# Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
-- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format. As example, see:)
+- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format. As example, see: SARS-CoV-2_curated_list_17_07_2020.tabular)
 - SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - number of threads for calculations 
 
