@@ -99,13 +99,13 @@ pip install jacquard
 
 # Steps for user-provided datasets from SARS-CoV-2
 
-In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) in user-provided SARS-CoV-2 NGS datasets (txt list with SRA), users need to execute: SARS-CoV-2-freebayes.sh, as follows: 
+In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
 - Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format. As example, see:)
 - SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - number of threads for calculations 
 
-as follows: 
+Execution (from scratch): 
 ```
 git clone https://github.com/cfarkas/SARS-CoV-2_illumina_analysis.git
 cd SARS-CoV-2_illumina_analysis
