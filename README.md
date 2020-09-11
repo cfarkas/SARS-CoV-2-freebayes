@@ -96,3 +96,25 @@ For information, please see :https://jacquard.readthedocs.io/en/v0.42/installati
 ```
 pip install jacquard
 ```
+
+# Steps for user-provided datasets from SARS-CoV-2
+
+In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) in user-provided SARS-CoV-2 NGS datasets, users need to execute another bash script: SARS-CoV-2_get_ngs.sh, providing: 
+
+- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format)
+- SARS-CoV-2 reference in fasta format
+- number of threads for calculations 
+
+as follows: 
+```
+git clone https://github.com/cfarkas/SARS-CoV-2_illumina_analysis.git
+cd SARS-CoV-2_illumina_analysis
+samtools faidx covid19-refseq.fasta
+chmod 755 SARS-CoV-2* covid19-refseq.fasta*
+./SARS-CoV-2_get_ngs.sh SRA_list Reference Threads
+```
+For more information about this script, do
+
+```
+./SARS-CoV-2_get_ngs.sh -h 
+```
