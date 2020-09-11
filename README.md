@@ -113,7 +113,7 @@ samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
 ./SARS-CoV-2_get_ngs.sh SRA_list covid19-refseq.fasta Threads
 ```
-This execution will do:
+This execution will:
 
 - Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list
 - Align trimmed reads against SARS-CoV-2 reference genome (NC_045512.2) by using minimap2
