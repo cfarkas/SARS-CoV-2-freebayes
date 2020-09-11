@@ -118,6 +118,7 @@ This execution will do:
 - Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list
 - Align trimmed reads against SARS-CoV-2 reference genome (NC_045512.2) by using minimap2
 - Call variants (viral frequency >= 0.5) by using freebayes as frequency-based pooled caller
+- Merge all variants in a single VCF file by using jacquard. This VCF file also contains viral frequencies in the AF field (AF=AO/AO+RO). See AO and RO fields for alternative and reference allele counts.
 
 
 We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 worldwide datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to collect variants from July_28_2020_North_America.txt datasets using 30 threads, do:
