@@ -1,7 +1,7 @@
 # SARS-CoV-2-freebayes
 Analysis of SARS-CoV-2 genome variants collected by using freebayes variant caller
 
-# Preeliminars: 
+# Requirements: 
 
 ### Installing minimap2 aligner (for install details, please see: https://github.com/lh3/minimap2)
 ```
