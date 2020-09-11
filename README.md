@@ -1,5 +1,5 @@
 # SARS-CoV-2-freebayes
-Analysis of SARS-CoV-2 genome variants collected by using freebayes variant caller
+Analysis of SARS-CoV-2 genome variants collected by using freebayes variant caller.
 
 # Requirements: 
 
@@ -113,6 +113,13 @@ samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
 ./SARS-CoV-2_get_ngs.sh SRA_list Reference Threads
 ```
+This execution will do:
+
+- Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list
+- Align trimmed reads against SARS-CoV-2 reference genome () by using minimap2
+- Call variants (viral frequency >= 0.5) by using freebayes as frequency-based pooled caller
+
+
 We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 worldwide datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to execute 
 
 ```
