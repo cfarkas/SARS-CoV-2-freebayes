@@ -138,9 +138,9 @@ a= ls -1 *.bam
 for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${2}.fai 2000) ${3} -f covid19-refseq.fasta -F 0.49 -b ${a} > ${a}.freebayes.vcf
 done
 
-###############################################
-### Merging founder variants using jacquard ###
-###############################################
+#######################################
+### Merging variants using jacquard ###
+#######################################
 echo "Merging variants using jacquard"
 echo ""
 echo "for information, please see: https://jacquard.readthedocs.io/en/v0.42/overview.html#why-would-i-use-jacquard"
