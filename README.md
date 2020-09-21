@@ -206,3 +206,126 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' South_America_alignment.DP4 >
 
 ```
 
+
+
+# Collecting GISAID variants per genome
+
+```
+cd /home/user/MITACS/GISAID/
+mkdir within-host-variation
+cp gisaid_*.fasta ./within-host-variation/
+cd /home/user/MITACS/GISAID/within-host-variation/
+
+### Split fasta files
+cat *.fasta > gisaid.merge.fasta
+rm gisaid_*
+sed -i 's/ /-/'g gisaid.merge.fasta
+sed -i 's/|.*//'g gisaid.merge.fasta
+sed -i "s|/2020||"g gisaid.merge.fasta
+sed -i "s|/|.|"g gisaid.merge.fasta
+awk '/^>hCoV-19/ {OUT=substr($0,2) ".fa"}; OUT {print >OUT}' gisaid.merge.fasta
+rm gisaid.merge.fasta
+
+
+### Align fasta files to reference and call variants with freebayes (option C 1)
+cp /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/covid19-refseq.fasta* ./
+
+fasta= ls -1 *.fa
+for fasta in *.fa; do
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta ${fasta} > ${fasta}.sam
+samtools view -bS ${fasta}.sam > ${fasta}.bam
+samtools sort -o ${fasta}.sorted.bam ${fasta}.bam
+freebayes -f covid19-refseq.fasta -C 1 ${fasta}.sorted.bam > ${fasta}.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta ${fasta}.vcf > ${fasta}.left.vcf
+rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
+done
+
+
+### Number of variants
+# See: https://unix.stackexchange.com/questions/45583/argument-list-too-long-how-do-i-deal-with-it-without-changing-my-command
+# ulimit -s 80000
+{
+vcf= ls -1 *.left.vcf
+for vcf in *.left.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_GISAID_freebayes
+#
+
+grep "hCoV-19." logfile_variants_GISAID_freebayes > vcf_files
+grep -v "hCoV-19." logfile_variants_GISAID_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_GISAID
+rm vcf_files variants_per_sample
+sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
+
+
+### Removing non-human samples:
+rm hCoV-19.bat.Yunnan.R*
+rm hCoV-19.pangolin.*
+rm hCoV-19.canine*
+rm hCoV-19.cat*
+rm hCoV-19.env*
+rm hCoV-19.mink*
+rm hCoV-19.mouse*
+rm hCoV-19.tiger*
+
+
+### Recalculating Number of Variants
+ulimit -s 80000
+{
+vcf= ls -1 *.left.vcf
+for vcf in *.left.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_GISAID_freebayes
+#
+grep "hCoV-19." logfile_variants_GISAID_freebayes > vcf_files
+grep -v "hCoV-19." logfile_variants_GISAID_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_GISAID
+rm vcf_files variants_per_sample
+sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
+
+
+### Merge of Variants                                      
+
+cd /home/user/MITACS/GISAID/within-host-variation/
+
+ulimit -s 80000 && vcf= ls -1 *.fa.left.vcf; for vcf in *.fa.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+
+# Renaming files in bash
+for filename in *.fa.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fa.left.vcf/.vcf/g')";  done
+for filename in *.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/hCoV-19.//g')";  done
+for filename in *.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/[.]/_/g')";  done
+for filename in *_vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/_vcf/.vcf/g')";  done
+
+# Merge VCFs using jacquard
+ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
+
+# Left only genotypes in merged VCF
+vcfkeepgeno merged.GISAID.vcf GT > merged.GISAID.GT.vcf
+
+# Split variants and header from merged.GT.vcf
+grep "#" merged.GISAID.GT.vcf > header
+grep -v "#" merged.GISAID.GT.vcf > variants.vcf
+
+sed -i 's|1/1|1|'g variants.vcf   # convert diploid to haploid 
+sed -i 's|0/1|1|'g variants.vcf   # convert diploid to haploid 
+sed -i 's|1/0|1|'g variants.vcf   # convert diploid to haploid 
+sed -i 's/[.]/0/'g variants.vcf   # convert points to zeros
+
+# Reconstitute vcf file
+cat header variants.vcf > merged.GISAID.fixed.vcf
+rm header variants.vcf
+sed -i 's/NC_04551202/NC_045512.2/'g merged.GISAID.fixed.vcf
+
+# left-align vcf file and fix names
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
+sed -i 's/|unknown//'g merged.GISAID.left.vcf
+
+# calculate AF
+vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
+rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
+gzip merged.GISAID.vcf
+ulimit -s 80000
+gzip *.fa
+```
