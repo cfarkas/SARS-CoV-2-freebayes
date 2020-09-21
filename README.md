@@ -128,3 +128,81 @@ We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated lis
 ./SARS-CoV-2-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
 ```
 will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 138 of SARS-CoV-2-freebayes.sh script.
+
+# Founder analysis of Variants (GISAID data, AF<=1%)
+
+```
+### Africa
+
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Africa_08_03_2020.fasta > Africa_alignment.sam
+samtools view -bS Africa_alignment.sam > Africa_alignment.bam
+samtools sort -o Africa_alignment.sorted.bam Africa_alignment.bam
+freebayes -f covid19-refseq.fasta -F 0.01 Africa_alignment.sorted.bam > Africa_alignment.vcf
+freebayes -f covid19-refseq.fasta -F 0.05 Africa_alignment.sorted.bam > Africa_alignment.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta Africa_alignment.vcf > Africa.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Africa.left.vcf > Africa_alignment.DP4
+rm Africa_alignment.sam Africa_alignment.bam Africa_alignment.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Africa_alignment.DP4 > Africa_alignment.AF
+
+
+### Asia
+
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Asia_08_03_2020.fasta > Asia_alignment.sam
+samtools view -bS Asia_alignment.sam > Asia_alignment.bam
+samtools sort -o Asia_alignment.sorted.bam Asia_alignment.bam
+freebayes -f covid19-refseq.fasta -F 0.01 Asia_alignment.sorted.bam > Asia_alignment.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta Asia_alignment.vcf > Asia.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Asia.left.vcf > Asia_alignment.DP4
+rm Asia_alignment.sam Asia_alignment.bam Asia_alignment.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Asia_alignment.DP4 > Asia_alignment.AF
+
+
+### Europe
+
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Europe_08_03_2020.fasta > Europe_alignment.sam
+samtools view -bS Europe_alignment.sam > Europe_alignment.bam
+samtools sort -o Europe_alignment.sorted.bam Europe_alignment.bam
+freebayes -f covid19-refseq.fasta -F 0.01 Europe_alignment.sorted.bam > Europe_alignment.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta Europe_alignment.vcf > Europe.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Europe.left.vcf > Europe_alignment.DP4
+rm Europe_alignment.sam Europe_alignment.bam Europe_alignment.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Europe_alignment.DP4 > Europe_alignment.AF
+
+
+### North_America
+
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_North_America_08_03_2020.fasta > North_America_alignment.sam
+samtools view -bS North_America_alignment.sam > North_America_alignment.bam
+samtools sort -o North_America_alignment.sorted.bam North_America_alignment.bam
+freebayes -f covid19-refseq.fasta -F 0.01 North_America_alignment.sorted.bam > North_America_alignment.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta North_America_alignment.vcf > North_America.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' North_America.left.vcf > North_America_alignment.DP4
+rm North_America_alignment.sam North_America_alignment.bam North_America_alignment.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' North_America_alignment.DP4 > North_America_alignment.AF
+
+
+### Oceania
+
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Oceania_08_03_2020.fasta > Oceania_alignment.sam
+samtools view -bS Oceania_alignment.sam > Oceania_alignment.bam
+samtools sort -o Oceania_alignment.sorted.bam Oceania_alignment.bam
+freebayes -f covid19-refseq.fasta -F 0.01 Oceania_alignment.sorted.bam > Oceania_alignment.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta Oceania_alignment.vcf > Oceania.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Oceania.left.vcf > Oceania_alignment.DP4
+rm Oceania_alignment.sam Oceania_alignment.bam Oceania_alignment.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Oceania_alignment.DP4 > Oceania_alignment.AF
+
+
+### South_America
+
+minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_South_America_08_03_2020.fasta > South_America_alignment.sam
+samtools view -bS South_America_alignment.sam > South_America_alignment.bam
+samtools sort -o South_America_alignment.sorted.bam South_America_alignment.bam
+freebayes -f covid19-refseq.fasta -F 0.01 South_America_alignment.sorted.bam > South_America_alignment.vcf
+vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta South_America_alignment.vcf > South_America.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' South_America.left.vcf > South_America_alignment.DP4
+rm South_America_alignment.sam South_America_alignment.bam South_America_alignment.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' South_America_alignment.DP4 > South_America_alignment.AF
+
+```
+
