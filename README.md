@@ -329,3 +329,74 @@ gzip merged.GISAID.vcf
 ulimit -s 80000
 gzip *.fa
 ```
+
+# Variants per Protein (GISAID classification of merged variants with SnpEff)
+```
+### merged.GISAID.AF.SnpEff.vcf processing
+
+grep "#" -v merged.GISAID.AF.SnpEff.vcf > variants.vcf
+awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
+sed -i 's/|/\t/'g SnpEff.sites
+sed -i 's/Ala/A/'g SnpEff.sites
+sed -i 's/Arg/R/'g SnpEff.sites
+sed -i 's/Asn/N/'g SnpEff.sites
+sed -i 's/Asp/D/'g SnpEff.sites
+sed -i 's/Cys/C/'g SnpEff.sites
+sed -i 's/Glu/E/'g SnpEff.sites
+sed -i 's/Gln/Q/'g SnpEff.sites
+sed -i 's/Gly/G/'g SnpEff.sites
+sed -i 's/His/H/'g SnpEff.sites
+sed -i 's/His/H/'g SnpEff.sites
+sed -i 's/Ile/I/'g SnpEff.sites
+sed -i 's/Leu/L/'g SnpEff.sites
+sed -i 's/Lys/K/'g SnpEff.sites
+sed -i 's/Met/M/'g SnpEff.sites
+sed -i 's/Phe/F/'g SnpEff.sites
+sed -i 's/Pro/P/'g SnpEff.sites
+sed -i 's/Ser/S/'g SnpEff.sites
+sed -i 's/Thr/T/'g SnpEff.sites
+sed -i 's/Trp/W/'g SnpEff.sites
+sed -i 's/Tyr/Y/'g SnpEff.sites
+sed -i 's/Val/V/'g SnpEff.sites
+rm variants.vcf
+gzip merged.GISAID.AF.SnpEff.vcf
+grep "protein_coding" SnpEff.sites > SnpEff.coding.sites
+mkdir variants_per_protein
+grep "GU280_gp04" SnpEff.coding.sites > ./variants_per_protein/E.variants
+grep "GU280_gp05" SnpEff.coding.sites > ./variants_per_protein/M.variants
+grep "GU280_gp10" SnpEff.coding.sites > ./variants_per_protein/N.variants
+grep "GU280_gp11" SnpEff.coding.sites > ./variants_per_protein/ORF10.variants
+grep "YP_009725297.1" SnpEff.coding.sites > ./variants_per_protein/leader_protein.variants
+grep "YP_009725298.1" SnpEff.coding.sites > ./variants_per_protein/nsp2.variants
+grep "YP_009725299.1" SnpEff.coding.sites > ./variants_per_protein/nsp3.variants
+grep "YP_009725300.1" SnpEff.coding.sites > ./variants_per_protein/nsp4.variants
+grep "YP_009725301.1" SnpEff.coding.sites > ./variants_per_protein/3C-like-proteinase.variants
+grep "YP_009725302.1" SnpEff.coding.sites > ./variants_per_protein/nsp6.variants
+grep "YP_009725303.1" SnpEff.coding.sites > ./variants_per_protein/nsp7.variants
+grep "YP_009725304.1" SnpEff.coding.sites > ./variants_per_protein/nsp8.variants
+grep "YP_009725305.1" SnpEff.coding.sites > ./variants_per_protein/nsp9.variants
+grep "YP_009725306.1" SnpEff.coding.sites > ./variants_per_protein/nsp10.variants
+grep "YP_009725307.1" SnpEff.coding.sites > ./variants_per_protein/RNA-dependent-RNA-polymerase.variants
+grep "YP_009725308.1" SnpEff.coding.sites > ./variants_per_protein/helicase.variants
+grep "YP_009725309.1" SnpEff.coding.sites > ./variants_per_protein/3-to-5-exonuclease.variants
+grep "YP_009725310.1" SnpEff.coding.sites > ./variants_per_protein/endoRNAse.variants
+grep "YP_009725311.1" SnpEff.coding.sites > ./variants_per_protein/2-O-ribose-methyltransferase.variants
+grep "YP_009725312.1" SnpEff.coding.sites > ./variants_per_protein/nsp11.variants
+grep "GU280_gp03" SnpEff.coding.sites > ./variants_per_protein/ORF3a.variants
+grep "GU280_gp06" SnpEff.coding.sites > ./variants_per_protein/ORF6.variants
+grep "GU280_gp07" SnpEff.coding.sites > ./variants_per_protein/ORF7a.variants
+grep "GU280_gp08" SnpEff.coding.sites > ./variants_per_protein/ORF7b.variants
+grep "GU280_gp09" SnpEff.coding.sites > ./variants_per_protein/ORF8.variants
+grep "GU280_gp02" SnpEff.coding.sites > ./variants_per_protein/S.variants
+grep "intergenic_region" SnpEff.sites > ./variants_per_protein/intergenic_region.variants
+
+cd variants_per_protein
+
+{
+file= ls -1 *.variants
+for file in *.variants; do cat ${file} | wc -l
+done
+#
+} | tee logfile_variants
+#
+```
