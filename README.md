@@ -208,7 +208,7 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' South_America_alignment.DP4 >
 
 
 
-# Collecting GISAID variants per genome
+# Collecting variants per genome: GISAID datasets
 
 ```
 cd /home/user/MITACS/GISAID/
@@ -330,7 +330,7 @@ ulimit -s 80000
 gzip *.fa
 ```
 
-# Variants per Protein (GISAID classification of merged variants with SnpEff)
+# Collecting variants per Protein (SnpEff-classified GISAID merged variants)
 ```
 ### merged.GISAID.AF.SnpEff.vcf processing
 
@@ -400,7 +400,7 @@ done
 } | tee logfile_variants
 #
 
-### Compute the frequencies of synonymous, missense, nonsense and frameshift variants
+# Compute the frequencies of synonymous, missense, nonsense and frameshift variants (SnpEff-classified GISAID merged variants)
 
 grep "missense_variant" merged.GISAID.AF.SnpEff.vcf > missense_variant.GISAID.SnpEff
 grep "stop_gained" merged.GISAID.AF.SnpEff.vcf > stop_gained.GISAID.SnpEff
