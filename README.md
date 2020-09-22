@@ -400,7 +400,8 @@ done
 } | tee logfile_variants
 #
 
-### Compute the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)  ###
+### Compute the frequencies of synonymous, missense, nonsense and frameshift variants
+
 gunzip merged.GISAID.AF.SnpEff.vcf.gz
 grep "missense_variant" merged.GISAID.AF.SnpEff.vcf > missense_variant.GISAID.SnpEff
 grep "stop_gained" merged.GISAID.AF.SnpEff.vcf > stop_gained.GISAID.SnpEff
