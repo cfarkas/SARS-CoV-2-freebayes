@@ -402,17 +402,20 @@ done
 
 ### Compute the frequencies of synonymous, missense, nonsense and frameshift variants
 
-gunzip merged.GISAID.AF.SnpEff.vcf.gz
 grep "missense_variant" merged.GISAID.AF.SnpEff.vcf > missense_variant.GISAID.SnpEff
 grep "stop_gained" merged.GISAID.AF.SnpEff.vcf > stop_gained.GISAID.SnpEff
 grep "synonymous_variant" merged.GISAID.AF.SnpEff.vcf > synonymous_variant.GISAID.SnpEff
+grep "frameshift_variant" merged.GISAID.AF.SnpEff.vcf > frameshift_variant.GISAID.SnpEff
 sed -i 's/;/\t/'g missense_variant.GISAID.SnpEff
 sed -i 's/;/\t/'g stop_gained.GISAID.SnpEff
 sed -i 's/;/\t/'g synonymous_variant.GISAID.SnpEff
+sed -i 's/;/\t/'g frameshift_variant.GISAID.SnpEff
 awk '{print $8}' missense_variant.GISAID.SnpEff > missense_variant.GISAID.counts
 awk '{print $8}' stop_gained.GISAID.SnpEff > stop_gained.GISAID.counts
 awk '{print $8}' synonymous_variant.GISAID.SnpEff > synonymous_variant.GISAID.counts
+awk '{print $8}' frameshift_variant.GISAID.SnpEff > frameshift_variant.GISAID.counts
 sed -i 's/AC=//'g missense_variant.GISAID.counts
 sed -i 's/AC=//'g stop_gained.GISAID.counts
 sed -i 's/AC=//'g synonymous_variant.GISAID.counts
+sed -i 's/AC=//'g frameshift_variant.GISAID.counts
 ```
