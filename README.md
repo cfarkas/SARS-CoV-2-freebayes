@@ -241,25 +241,6 @@ vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/co
 rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
 done
 
-
-### Number of variants
-# See: https://unix.stackexchange.com/questions/45583/argument-list-too-long-how-do-i-deal-with-it-without-changing-my-command
-# ulimit -s 80000
-{
-vcf= ls -1 *.left.vcf
-for vcf in *.left.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
-done
-#
-} | tee logfile_variants_GISAID_freebayes
-#
-
-grep "hCoV-19." logfile_variants_GISAID_freebayes > vcf_files
-grep -v "hCoV-19." logfile_variants_GISAID_freebayes > variants_per_sample
-paste vcf_files variants_per_sample > logfile_variants_GISAID
-rm vcf_files variants_per_sample
-sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
-
-
 ### Removing non-human samples:
 rm hCoV-19.bat.Yunnan.R*
 rm hCoV-19.pangolin.*
@@ -271,7 +252,7 @@ rm hCoV-19.mouse*
 rm hCoV-19.tiger*
 
 
-### Recalculating Number of Variants
+### Calculating Number of Variants
 ulimit -s 80000
 {
 vcf= ls -1 *.left.vcf
@@ -288,9 +269,7 @@ sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
 
 
 ### Merge of Variants                                      
-
 cd /home/user/MITACS/GISAID/within-host-variation/
-
 ulimit -s 80000 && vcf= ls -1 *.fa.left.vcf; for vcf in *.fa.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
