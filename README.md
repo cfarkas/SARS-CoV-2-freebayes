@@ -1,5 +1,5 @@
 # SARS-CoV-2-freebayes
-Analysis of SARS-CoV-2 genome variants collected by using freebayes variant caller.
+Analysis of SARS-CoV-2 genome variants collected with freebayes variant caller.
 
 # Requirements: 
 
@@ -128,6 +128,7 @@ We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated lis
 ./SARS-CoV-2-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
 ```
 will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 138 of SARS-CoV-2-freebayes.sh script.
+
 
 # Founder analysis of Variants (GISAID data, AF<=1%)
 
