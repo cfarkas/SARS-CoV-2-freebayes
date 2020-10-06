@@ -184,6 +184,15 @@ paste vcf_files variants_per_sample > logfile_variants_GISAID
 rm vcf_files variants_per_sample
 sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
 
+### Removing non-human samples:
+rm hCoV-19.bat.Yunnan.R*
+rm hCoV-19.pangolin.*
+rm hCoV-19.canine*
+rm hCoV-19.cat*
+rm hCoV-19.env*
+rm hCoV-19.mink*
+rm hCoV-19.mouse*
+rm hCoV-19.tiger*
 
 ### Merge of Variants                                      
 ulimit -s 80000 && vcf= ls -1 *.fa.left.vcf; for vcf in *.fa.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
