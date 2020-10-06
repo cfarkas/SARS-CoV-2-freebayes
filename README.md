@@ -188,11 +188,28 @@ rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
 done
 
 
-### Merge of Variants                                      
+### Merge of Variants
+
+# fixing VCF files for merge
 ulimit -s 80000 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
+
+# Calculating Number of Variants per genome
+ulimit -s 80000
+{
+vcf= ls -1 *.vcf
+for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_GISAID_freebayes
+#
+grep "EPI_ISL_" logfile_variants_GISAID_freebayes > vcf_files
+grep -v "EPI_ISL_" logfile_variants_GISAID_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_GISAID
+rm vcf_files variants_per_sample
+sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
 
 # Merge VCFs using jacquard
 ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
