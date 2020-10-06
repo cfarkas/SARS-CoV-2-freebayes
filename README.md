@@ -154,21 +154,31 @@ all these fasta files are available here:
 As an example for gisaid.merge.fasta (containing all genomes per geographical region) place gisaid.merge.fasta and covid19-refseq.fasta in a folder and do:
 
 ```
+
 ### Split fasta files
 
+ulimit -s 80000
 sed -i 's/ /-/'g gisaid.merge.fasta
-sed -i 's/|.*//'g gisaid.merge.fasta
-sed -i "s|/2020||"g gisaid.merge.fasta
-sed -i "s|/|.|"g gisaid.merge.fasta
-awk '/^>hCoV-19/ {OUT=substr($0,2) ".fa"}; OUT {print >OUT}' gisaid.merge.fasta
-rm gisaid.merge.fasta
+sed -i "s|hCoV-19/.*./2020||"g gisaid.merge.fasta
+sed -i "s|hCoV-19/.*./2019||"g gisaid.merge.fasta
+sed -i 's/|/\t/'g gisaid.merge.fasta
+sed -i 's/>\t/>/'g gisaid.merge.fasta
+seqkit fx2tab gisaid.merge.fasta > gisaid.merge.tabular
+awk '{print $1"\t"$3}' gisaid.merge.tabular > gisaid.merge.tab && rm gisaid.merge.tabular
+seqkit tab2fx gisaid.merge.tab > gisaid.merge.fasta && rm gisaid.merge.tab
+seqkit split --by-id gisaid.merge.fasta
+cd gisaid.merge.fasta.split/
+for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/gisaid.merge.id_//g')";  done
+cd ..
+cp ./gisaid.merge.fasta.split/EPI*.fasta ./
+rm -r -f gisaid.merge.fasta.split gisaid.merge.fasta
 
 
 ### Align fasta files to reference (covid19-refseq.fasta, provided in this repository) and call variants with freebayes (option C 1)
 
 samtools faidx covid19-refseq.fasta
-fasta= ls -1 *.fa
-for fasta in *.fa; do
+fasta= ls -1 *.fasta
+for fasta in *.fasta; do
 minimap2 -ax asm5 -t 50 covid19-refseq.fasta ${fasta} > ${fasta}.sam
 samtools view -bS ${fasta}.sam > ${fasta}.bam
 samtools sort -o ${fasta}.sorted.bam ${fasta}.bam
@@ -178,41 +188,11 @@ rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
 done
 
 
-### Calculating Number of Variants
-ulimit -s 80000
-{
-vcf= ls -1 *.left.vcf
-for vcf in *.left.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
-done
-#
-} | tee logfile_variants_GISAID_freebayes
-#
-grep "hCoV-19." logfile_variants_GISAID_freebayes > vcf_files
-grep -v "hCoV-19." logfile_variants_GISAID_freebayes > variants_per_sample
-paste vcf_files variants_per_sample > logfile_variants_GISAID
-rm vcf_files variants_per_sample
-sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
-
-
-### Removing non-human samples:
-rm hCoV-19.bat.Yunnan.R*
-rm hCoV-19.pangolin.*
-rm hCoV-19.canine*
-rm hCoV-19.cat*
-rm hCoV-19.env*
-rm hCoV-19.mink*
-rm hCoV-19.mouse*
-rm hCoV-19.tiger*
-
-
 ### Merge of Variants                                      
-ulimit -s 80000 && vcf= ls -1 *.fa.left.vcf; for vcf in *.fa.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+ulimit -s 80000 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
-for filename in *.fa.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fa.left.vcf/.vcf/g')";  done
-for filename in *.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/hCoV-19.//g')";  done
-for filename in *.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/[.]/_/g')";  done
-for filename in *_vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/_vcf/.vcf/g')";  done
+for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
 
 # Merge VCFs using jacquard
 ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
