@@ -168,16 +168,6 @@ vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/co
 rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
 done
 
-### Removing non-human samples:
-rm hCoV-19.bat.Yunnan.R*
-rm hCoV-19.pangolin.*
-rm hCoV-19.canine*
-rm hCoV-19.cat*
-rm hCoV-19.env*
-rm hCoV-19.mink*
-rm hCoV-19.mouse*
-rm hCoV-19.tiger*
-
 
 ### Calculating Number of Variants
 ulimit -s 80000
