@@ -97,6 +97,15 @@ For information, please see :https://jacquard.readthedocs.io/en/v0.42/installati
 pip install jacquard
 ```
 
+### (8) Installing seqkit
+SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
+```
+wget https://github.com/shenwei356/seqkit/releases/download/v0.12.1/seqkit_linux_386.tar.gz
+gunzip seqkit_linux_386.tar.gz
+tar -xvf seqkit_linux_386.tar
+sudo cp seqkit /usr/local/bin/
+```
+
 # Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
