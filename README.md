@@ -240,7 +240,7 @@ vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
 gzip merged.GISAID.vcf
 ulimit -s 80000
-gzip *.fa
+gzip *.fasta
 
 # Filter variants by Viral Frequency: 0.0499 (5%)
 vcffilter -f "AF > 0.0499" merged.GISAID.AF.vcf > merged.GISAID.AF_5%.vcf
