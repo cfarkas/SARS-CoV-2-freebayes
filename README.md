@@ -250,12 +250,10 @@ grep -v "##" merged.GISAID.AF_5%.vcf > merged.GISAID.AF_5%.table
 Users can do the same for each fasta collection file to collect aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf). 
 
 
-# Collecting variants per Protein (SnpEff-classified GISAID merged variants)
-
+# Collecting variants per Protein (SnpEff-classified GISAID merged variants: working with SnpEff-eff_merged.GISAID.vcf file)
+In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
 ```
-### merged.GISAID.AF.SnpEff.vcf processing
-
-grep "#" -v merged.GISAID.AF.SnpEff.vcf > variants.vcf
+grep "#" -v SnpEff-eff_merged.GISAID.vcf > variants.vcf
 awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
 sed -i 's/|/\t/'g SnpEff.sites
 sed -i 's/Ala/A/'g SnpEff.sites
@@ -279,8 +277,8 @@ sed -i 's/Thr/T/'g SnpEff.sites
 sed -i 's/Trp/W/'g SnpEff.sites
 sed -i 's/Tyr/Y/'g SnpEff.sites
 sed -i 's/Val/V/'g SnpEff.sites
+
 rm variants.vcf
-gzip merged.GISAID.AF.SnpEff.vcf
 grep "protein_coding" SnpEff.sites > SnpEff.coding.sites
 mkdir variants_per_protein
 grep "GU280_gp04" SnpEff.coding.sites > ./variants_per_protein/E.variants
@@ -320,13 +318,13 @@ done
 #
 } | tee logfile_variants
 #
+cd ..
 
-# Compute the frequencies of synonymous, missense, nonsense and frameshift variants (SnpEff-classified GISAID merged variants)
-
-grep "missense_variant" merged.GISAID.AF.SnpEff.vcf > missense_variant.GISAID.SnpEff
-grep "stop_gained" merged.GISAID.AF.SnpEff.vcf > stop_gained.GISAID.SnpEff
-grep "synonymous_variant" merged.GISAID.AF.SnpEff.vcf > synonymous_variant.GISAID.SnpEff
-grep "frameshift_variant" merged.GISAID.AF.SnpEff.vcf > frameshift_variant.GISAID.SnpEff
+### Compute the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)  ###
+grep "missense_variant" SnpEff-eff_merged.GISAID.vcf > missense_variant.GISAID.SnpEff
+grep "stop_gained" SnpEff-eff_merged.GISAID.vcf > stop_gained.GISAID.SnpEff
+grep "synonymous_variant" SnpEff-eff_merged.GISAID.vcf > synonymous_variant.GISAID.SnpEff
+grep "frameshift_variant" SnpEff-eff_merged.GISAID.vcf > frameshift_variant.GISAID.SnpEff
 sed -i 's/;/\t/'g missense_variant.GISAID.SnpEff
 sed -i 's/;/\t/'g stop_gained.GISAID.SnpEff
 sed -i 's/;/\t/'g synonymous_variant.GISAID.SnpEff
@@ -339,6 +337,7 @@ sed -i 's/AC=//'g missense_variant.GISAID.counts
 sed -i 's/AC=//'g stop_gained.GISAID.counts
 sed -i 's/AC=//'g synonymous_variant.GISAID.counts
 sed -i 's/AC=//'g frameshift_variant.GISAID.counts
+gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
