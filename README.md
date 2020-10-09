@@ -147,14 +147,13 @@ will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in li
 -  gisaid_North_America_08_03_2020.fasta
 -  gisaid_Oceania_08_03_2020.fasta
 -  gisaid_South_America_08_03_2020.fasta
--  merged.GISAID.fasta.gz (by doing cat gisaid_*_08_03_2020.fasta > merged.GISAID.fasta.gz)
+-  merged.GISAID.fasta.gz (merge)
 
 all these fasta files are available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020 
 
 As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
 
 ```
-
 ### Split fasta files
 
 ulimit -s 80000
