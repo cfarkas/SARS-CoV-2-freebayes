@@ -552,7 +552,6 @@ grep "Deceased" Saudi.tsv > Deceased.tsv
 awk '{print $1}' Live.tsv > Live.names
 awk '{print $1}' Deceased.tsv > Deceased.names
 
-
 # Live
 grep -w -F -f Live.names ../reformatted.tab > live.tab                               # grep in reformatted.tab       
 seqkit tab2fx live.tab > live.fasta && rm live.tab                                   # tabular to fasta
@@ -564,7 +563,6 @@ vcfleftalign -r ../covid19-refseq.fasta live.vcf > live.left.vcf
 bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' live.left.vcf > live.left.DP4
 rm live.sam live.bam live.vcf
 awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' live.left.DP4 > live.left.AF
-
 
 # Deceased
 grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                           # grep in reformatted.tab       
@@ -612,9 +610,7 @@ grep "Deceased" USA.tsv > Deceased.tsv
 awk '{print $1}' Released.tsv > Released.names
 awk '{print $1}' Deceased.tsv > Deceased.names
 
-
 # Released
-
 grep -w -F -f Released.names ../reformatted.tab > Released.tab               # grep in reformatted.tab       
 seqkit tab2fx Released.tab > Released.fasta && rm Released.tab               # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
@@ -626,9 +622,7 @@ bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Released.left.vcf > Released.l
 rm Released.sam Released.bam Released.vcf
 awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.left.AF
 
-
 # Deceased
-
 grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
 seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
@@ -678,7 +672,6 @@ awk '{print $1}' Deceased.tsv > Deceased.names
 
 
 # Released
-
 grep -w -F -f Released.names ../reformatted.tab > Released.tab               # grep in reformatted.tab       
 seqkit tab2fx Released.tab > Released.fasta && rm Released.tab               # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
@@ -692,7 +685,6 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.
 
 
 # Deceased
-
 grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
 seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
@@ -745,7 +737,6 @@ cat Hospitalized.names Released.names > Live.names
 
 
 # Live
-
 grep -w -F -f Live.names ../reformatted.tab > Live.tab                   # grep in reformatted.tab       
 seqkit tab2fx Live.tab > Live.fasta && rm Live.tab                       # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Live.fasta > Live.sam
@@ -759,7 +750,6 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Live.left.DP4 > Live.left.AF
 
 
 # Deceased
-
 grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
 seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
@@ -793,16 +783,16 @@ awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.s
 
 
 
-
 ###
-### Submit all to snpFreq: Alleles, precounted here: https://usegalaxy.org/
+### Submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/
 ###
 
-# Column with genotype 1 count for group 1	4
-# Column with genotype 2 count for group 1	5
-# Column with genotype 3 count for group 1	6
-# Column with genotype 1 count for group 2	7
-# Column with genotype 2 count for group 2	8
-# Column with genotype 3 count for group 2	9
+- Select Alleles, precounted
+- Column with genotype 1 count for group 1: 4
+- Column with genotype 2 count for group 1: 5
+- Column with genotype 3 count for group 1: 6
+- Column with genotype 1 count for group 2: 7
+- Column with genotype 2 count for group 2: 8
+- Column with genotype 3 count for group 2: 9
 ```
 
