@@ -473,7 +473,7 @@ perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafi
 ```
 
 # GISAID patient metadata analysis
-We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment, R statistical environment and Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups. Here are the steps in BASH to obtain suitable inputs for the snpFreq program 
+We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. 
 
 ```
 ############################################
@@ -780,12 +780,8 @@ nano Deceased-Live.subset
 awk '{print $0, "0"}' Deceased-Live.subset > Deceased-Live.subset1
 sed -i 's/ /\t/'g Deceased-Live.subset1
 awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.subset1 > Deceased-Live.subset && rm Deceased-Live.subset1 Deceased-Live.merge
-
-
-
-###
-### Submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/
-###
+```
+After these steps, submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/ and do the following: 
 
 - Select Alleles, precounted
 - Column with genotype 1 count for group 1: 4
@@ -794,5 +790,3 @@ awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.s
 - Column with genotype 1 count for group 2: 7
 - Column with genotype 2 count for group 2: 8
 - Column with genotype 3 count for group 2: 9
-```
-
