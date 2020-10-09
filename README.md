@@ -106,6 +106,14 @@ tar -xvf seqkit_linux_386.tar
 sudo cp seqkit /usr/local/bin/
 ```
 
+### (9) Installing BEDOPS
+For information, please see: https://bedops.readthedocs.io/en/latest/content/installation.html#linux
+```
+wget https://github.com/bedops/bedops/releases/download/v2.4.39/bedops_linux_x86_64-v2.4.39.tar.bz2
+tar jxvf bedops_linux_x86_64-v2.4.39.tar.bz2
+cp bin/* /usr/local/bin/
+```
+
 # Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
