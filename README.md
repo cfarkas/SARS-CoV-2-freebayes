@@ -815,3 +815,5 @@ and execute snpFreq in each file, with the following parameters:
 - Column with genotype 1 count for group 2: 7
 - Column with genotype 2 count for group 2: 8
 - Column with genotype 3 count for group 2: 9
+
+snpFreq results per country are available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept25-2020
