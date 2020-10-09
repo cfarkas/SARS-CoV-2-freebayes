@@ -781,9 +781,9 @@ awk '{print $0, "0"}' Deceased-Live.subset > Deceased-Live.subset1
 sed -i 's/ /\t/'g Deceased-Live.subset1
 awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.subset1 > Deceased-Live.subset && rm Deceased-Live.subset1 Deceased-Live.merge
 ```
-After these steps, submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/ and do the following: 
+After these steps, submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/ and for each one, do the following: 
 
-- Select Alleles, precounted
+- Format of input: select Alleles, precounted
 - Column with genotype 1 count for group 1: 4
 - Column with genotype 2 count for group 1: 5
 - Column with genotype 3 count for group 1: 6
