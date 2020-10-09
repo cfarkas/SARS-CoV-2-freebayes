@@ -258,7 +258,7 @@ grep -v "##" merged.GISAID.AF_5%.vcf > merged.GISAID.AF_5%.table
 Users can do the same for each fasta collection file to collect aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf). 
 
 
-# Collecting variants per Protein (SnpEff-classified GISAID merged variants: working with SnpEff-eff_merged.GISAID.vcf file)
+# Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
 In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
 ```
 grep "#" -v SnpEff-eff_merged.GISAID.vcf > variants.vcf
