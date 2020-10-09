@@ -473,9 +473,12 @@ perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafi
 ```
 
 # GISAID patient metadata analysis
-We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. 
+We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv) as follows: 
 
 ```
+sed 's/|.*//'g gisaid_hcov-19_2020_09_28_19.fasta > reformatted.fasta  # remove everything after |
+seqkit fx2tab reformatted.fasta > reformatted.tab
+
 ############################################
 ### India analysis: released vs deceased ###
 ############################################
@@ -529,7 +532,10 @@ sed -i 's/ /\t/'g deceased-released.merge
 awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-released.merge > deceased-released.subset
 
 # fill empty spaces with nano : grep ">" released.fasta -c : 398, then: 398 0
-nano deceased-released.subset
+awk -F'\t' '$5 && !$6{ $6="398" }1' deceased-released.subset  > deceased-released.intermediate
+sed -i 's/ /\t/'g deceased-released.intermediate
+awk -F'\t' '$6 && !$7{ $7="0" }1' deceased-released.intermediate  > deceased-released.subset && rm deceased-released.intermediate
+sed -i 's/ /\t/'g deceased-released.subset
 
 awk '{print $0, "0"}' deceased-released.subset > deceased-released.subset1
 sed -i 's/ /\t/'g deceased-released.subset1
@@ -589,7 +595,10 @@ sed -i 's/ /\t/'g deceased-live.merge
 awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-live.merge > deceased-live.subset
 
 # fill empty spaces with nano : grep ">" live.fasta -c : 216, then: 216 0
-nano deceased-live.subset
+awk -F'\t' '$5 && !$6{ $6="216" }1' deceased-live.subset  > deceased-live.intermediate
+sed -i 's/ /\t/'g deceased-live.intermediate
+awk -F'\t' '$6 && !$7{ $7="0" }1' deceased-live.intermediate  > deceased-live.subset && rm deceased-live.intermediate
+sed -i 's/ /\t/'g deceased-live.subset
 
 awk '{print $0, "0"}' deceased-live.subset > deceased-live.subset1
 sed -i 's/ /\t/'g deceased-live.subset1
@@ -647,7 +656,10 @@ sed -i 's/ /\t/'g Deceased-Released.merge
 awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > Deceased-Released.subset
 
 # fill empty spaces with nano : grep ">" Released.fasta -c : 87, then: 87 0
-nano Deceased-Released.subset
+awk -F'\t' '$5 && !$6{ $6="87" }1' Deceased-Released.subset  > Deceased-Released.subset.intermediate
+sed -i 's/ /\t/'g Deceased-Released.subset.intermediate
+awk -F'\t' '$6 && !$7{ $7="0" }1' Deceased-Released.subset.intermediate  > Deceased-Released.subset && rm Deceased-Released.intermediate
+sed -i 's/ /\t/'g Deceased-Released.subset
 
 awk '{print $0, "0"}' Deceased-Released.subset > Deceased-Released.subset1
 sed -i 's/ /\t/'g Deceased-Released.subset1
@@ -709,7 +721,10 @@ sed -i 's/ /\t/'g Deceased-Released.merge
 awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > Deceased-Released.subset
 
 # fill empty spaces with nano : grep ">" Released.fasta -c : 48, then: 48 0
-nano Deceased-Released.subset
+awk -F'\t' '$5 && !$6{ $6="48" }1' Deceased-Released.subset  > Deceased-Released.intermediate
+sed -i 's/ /\t/'g Deceased-Released.intermediate
+awk -F'\t' '$6 && !$7{ $7="0" }1' Deceased-Released.intermediate  > Deceased-Released.subset && rm Deceased-Released.intermediate
+sed -i 's/ /\t/'g Deceased-Released.subset
 
 awk '{print $0, "0"}' Deceased-Released.subset > Deceased-Released.subset1
 sed -i 's/ /\t/'g Deceased-Released.subset1
@@ -763,7 +778,7 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.
 
 
 ### Processing DP4 fields for snpFreq
-vcfcombine Deceased.left.vcf Live.left.vcf > Deceased-Live.vcf                                                       # vcflib
+vcfcombine Deceased.left.vcf Live.left.vcf > Deceased-Live.vcf                                                       # vcflib 
 vcf2bed < Deceased-Live.vcf > Deceased-Live.bed                                                                      # BEDOPS
 awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Live.bed > Deceased-Live.bed1                                      # awk GNU 
 join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Live.left.DP4) > Deceased-Live.DP4                              # join GNU 
@@ -775,13 +790,16 @@ awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Live.merge > Dec
 
 
 # fill empty spaces with nano : grep ">" Live.fasta -c : 109, then: 109 0
-nano Deceased-Live.subset
+awk -F'\t' '$5 && !$6{ $6="109" }1' Deceased-Live.subset  > Deceased-Live.intermediate
+sed -i 's/ /\t/'g Deceased-Live.intermediate
+awk -F'\t' '$6 && !$7{ $7="0" }1' Deceased-Live.intermediate  > Deceased-Live.subset && rm Deceased-Live.intermediate
+sed -i 's/ /\t/'g Deceased-Live.subset
 
 awk '{print $0, "0"}' Deceased-Live.subset > Deceased-Live.subset1
 sed -i 's/ /\t/'g Deceased-Live.subset1
 awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.subset1 > Deceased-Live.subset && rm Deceased-Live.subset1 Deceased-Live.merge
 ```
-After these steps, submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/ and for each one, do the following: 
+After these steps, submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/ and for each one, do the following:
 
 - Format of input: select Alleles, precounted
 - Column with genotype 1 count for group 1: 4
