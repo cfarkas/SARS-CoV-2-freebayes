@@ -495,7 +495,7 @@ awk '{print $1}' Deceased.tsv > Deceased.names
 awk '{print $1}' Released.tsv > Released.names
 
 # Released
-grep -w -F -f Released.names ../reformatted.tab > released.tab                                              # grep in reformatted.tab       
+grep -w -F -f Released.names ../reformatted.tab > released.tab                                           # grep in reformatted.tab       
 seqkit tab2fx released.tab > released.fasta && rm released.tab                                           # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta released.fasta > released.sam
 samtools view -bS released.sam > released.bam
@@ -508,7 +508,7 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' released.left.DP4 > released.
 
 
 # Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                              # grep in reformatted.tab       
+grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                           # grep in reformatted.tab       
 seqkit tab2fx deceased.tab > deceased.fasta && rm deceased.tab                                           # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta deceased.fasta > deceased.sam
 samtools view -bS deceased.sam > deceased.bam
@@ -799,7 +799,14 @@ awk '{print $0, "0"}' Deceased-Live.subset > Deceased-Live.subset1
 sed -i 's/ /\t/'g Deceased-Live.subset1
 awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.subset1 > Deceased-Live.subset && rm Deceased-Live.subset1 Deceased-Live.merge
 ```
-After these steps, submit all Deceased-Live.subset resulting files to snpFreq (Alleles, precounted) here: https://usegalaxy.org/ and for each one, do the following:
+After these steps, upload to galaxy: https://usegalaxy.org/ (rename files for simplicity)
+- deceased-released.subset: from India
+- deceased-live.subset: from Saudi Arabia
+- Deceased-Released.subset: from USA
+- Deceased-Released.subset: from Brazil 
+- Deceased-Live.subset: from Brazil (Released + Hospitalized vs deceased).
+
+and execute snpFreq in each file, with the following parameters:
 
 - Format of input: select Alleles, precounted
 - Column with genotype 1 count for group 1: 4
