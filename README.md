@@ -471,3 +471,338 @@ freebayes -f covid19-refseq.fasta -F 0.001 Oceania_alignment.sorted.bam > Oceani
 vcfleftalign -r covid19-refseq.fasta Oceania_alignment.vcf > Oceania.left.vcf
 perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Oceania
 ```
+
+# GISAID patient metadata analysis
+We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment, R statistical environment and Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups. Here are the steps in BASH to obtain suitable inputs for the snpFreq program 
+
+```
+############################################
+### India analysis: released vs deceased ###
+############################################
+
+grep "India" gisaid_hcov-19_2020_09_28_19.tsv > India.tsv
+mkdir India
+cp India.tsv reformatted.tab covid19-refseq.fasta* ./India
+rm India.tsv
+cd India/
+
+grep "Released" India.tsv > Released.tsv
+grep "Deceased" India.tsv > Deceased.tsv
+awk '{print $1}' Deceased.tsv > Deceased.names
+awk '{print $1}' Released.tsv > Released.names
+
+# Released
+grep -w -F -f Released.names ../reformatted.tab > released.tab                                              # grep in reformatted.tab       
+seqkit tab2fx released.tab > released.fasta && rm released.tab                                           # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta released.fasta > released.sam
+samtools view -bS released.sam > released.bam
+samtools sort -o released.sorted.bam released.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 released.sorted.bam > released.vcf
+vcfleftalign -r ../covid19-refseq.fasta released.vcf > released.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' released.left.vcf > released.left.DP4
+rm released.sam released.bam released.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' released.left.DP4 > released.left.AF
+
+
+# Deceased
+grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                              # grep in reformatted.tab       
+seqkit tab2fx deceased.tab > deceased.fasta && rm deceased.tab                                           # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta deceased.fasta > deceased.sam
+samtools view -bS deceased.sam > deceased.bam
+samtools sort -o deceased.sorted.bam deceased.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 deceased.sorted.bam > deceased.vcf
+vcfleftalign -r ../covid19-refseq.fasta deceased.vcf > deceased.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' deceased.left.vcf > deceased.left.DP4
+rm deceased.sam deceased.bam deceased.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' deceased.left.DP4 > deceased.left.AF
+
+
+### Processing DP4 fields for snpFreq
+vcfcombine deceased.left.vcf released.left.vcf > deceased-released.vcf                                                                   # vcflib
+vcf2bed < deceased-released.vcf > deceased-released.bed                                                                                  # BEDOPS
+awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' deceased-released.bed > deceased-released.bed1                                                  # awk GNU 
+join -a 1 -e 0 -j 1 <(sort deceased.left.DP4) <(sort released.left.DP4) > deceased-released.DP4                                          # join GNU 
+sed -i 's/ /\t/'g deceased-released.DP4                                                                                                  # sed GNU 
+join -e 0 -j 1 <(sort deceased-released.bed1) <(sort deceased-released.DP4) > deceased-released.merge     
+rm deceased-released.bed1
+sed -i 's/ /\t/'g deceased-released.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-released.merge > deceased-released.subset
+
+# fill empty spaces with nano : grep ">" released.fasta -c : 398, then: 398 0
+nano deceased-released.subset
+
+awk '{print $0, "0"}' deceased-released.subset > deceased-released.subset1
+sed -i 's/ /\t/'g deceased-released.subset1
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' deceased-released.subset1 > deceased-released.subset && rm deceased-released.subset1 deceased-released.merge
+
+
+##################################################
+### Saudi Arabia analysis: released vs deceased ##
+##################################################
+
+grep "Saudi" gisaid_hcov-19_2020_09_28_19.tsv > Saudi.tsv
+mkdir Saudi
+cp Saudi.tsv reformatted.tab covid19-refseq.fasta* ./Saudi
+rm Saudi.tsv
+cd Saudi/
+sed -i 's/Saudi Arabia/SaudiArabia/'g reformatted.tab
+sed -i 's/Saudi Arabia/SaudiArabia/'g Saudi.tsv
+grep "Live" Saudi.tsv > Live.tsv
+grep "Deceased" Saudi.tsv > Deceased.tsv
+awk '{print $1}' Live.tsv > Live.names
+awk '{print $1}' Deceased.tsv > Deceased.names
+
+
+# Live
+grep -w -F -f Live.names ../reformatted.tab > live.tab                               # grep in reformatted.tab       
+seqkit tab2fx live.tab > live.fasta && rm live.tab                                   # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta live.fasta > live.sam
+samtools view -bS live.sam > live.bam
+samtools sort -o live.sorted.bam live.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 live.sorted.bam > live.vcf
+vcfleftalign -r ../covid19-refseq.fasta live.vcf > live.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' live.left.vcf > live.left.DP4
+rm live.sam live.bam live.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' live.left.DP4 > live.left.AF
+
+
+# Deceased
+grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                           # grep in reformatted.tab       
+seqkit tab2fx deceased.tab > deceased.fasta && rm deceased.tab                                           # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta deceased.fasta > deceased.sam
+samtools view -bS deceased.sam > deceased.bam
+samtools sort -o deceased.sorted.bam deceased.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 deceased.sorted.bam > deceased.vcf
+vcfleftalign -r ../covid19-refseq.fasta deceased.vcf > deceased.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' deceased.left.vcf > deceased.left.DP4
+rm deceased.sam deceased.bam deceased.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' deceased.left.DP4 > deceased.left.AF
+
+
+### Processing DP4 fields for snpFreq
+vcfcombine deceased.left.vcf live.left.vcf > deceased-live.vcf                                                           # vcflib
+vcf2bed < deceased-live.vcf > deceased-live.bed                                                                          # BEDOPS
+awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' deceased-live.bed > deceased-live.bed1                                          # awk GNU 
+join -a 1 -e 0 -j 1 <(sort deceased.left.DP4) <(sort live.left.DP4) > deceased-live.DP4                                  # join GNU 
+sed -i 's/ /\t/'g deceased-live.DP4                                                                                      # sed GNU 
+join -e 0 -j 1 <(sort deceased-live.bed1) <(sort deceased-live.DP4) > deceased-live.merge     
+rm deceased-live.bed1
+sed -i 's/ /\t/'g deceased-live.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-live.merge > deceased-live.subset
+
+# fill empty spaces with nano : grep ">" live.fasta -c : 216, then: 216 0
+nano deceased-live.subset
+
+awk '{print $0, "0"}' deceased-live.subset > deceased-live.subset1
+sed -i 's/ /\t/'g deceased-live.subset1
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' deceased-live.subset1 > deceased-live.subset && rm deceased-live.subset1 deceased-live.merge
+
+
+########################################
+### USA analysis: Released, Deceased ###
+########################################
+
+grep "USA" gisaid_hcov-19_2020_09_28_19.tsv > USA.tsv
+mkdir USA
+cp USA.tsv reformatted.tab covid19-refseq.fasta* ./USA
+rm USA.tsv
+cd USA/
+grep "Released" USA.tsv > Released.tsv
+grep "Deceased" USA.tsv > Deceased.tsv
+awk '{print $1}' Released.tsv > Released.names
+awk '{print $1}' Deceased.tsv > Deceased.names
+
+
+# Released
+
+grep -w -F -f Released.names ../reformatted.tab > Released.tab               # grep in reformatted.tab       
+seqkit tab2fx Released.tab > Released.fasta && rm Released.tab               # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
+samtools view -bS Released.sam > Released.bam
+samtools sort -o Released.sorted.bam Released.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 Released.sorted.bam > Released.vcf
+vcfleftalign -r ../covid19-refseq.fasta Released.vcf > Released.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Released.left.vcf > Released.left.DP4
+rm Released.sam Released.bam Released.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.left.AF
+
+
+# Deceased
+
+grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
+seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
+samtools view -bS Deceased.sam > Deceased.bam
+samtools sort -o Deceased.sorted.bam Deceased.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 Deceased.sorted.bam > Deceased.vcf
+vcfleftalign -r ../covid19-refseq.fasta Deceased.vcf > Deceased.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Deceased.left.vcf > Deceased.left.DP4
+rm Deceased.sam Deceased.bam Deceased.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.left.AF
+
+
+### Processing DP4 fields for snpFreq
+vcfcombine Deceased.left.vcf Released.left.vcf > Deceased-Released.vcf                                                   # vcflib
+vcf2bed < Deceased-Released.vcf > Deceased-Released.bed                                                                  # BEDOPS
+awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Released.bed > Deceased-Released.bed1                                  # awk GNU 
+join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Released.left.DP4) > Deceased-Released.DP4                          # join GNU 
+sed -i 's/ /\t/'g Deceased-Released.DP4                                                                                  # sed GNU 
+join -e 0 -j 1 <(sort Deceased-Released.bed1) <(sort Deceased-Released.DP4) > Deceased-Released.merge     
+rm Deceased-Released.bed1
+sed -i 's/ /\t/'g Deceased-Released.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > Deceased-Released.subset
+
+# fill empty spaces with nano : grep ">" Released.fasta -c : 87, then: 87 0
+nano Deceased-Released.subset
+
+awk '{print $0, "0"}' Deceased-Released.subset > Deceased-Released.subset1
+sed -i 's/ /\t/'g Deceased-Released.subset1
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Released.subset1 > Deceased-Released.subset && rm Deceased-Released.subset1 Deceased-Released.merge
+
+
+###########################################
+### Brazil analysis: Released, Deceased ###
+###########################################
+
+grep "Brazil" gisaid_hcov-19_2020_09_28_19.tsv > Brazil.tsv
+mkdir Brazil
+cp Brazil.tsv reformatted.tab covid19-refseq.fasta* ./Brazil
+rm Brazil.tsv
+cd Brazil/
+sed -i 's/Live/Released/'g Brazil.tsv
+grep "Released" Brazil.tsv > Released.tsv
+grep "Deceased" Brazil.tsv > Deceased.tsv
+grep "Live" Brazil.tsv > Live.tsv
+awk '{print $1}' Released.tsv > Released.names
+awk '{print $1}' Deceased.tsv > Deceased.names
+
+
+# Released
+
+grep -w -F -f Released.names ../reformatted.tab > Released.tab               # grep in reformatted.tab       
+seqkit tab2fx Released.tab > Released.fasta && rm Released.tab               # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
+samtools view -bS Released.sam > Released.bam
+samtools sort -o Released.sorted.bam Released.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 Released.sorted.bam > Released.vcf
+vcfleftalign -r ../covid19-refseq.fasta Released.vcf > Released.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Released.left.vcf > Released.left.DP4
+rm Released.sam Released.bam Released.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.left.AF
+
+
+# Deceased
+
+grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
+seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
+samtools view -bS Deceased.sam > Deceased.bam
+samtools sort -o Deceased.sorted.bam Deceased.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 Deceased.sorted.bam > Deceased.vcf
+vcfleftalign -r ../covid19-refseq.fasta Deceased.vcf > Deceased.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Deceased.left.vcf > Deceased.left.DP4
+rm Deceased.sam Deceased.bam Deceased.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.left.AF
+
+
+### Processing DP4 fields for snpFreq
+vcfcombine Deceased.left.vcf Released.left.vcf > Deceased-Released.vcf                                                   # vcflib
+vcf2bed < Deceased-Released.vcf > Deceased-Released.bed                                                                  # BEDOPS
+awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Released.bed > Deceased-Released.bed1                                  # awk GNU 
+join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Released.left.DP4) > Deceased-Released.DP4                          # join GNU 
+sed -i 's/ /\t/'g Deceased-Released.DP4                                                                                  # sed GNU 
+join -e 0 -j 1 <(sort Deceased-Released.bed1) <(sort Deceased-Released.DP4) > Deceased-Released.merge     
+rm Deceased-Released.bed1
+sed -i 's/ /\t/'g Deceased-Released.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > Deceased-Released.subset
+
+# fill empty spaces with nano : grep ">" Released.fasta -c : 48, then: 48 0
+nano Deceased-Released.subset
+
+awk '{print $0, "0"}' Deceased-Released.subset > Deceased-Released.subset1
+sed -i 's/ /\t/'g Deceased-Released.subset1
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Released.subset1 > Deceased-Released.subset && rm Deceased-Released.subset1 Deceased-Released.merge
+
+
+##########################################################
+### Brazil analysis: Released+Hospitalized vs Deceased ###
+##########################################################
+
+grep "Brazil" gisaid_hcov-19_2020_09_28_19.tsv > Brazil.tsv
+mkdir Brazil_R+H
+cp Brazil.tsv reformatted.tab covid19-refseq.fasta* ./Brazil_R+H
+rm Brazil.tsv
+cd Brazil_R+H/
+sed -i 's/Live/Released/'g Brazil.tsv
+grep "Released" Brazil.tsv > Released.tsv
+grep "Deceased" Brazil.tsv > Deceased.tsv
+grep "Hospitalized" Brazil.tsv > Hospitalized.tsv
+grep "Live" Brazil.tsv > Live.tsv
+awk '{print $1}' Released.tsv > Released.names
+awk '{print $1}' Deceased.tsv > Deceased.names
+awk '{print $1}' Hospitalized.tsv > Hospitalized.names
+cat Hospitalized.names Released.names > Live.names
+
+
+# Live
+
+grep -w -F -f Live.names ../reformatted.tab > Live.tab                   # grep in reformatted.tab       
+seqkit tab2fx Live.tab > Live.fasta && rm Live.tab                       # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Live.fasta > Live.sam
+samtools view -bS Live.sam > Live.bam
+samtools sort -o Live.sorted.bam Live.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 Live.sorted.bam > Live.vcf
+vcfleftalign -r ../covid19-refseq.fasta Live.vcf > Live.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Live.left.vcf > Live.left.DP4
+rm Live.sam Live.bam Live.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Live.left.DP4 > Live.left.AF
+
+
+# Deceased
+
+grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
+seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
+minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
+samtools view -bS Deceased.sam > Deceased.bam
+samtools sort -o Deceased.sorted.bam Deceased.bam
+freebayes -f ../covid19-refseq.fasta -F 0.01 Deceased.sorted.bam > Deceased.vcf
+vcfleftalign -r ../covid19-refseq.fasta Deceased.vcf > Deceased.left.vcf
+bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Deceased.left.vcf > Deceased.left.DP4
+rm Deceased.sam Deceased.bam Deceased.vcf
+awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.left.AF
+
+
+### Processing DP4 fields for snpFreq
+vcfcombine Deceased.left.vcf Live.left.vcf > Deceased-Live.vcf                                                       # vcflib
+vcf2bed < Deceased-Live.vcf > Deceased-Live.bed                                                                      # BEDOPS
+awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Live.bed > Deceased-Live.bed1                                      # awk GNU 
+join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Live.left.DP4) > Deceased-Live.DP4                              # join GNU 
+sed -i 's/ /\t/'g Deceased-Live.DP4                                                                                  # sed GNU 
+join -e 0 -j 1 <(sort Deceased-Live.bed1) <(sort Deceased-Live.DP4) > Deceased-Live.merge     
+rm Deceased-Live.bed1
+sed -i 's/ /\t/'g Deceased-Live.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Live.merge > Deceased-Live.subset
+
+
+# fill empty spaces with nano : grep ">" Live.fasta -c : 109, then: 109 0
+nano Deceased-Live.subset
+
+awk '{print $0, "0"}' Deceased-Live.subset > Deceased-Live.subset1
+sed -i 's/ /\t/'g Deceased-Live.subset1
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.subset1 > Deceased-Live.subset && rm Deceased-Live.subset1 Deceased-Live.merge
+
+
+
+
+###
+### Submit all to snpFreq: Alleles, precounted here: https://usegalaxy.org/
+###
+
+# Column with genotype 1 count for group 1	4
+# Column with genotype 2 count for group 1	5
+# Column with genotype 3 count for group 1	6
+# Column with genotype 1 count for group 2	7
+# Column with genotype 2 count for group 2	8
+# Column with genotype 3 count for group 2	9
+```
+
