@@ -164,7 +164,7 @@ sed -i "s|hCoV-19/.*./2020||"g merged.GISAID.fasta
 sed -i "s|hCoV-19/.*./2019||"g merged.GISAID.fasta
 sed -i 's/|/\t/'g merged.GISAID.fasta
 sed -i 's/>\t/>/'g merged.GISAID.fasta
-seqkit fx2tab merged.GISAID.fasta.gz > merged.GISAID.tabular
+seqkit fx2tab merged.GISAID.fasta > merged.GISAID.tabular
 awk '{print $1"\t"$3}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
 seqkit tab2fx merged.GISAID.tab > merged.GISAID.fasta && rm merged.GISAID.tab
 seqkit split --by-id merged.GISAID.fasta
