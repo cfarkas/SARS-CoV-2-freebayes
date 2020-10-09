@@ -349,11 +349,11 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-# Ka-Ks calculation per geographical region
-In a folder (i.e. Ka-Ks) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
+# piN-piS calculation per geographical region
+In a folder (i.e. piN-piS) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
 ```
-mkdir Ka-Ks
-cd ./Ka-Ks/
+mkdir piN-piS
+cd ./piN-piS/
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.gff.gz
 gunzip *
 gffread GCF_009858895.2_ASM985889v3_genomic.gff -T -o SARS-CoV-2.gtf
