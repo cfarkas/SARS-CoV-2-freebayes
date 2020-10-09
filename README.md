@@ -147,31 +147,32 @@ will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in li
 -  gisaid_North_America_08_03_2020.fasta
 -  gisaid_Oceania_08_03_2020.fasta
 -  gisaid_South_America_08_03_2020.fasta
--  gisaid.merge.fasta (by doing cat gisaid_*_08_03_2020.fasta > gisaid.merge.fasta)
+-  merged.GISAID.fasta.gz (by doing cat gisaid_*_08_03_2020.fasta > merged.GISAID.fasta.gz)
 
-all these fasta files are available here: 
+all these fasta files are available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020 
 
-As an example for gisaid.merge.fasta (containing all genomes per geographical region) place gisaid.merge.fasta and covid19-refseq.fasta in a folder and do:
+As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
 
 ```
 
 ### Split fasta files
 
 ulimit -s 80000
-sed -i 's/ /-/'g gisaid.merge.fasta
-sed -i "s|hCoV-19/.*./2020||"g gisaid.merge.fasta
-sed -i "s|hCoV-19/.*./2019||"g gisaid.merge.fasta
-sed -i 's/|/\t/'g gisaid.merge.fasta
-sed -i 's/>\t/>/'g gisaid.merge.fasta
-seqkit fx2tab gisaid.merge.fasta > gisaid.merge.tabular
-awk '{print $1"\t"$3}' gisaid.merge.tabular > gisaid.merge.tab && rm gisaid.merge.tabular
-seqkit tab2fx gisaid.merge.tab > gisaid.merge.fasta && rm gisaid.merge.tab
-seqkit split --by-id gisaid.merge.fasta
-cd gisaid.merge.fasta.split/
-for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/gisaid.merge.id_//g')";  done
+gunzip merged.GISAID.fasta.gz
+sed -i 's/ /-/'g merged.GISAID.fasta
+sed -i "s|hCoV-19/.*./2020||"g merged.GISAID.fasta
+sed -i "s|hCoV-19/.*./2019||"g merged.GISAID.fasta
+sed -i 's/|/\t/'g merged.GISAID.fasta
+sed -i 's/>\t/>/'g merged.GISAID.fasta
+seqkit fx2tab merged.GISAID.fasta.gz > merged.GISAID.tabular
+awk '{print $1"\t"$3}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
+seqkit tab2fx merged.GISAID.tab > merged.GISAID.fasta && rm merged.GISAID.tab
+seqkit split --by-id merged.GISAID.fasta
+cd merged.GISAID.fasta.split/
+for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/merged.GISAID.id_//g')";  done
 cd ..
-cp ./gisaid.merge.fasta.split/EPI*.fasta ./
-rm -r -f gisaid.merge.fasta.split gisaid.merge.fasta
+cp ./merged.GISAID.fasta.split/EPI*.fasta ./
+rm -r -f merged.GISAID.fasta.split merged.GISAID.fasta
 
 
 ### Align fasta files to reference (covid19-refseq.fasta, provided in this repository) and call variants with freebayes (option C 1)
@@ -232,7 +233,7 @@ rm header variants.vcf
 sed -i 's/NC_04551202/NC_045512.2/'g merged.GISAID.fixed.vcf
 
 # left-align vcf file and fix names
-vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
+vcfleftalign -r covid19-refseq.fasta merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
 sed -i 's/|unknown//'g merged.GISAID.left.vcf
 
 # calculate AF
