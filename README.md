@@ -147,7 +147,7 @@ We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated lis
 will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 138 of SARS-CoV-2-freebayes.sh script.
 
 
-# Collecting variants per genome: GISAID datasets
+# Collecting Variants (GISAID FASTA genomes)
 - This operation will split every fasta file from a given collection of GISAID SARS-CoV-2 genomes, call variants per genome and will merge variants in a single VCF containing all sample names. The fasta collections from GISAID are the following:
 -  gisaid_Africa_08_03_2020.fasta
 -  gisaid_Asia_08_03_2020.fasta
