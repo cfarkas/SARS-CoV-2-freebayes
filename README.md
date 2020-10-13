@@ -494,7 +494,7 @@ To estimate nucleotide diversity (microdiversity within a sequencing sample), an
 mkdir inStrain_USA
 cd inStrain_USA
 
-# Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular)
+# Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular), using 40 threads
 
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
@@ -506,7 +506,7 @@ bash SARS-CoV-2-freebayes/SARS-CoV-2-freebayes.sh ./SARS-CoV-2-freebayes/inStrai
 ### inStrain_USA analysis ###
 #############################   
 
-# Execute inStrain, using 40 processes (take a while)
+# Execute inStrain, using 40 threads (take a while)
 
 bam= ls -1 *.bam
 for bam in *.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 40 -o ./${bam}.IS; done
