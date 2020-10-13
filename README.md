@@ -493,7 +493,10 @@ To estimate nucleotide diversity (microdiversity within a sequencing sample), an
 ```
 mkdir inStrain_SRR11869
 cd inStrain_SRR11869
-
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
+cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
+cp ./SARS-CoV-2-freebayes/covid19-refseq.fasta* ./
+samtools faidx covid19-refseq.fasta
 
 #########################
 ### inStrain_SRR11869 ###
