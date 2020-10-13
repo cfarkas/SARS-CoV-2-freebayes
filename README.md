@@ -500,7 +500,7 @@ git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
 cp ./SARS-CoV-2-freebayes/covid19-refseq.fasta* ./
 samtools faidx covid19-refseq.fasta
-bash SARS-CoV-2-freebayes/SARS-CoV-2-freebayes.sh ./SARS-CoV-2-freebayes/inStrain_USA.tabular ./SARS-CoV-2-freebayes/covid19-refseq.fasta 40
+bash SARS-CoV-2-freebayes/SARS-CoV-2-freebayes.sh ./SARS-CoV-2-freebayes/inStrain_USA.tabular covid19-refseq.fasta 40
 
 #############################
 ### inStrain_USA analysis ###
