@@ -135,7 +135,7 @@ echo "Performing Variant Calling with freebayes:"
 echo ""
 
 a= ls -1 *.bam
-for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${2}.fai 2000) ${3} -f covid19-refseq.fasta -F 0.49 -b ${a} > ${a}.freebayes.vcf
+for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${2}.fai 2000) ${3} -f ${2} -F 0.49 -b ${a} > ${a}.freebayes.vcf
 done
 
 ###############
