@@ -349,7 +349,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-# piN-piS calculation per geographical region
+# πN-πS calculation per geographical region
 In a folder (i.e. piN-piS) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
 ```
 mkdir piN-piS
