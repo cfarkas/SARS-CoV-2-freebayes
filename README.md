@@ -547,8 +547,27 @@ python -c "import sys; print('\n'.join(' '.join(c) for c in zip(*(l.split() for 
 rm joined
 sed -i 's/ /\t/'g merged.tabular
 sed -i 's/NULL/*/'g merged.tabular
+
+### Freebayes variants (VF>5%, related to figure 1G). 
+a= ls -1 *.bam 
+for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py covid19-refseq.fasta.fai 2000) 50 -f covid19-refseq.fasta -F 0.0499 -b ${a} > ${a}.freebayes.vcf
+done 
+
+{
+vcf= ls -1 *.freebayes.vcf
+for vcf in *.freebayes.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_AF_5%_freebayes
+#
+grep ".bam.freebayes.vcf" logfile_variants_AF_5%_freebayes > vcf_files
+grep -v ".bam.freebayes.vcf" logfile_variants_AF_5%_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_AF_5%_freebayes.tabular
+rm vcf_files variants_per_sample
+sed -i s'/.bam.freebayes.vcf//'g logfile_variants_AF_5%_freebayes.tabular
+
 ```
-merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. 
+merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_AF_5%_freebayes.tabular contain variants with viral frequency over 5%, per genome.  
 
 
 # GISAID patient metadata analysis
