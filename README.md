@@ -488,23 +488,23 @@ perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafi
 ```
 
 # inStrain analysis of SRA sequencing cohorts (microdiversity)
-To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze all Sequence Read Archive datasets starting with the prefix SRR11869 (USA samples), in a given folder do the following: 
+To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze Sequence Read Archive datasets from USA as done in the manuscript, do the following: 
 
 ```
-mkdir inStrain_SRR11869
-cd inStrain_SRR11869
+mkdir inStrain_USA
+cd inStrain_USA
+
+# Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular)
+
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
 cp ./SARS-CoV-2-freebayes/covid19-refseq.fasta* ./
 samtools faidx covid19-refseq.fasta
 bash SARS-CoV-2-freebayes/SARS-CoV-2-freebayes.sh ./SARS-CoV-2-freebayes/inStrain_USA.tabular ./SARS-CoV-2-freebayes/covid19-refseq.fasta 40
 
-#########################
-### inStrain_SRR11869 ###
-#########################   
-
-f= ls -1 *.bam
-for f in *.bam; do samtools index ${f}; done
+#############################
+### inStrain_USA analysis ###
+#############################   
 
 # Execute inStrain, using 40 processes (take a while)
 
@@ -539,29 +539,8 @@ transpose= ls -1 *transpose
 for transpose in *transpose; do sed -i 's/.transpose//'g ${transpose}; done
 
 
-# nano join.sh:
-
-#!/bin/bash
-tempdir=$(mktemp --directory)
-trap "rm -r $tempdir" EXIT SIGTERM
-
-for infile in "$@"; do
-  sort "$infile" > "${tempdir}/${infile}.sorted"
-  if [ -e "${tempdir}/final.results" ]
-  then
-    join -a1 -a2 -e "NULL" -o auto \
-      "${tempdir}/final.results" "${tempdir}/${infile}.sorted" \
-      > "${tempdir}/res"
-    mv "${tempdir}/res" "${tempdir}/final.results"
-  else
-    cp "${tempdir}/${infile}.sorted" "${tempdir}/final.results"
-  fi
-done
-cat "${tempdir}/final.results"
-
-
 # Join files with a function
-bash join.sh *.transpose > joined
+bash ./SARS-CoV-2-freebayes/join.sh *.transpose > joined
 sed -i 's/ /\t/'g joined
 
 
