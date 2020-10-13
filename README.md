@@ -114,6 +114,13 @@ tar jxvf bedops_linux_x86_64-v2.4.39.tar.bz2
 cp bin/* /usr/local/bin/
 ```
 
+### (10) Installing inStrain 
+Tool for highly accurate genome comparisons, analysis of coverage, microdiversity, linkage and sensitive SNP detection. For information, please see: https://instrain.readthedocs.io/en/latest/
+
+```
+pip install instrain
+```
+
 # Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
@@ -350,7 +357,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 
 
 # πN-πS calculation per geographical region
-In a folder (i.e. piN-piS) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
+To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). In a folder (i.e. piN-piS) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
 ```
 mkdir piN-piS
 cd ./piN-piS/
@@ -479,6 +486,124 @@ freebayes -f covid19-refseq.fasta -F 0.001 Oceania_alignment.sorted.bam > Oceani
 vcfleftalign -r covid19-refseq.fasta Oceania_alignment.vcf > Oceania.left.vcf
 perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Oceania
 ```
+
+# inStrain analysis of SRA sequencing cohorts (microdiversity)
+To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ inStrain package, written in python  (https://instrain.readthedocs.io/en/latest/). To analyze all Sequence Read Archive datasets starting with the prefix SRR11869 (USA samples), do the following: 
+
+```
+
+#########################
+### inStrain_SRR11869 ###
+#########################   
+
+cd /home/user/MITACS/
+mkdir inStrain_SRR11869
+cd /home/user/MITACS/inStrain_SRR11869/
+cp /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/SARS-CoV-2.gb ./
+cp /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/covid19-refseq.fasta* ./
+
+f= ls -1 *.bam
+for f in *.bam; do samtools index ${f}; done
+
+bam= ls -1 *.bam
+for bam in *.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+
+bam= ls -1 SRR12*.bam
+for bam in SRR12*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+
+bam= ls -1 SRR114*.bam
+for bam in SRR114*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+
+bam= ls -1 SRR117*.bam
+for bam in SRR117*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+
+bam= ls -1 SRR1181*.bam
+for bam in SRR1181*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+
+bam= ls -1 SRR1185*.bam
+for bam in SRR1185*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+
+# Copy outputs
+IS= ls -1 *.IS/output/*.bam.IS_genome_info.tsv
+for IS in *.IS/output/*.bam.IS_genome_info.tsv; do cp ${IS} ./ ; done
+
+# Fill empty spaces with asterisks
+IS= ls -1 *.bam.IS_genome_info.tsv
+for IS in *.bam.IS_genome_info.tsv; do sed -i 's/\t\t/\t*\t/' ${IS}; done
+
+# Transpose outputs
+IS= ls -1 *.bam.IS_genome_info.tsv
+for IS in *.bam.IS_genome_info.tsv; do python -c "import sys; print('\n'.join(' '.join(c) for c in zip(*(l.split() for l in sys.stdin.readlines() if l.strip()))))" < ${IS} > ${IS}.transpose
+done
+
+# convert delimiters to tab
+IS= ls -1 *.bam.IS_genome_info.tsv.transpose
+for IS in *.bam.IS_genome_info.tsv.transpose; do sed -i 's/ /\t/'g ${IS}; done
+rm *.bam.IS_genome_info.tsv
+
+# Renaming transposed files
+for filename in *.bam.IS_genome_info.tsv.transpose; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.bam.IS_genome_info.tsv.transpose/.transpose/g')";  done
+
+# add FILENAME inside files and remove extension
+transpose= ls -1 *transpose
+for transpose in *transpose; do sed -i "s/all_scaffolds/${transpose}/"g ${transpose}; done
+transpose= ls -1 *transpose
+for transpose in *transpose; do sed -i 's/.transpose//'g ${transpose}; done
+
+
+# nano join.sh:
+
+#!/bin/bash
+tempdir=$(mktemp --directory)
+trap "rm -r $tempdir" EXIT SIGTERM
+
+for infile in "$@"; do
+  sort "$infile" > "${tempdir}/${infile}.sorted"
+  if [ -e "${tempdir}/final.results" ]
+  then
+    join -a1 -a2 -e "NULL" -o auto \
+      "${tempdir}/final.results" "${tempdir}/${infile}.sorted" \
+      > "${tempdir}/res"
+    mv "${tempdir}/res" "${tempdir}/final.results"
+  else
+    cp "${tempdir}/${infile}.sorted" "${tempdir}/final.results"
+  fi
+done
+cat "${tempdir}/final.results"
+
+
+# Join files with a function
+bash join.sh *.transpose > joined
+sed -i 's/ /\t/'g joined
+
+
+# transpose merged.tab and generate final file (merged.tabular)
+python -c "import sys; print('\n'.join(' '.join(c) for c in zip(*(l.split() for l in sys.stdin.readlines() if l.strip()))))" < joined > merged.tabular
+rm joined
+sed -i 's/ /\t/'g merged.tabular
+sed -i 's/NULL/*/'g merged.tabular
+
+
+### Freebayes variants (VF>5%) screen -r 1122130.pts-2.X39932CORE 
+a= ls -1 *.bam 
+for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py covid19-refseq.fasta.fai 2000) 50 -f covid19-refseq.fasta -F 0.0499 -b ${a} > ${a}.freebayes.vcf
+done 
+
+{
+vcf= ls -1 *.freebayes.vcf
+for vcf in *.freebayes.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_AF_5%_freebayes
+#
+grep ".bam.freebayes.vcf" logfile_variants_AF_5%_freebayes > vcf_files
+grep -v ".bam.freebayes.vcf" logfile_variants_AF_5%_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_AF_5%_freebayes.tabular
+rm vcf_files variants_per_sample
+sed -i s'/.bam.freebayes.vcf//'g logfile_variants_AF_5%_freebayes.tabular
+
+```
+
 
 # GISAID patient metadata analysis
 We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv) as follows: 
