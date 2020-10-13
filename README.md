@@ -571,7 +571,7 @@ merged.tabular contain all parameters calculated by inStrain for each genome, ag
 
 
 # GISAID patient metadata analysis
-We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv) as follows: 
+We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv), available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020, as follows: 
 
 ```
 sed 's/|.*//'g gisaid_hcov-19_2020_09_28_19.fasta > reformatted.fasta  # remove everything after |
@@ -914,4 +914,4 @@ and execute snpFreq in each file, with the following parameters:
 - Column with genotype 2 count for group 2: 8
 - Column with genotype 3 count for group 2: 9
 
-snpFreq results per country are available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept25-2020
+snpFreq results per country are available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020
