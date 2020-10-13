@@ -915,3 +915,20 @@ and execute snpFreq in each file, with the following parameters:
 - Column with genotype 3 count for group 2: 9
 
 snpFreq results per country are available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020
+
+The p-values from Fisher's exact test can be converted to negative logarithm in base 10 by using R. As an example, for Brazil output, called snpFreq_Brazil.tabular:
+
+```
+R
+data1<-read.table("snpFreq_Brazil.tabular", header = FALSE, sep = "\t")
+dim(data1)
+
+library(dplyr)
+data1.1<-select(data1,V3,V17)
+data1.1$log <- -log(data1.1$V17, 10)
+row.names(data1.1)<-data1.1$V3
+data1.2<-select(data1.1,log)
+names(data1.2)[names(data1.2) == "log"] <- "-log10(p_value)"
+write.table(data1.2, file = "snpFreq_Brazil-log.tab", append = FALSE, quote = TRUE, sep = "\t", eol = "\n", na = "NA", dec = ".", row.names = TRUE, col.names = TRUE)
+```
+The snpFreq_Brazil-log.tab file now contains the -log10(p-values) per variant. 
