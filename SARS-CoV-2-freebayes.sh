@@ -174,7 +174,7 @@ sed -i 's/NC_04551202/NC_045512.2/'g merged.fixed.vcf
 
 echo "left-align vcf file and fix names"
 echo ""
-vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta merged.fixed.vcf > merged.left.vcf
+vcfleftalign -r covid19-refseq.fasta merged.fixed.vcf > merged.left.vcf
 sed -i 's/|unknown//'g merged.left.vcf
 
 echo "calculate AF with vcflib"
