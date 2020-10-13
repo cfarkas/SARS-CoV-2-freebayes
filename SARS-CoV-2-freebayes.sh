@@ -138,6 +138,20 @@ a= ls -1 *.bam
 for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${2}.fai 2000) ${3} -f covid19-refseq.fasta -F 0.49 -b ${a} > ${a}.freebayes.vcf
 done
 
+###############
+### Logfile ###
+###############
+echo "generating logfile with variants : logfile_variants_SRA_freebayes"
+echo ""
+
+{
+vcf= ls -1 *.vcf
+for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_SRA_freebayes
+#
+
 #######################################
 ### Merging variants using jacquard ###
 #######################################
