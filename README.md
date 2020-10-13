@@ -488,40 +488,24 @@ perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafi
 ```
 
 # inStrain analysis of SRA sequencing cohorts (microdiversity)
-To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ inStrain package, written in python  (https://instrain.readthedocs.io/en/latest/). To analyze all Sequence Read Archive datasets starting with the prefix SRR11869 (USA samples), do the following: 
+To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze all Sequence Read Archive datasets starting with the prefix SRR11869 (USA samples), in a given folder do the following: 
 
 ```
+mkdir inStrain_SRR11869
+cd inStrain_SRR11869
+
 
 #########################
 ### inStrain_SRR11869 ###
 #########################   
 
-cd /home/user/MITACS/
-mkdir inStrain_SRR11869
-cd /home/user/MITACS/inStrain_SRR11869/
-cp /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/SARS-CoV-2.gb ./
-cp /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/covid19-refseq.fasta* ./
-
 f= ls -1 *.bam
 for f in *.bam; do samtools index ${f}; done
 
+# Execute inStrain, using 40 processes (take a while)
+
 bam= ls -1 *.bam
-for bam in *.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
-
-bam= ls -1 SRR12*.bam
-for bam in SRR12*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
-
-bam= ls -1 SRR114*.bam
-for bam in SRR114*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
-
-bam= ls -1 SRR117*.bam
-for bam in SRR117*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
-
-bam= ls -1 SRR1181*.bam
-for bam in SRR1181*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
-
-bam= ls -1 SRR1185*.bam
-for bam in SRR1185*.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 55 -o ./${bam}.IS; done
+for bam in *.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 40 -o ./${bam}.IS; done
 
 # Copy outputs
 IS= ls -1 *.IS/output/*.bam.IS_genome_info.tsv
