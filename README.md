@@ -121,7 +121,7 @@ Tool for highly accurate genome comparisons, analysis of coverage, microdiversit
 pip install instrain
 ```
 
-# Colecting Variants (Sequence Read Archive datasets)
+# I) Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
@@ -154,7 +154,7 @@ We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated lis
 will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 138 of SARS-CoV-2-freebayes.sh script.
 
 
-# Collecting Variants (GISAID FASTA genomes)
+# II) Collecting Variants (GISAID FASTA genomes)
 - This operation will split every fasta file from a given collection of GISAID SARS-CoV-2 genomes, call variants per genome and will merge variants in a single VCF containing all sample names. The fasta collections from GISAID are the following:
 -  gisaid_Africa_08_03_2020.fasta
 -  gisaid_Asia_08_03_2020.fasta
@@ -265,7 +265,7 @@ grep -v "##" merged.GISAID.AF_5%.vcf > merged.GISAID.AF_5%.table
 Users can do the same for each fasta collection file to collect aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf). 
 
 
-# Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
+# III) Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
 In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
 ```
 grep "#" -v SnpEff-eff_merged.GISAID.vcf > variants.vcf
@@ -356,7 +356,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-# πN-πS calculation per geographical region
+# IV) πN-πS calculation per geographical region
 To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). In a folder (i.e. piN-piS) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
 ```
 mkdir piN-piS
@@ -487,7 +487,7 @@ vcfleftalign -r covid19-refseq.fasta Oceania_alignment.vcf > Oceania.left.vcf
 perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Oceania
 ```
 
-# inStrain analysis of SRA sequencing cohorts (microdiversity)
+# V) inStrain analysis of SRA sequencing cohorts (microdiversity)
 To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze Sequence Read Archive datasets from USA as done in the manuscript, do the following: 
 
 ```
@@ -570,7 +570,7 @@ sed -i s'/.bam.freebayes.vcf//'g logfile_variants_AF_5%_freebayes.tabular
 merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_AF_5%_freebayes.tabular contain variants with viral frequency over 5%, per genome.  
 
 
-# GISAID patient metadata analysis
+# VI) GISAID patient metadata analysis
 We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv), available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020, as follows: 
 
 ```
