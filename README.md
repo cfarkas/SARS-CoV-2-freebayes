@@ -166,7 +166,7 @@ will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in li
 
 all these fasta files are available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020 
 
-As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
+For simplicity, in a given folder, any fasta collection can be renamed to "merged.GISAID.fasta" and run the provided commands. As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
 
 ```
 ### Split fasta files
