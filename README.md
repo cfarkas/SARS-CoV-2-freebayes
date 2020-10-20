@@ -257,9 +257,9 @@ gzip merged.GISAID.vcf
 ulimit -s 80000
 gzip *.fasta
 
-# Filter variants by Viral Frequency: 0.0499 (5%)
-vcffilter -f "AF > 0.0499" merged.GISAID.AF.vcf > merged.GISAID.AF_5%.vcf
-grep -v "##" merged.GISAID.AF_5%.vcf > merged.GISAID.AF_5%.table
+# Filter variants by Viral Frequency: 0.0099 (1%)
+vcffilter -f "AF > 0.0099" merged.GISAID.AF.vcf > merged.GISAID.AF_1%.vcf
+grep -v "##" merged.GISAID.AF_1%.vcf > merged.GISAID.AF_1%.table
 ```
 
 Users can do the same for each fasta collection file to collect aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf). 
