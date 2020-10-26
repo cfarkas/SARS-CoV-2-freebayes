@@ -125,7 +125,7 @@ pip install instrain
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
-- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format. As example, see: SARS-CoV-2_curated_list_17_07_2020.tabular, provided in this repository)
+- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see: SRA_Accessions_Aug_03_2020.tabular for curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
 - SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - number of threads for calculations 
 
