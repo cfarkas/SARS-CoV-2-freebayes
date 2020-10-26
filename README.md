@@ -125,7 +125,7 @@ pip install instrain
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
-- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see: SRA_Accessions_Aug_03_2020.tabular for curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
+- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, for curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
 - SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - number of threads for calculations 
 
@@ -146,7 +146,7 @@ This execution will:
 
 ### Example 
 
-We provided SARS-CoV-2_curated_list_17_07_2020.tabular, containing a curated list of 16586 SARS-CoV-2 worldwide datasets until July 17, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to collect variants from July_28_2020_North_America.txt datasets using 30 threads:
+We provided SRA_Accessions_Aug_03_2020.tabular, containing a curated list of 17560 SARS-CoV-2 worldwide datasets until August 03, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to collect variants from July_28_2020_North_America.txt datasets using 30 threads:
 
 ```
 ./SARS-CoV-2-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
