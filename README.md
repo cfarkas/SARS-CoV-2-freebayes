@@ -171,7 +171,7 @@ For simplicity, in a given folder, any fasta collection can be renamed to "merge
 ```
 ### Split fasta files
 
-ulimit -s 80000        # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
+ulimit -s 80000   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 gunzip merged.GISAID.fasta.gz
 sed -i 's/ /-/'g merged.GISAID.fasta
 sed -i "s|hCoV-19/.*./2020||"g merged.GISAID.fasta
