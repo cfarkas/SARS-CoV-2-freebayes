@@ -1,6 +1,6 @@
-### Increasing the number of open files for adequate performance of freebayes ###
+### Increasing the number of open files for adequate performance ###
 
-# becoming root:
+# become root:
 sudo -i 
 
 # edit limits.conf file:                             
