@@ -1,0 +1,26 @@
+### Increasing the number of open files for adequate performance of freebayes ###
+
+# becoming root:
+sudo -i 
+
+# edit limits.conf file:                             
+sudo nano /etc/security/limits.conf  
+
+# edit the following lines in /etc/security/limits.conf:  
+
+* soft nofile 1000000
+* hard nofile 1000000
+
+# CTRL + O and then press enter to save
+# CTRL + X for exiting
+
+Then, restart system for permanent changes. 
+
+
+#########################################################
+
+Check open limit with the following commands 
+ulimit -Sn
+ulimit -Hn
+
+
