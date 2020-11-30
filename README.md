@@ -841,6 +841,8 @@ cp Brazil.tsv reformatted.tab covid19-refseq.fasta* ./Brazil_R+H
 rm Brazil.tsv
 cd Brazil_R+H/
 sed -i 's/Live/Released/'g Brazil.tsv
+sed -i 's/Recovered/Released/'g Brazil.tsv
+sed -i 's/Death/Deceased/'g Brazil.tsv
 grep "Released" Brazil.tsv > Released.tsv
 grep "Deceased" Brazil.tsv > Deceased.tsv
 grep "Hospitalized" Brazil.tsv > Hospitalized.tsv
