@@ -590,13 +590,27 @@ sed -i 's/Puerto Rico/Puerto-Rico/'g gisaid_hcov-19_2020_09_28_19.tsv
 sed -i 's/Faroe Islands/Faroe-Islands/'g gisaid_hcov-19_2020_09_28_19.tsv
 sed -i 's/South Korea/South-Korea/'g gisaid_hcov-19_2020_09_28_19.tsv
 
+sed -i 's/Hong Kong/Hong-Kong/'g reformatted.tab                                             # Fix names in fasta (as tab) for grep
+sed -i 's/Saudi Arabia/Saudi-Arabia/'g reformatted.tab
+sed -i 's/SaudiArabia/Saudi-Arabia/'g reformatted.tab
+sed -i 's/Costa Rica/Costa-Rica/'g reformatted.tab
+sed -i 's/South Africa/South-Africa/'g reformatted.tab
+sed -i 's/United Arab Emirates/United-Arab-Emirates/'g reformatted.tab
+sed -i 's/Czech Republic/Czech-Republic/'g reformatted.tab
+sed -i 's/Bosnia and Herzegovina/Bosnia-and-Herzegovina/'g reformatted.tab
+sed -i 's/Sri Lanka/Sri-Lanka/'g reformatted.tab
+sed -i 's/Puerto Rico/Puerto-Rico/'g reformatted.tab
+sed -i 's/Faroe Islands/Faroe-Islands/'g reformatted.tab
+sed -i 's/South Korea/South-Korea/'g reformatted.tab
+
+
 ############################################
 ### India analysis: released vs deceased ###
 ############################################
 
 grep "India" gisaid_hcov-19_2020_09_28_19.tsv > India.tsv
 mkdir India
-cp India.tsv reformatted.tab covid19-refseq.fasta* ./India
+cp India.tsv covid19-refseq.fasta* ./India
 rm India.tsv
 cd India/
 
@@ -655,7 +669,7 @@ mv India.deceased-released.SnpFreq2 India.deceased-released.SnpFreq
 
 grep "Saudi-Arabia" gisaid_hcov-19_2020_09_28_19.tsv > Saudi-Arabia.tsv
 mkdir Saudi-Arabia
-cp Saudi-Arabia.tsv reformatted.tab covid19-refseq.fasta* ./Saudi-Arabia
+cp Saudi-Arabia.tsv covid19-refseq.fasta* ./Saudi-Arabia
 rm Saudi-Arabia.tsv
 cd Saudi-Arabia/
 
@@ -713,7 +727,7 @@ mv Saudi-Arabia.deceased-released.SnpFreq2 Saudi-Arabia.deceased-released.SnpFre
 
 grep "USA" gisaid_hcov-19_2020_09_28_19.tsv > USA.tsv
 mkdir USA
-cp USA.tsv reformatted.tab covid19-refseq.fasta* ./USA
+cp USA.tsv covid19-refseq.fasta* ./USA
 rm USA.tsv
 cd USA/
 grep "Released" USA.tsv > Released.tsv
@@ -770,7 +784,7 @@ mv USA.deceased-released.SnpFreq2 USA.deceased-released.SnpFreq
 
 grep "Brazil" gisaid_hcov-19_2020_09_28_19.tsv > Brazil.tsv
 mkdir Brazil
-cp Brazil.tsv reformatted.tab covid19-refseq.fasta* ./Brazil
+cp Brazil.tsv covid19-refseq.fasta* ./Brazil
 rm Brazil.tsv
 cd Brazil/
 sed -i 's/Live/Released/'g Brazil.tsv
