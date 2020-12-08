@@ -577,6 +577,19 @@ We present a basic analysis of variants in case-control data (i.e. deceased-rele
 sed 's/|.*//'g gisaid_hcov-19_2020_09_28_19.fasta > reformatted.fasta  # remove everything after |
 seqkit fx2tab reformatted.fasta > reformatted.tab
 
+sed -i 's/Hong Kong/Hong-Kong/'g gisaid_hcov-19_2020_09_28_19.tsv                            # Fix names in TSV for grep
+sed -i 's/Saudi Arabia/Saudi-Arabia/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/SaudiArabia/Saudi-Arabia/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/Costa Rica/Costa-Rica/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/South Africa/South-Africa/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/United Arab Emirates/United-Arab-Emirates/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/Czech Republic/Czech-Republic/'g gisaid_hcov-19_2020_09_28_19.tsv       
+sed -i 's/Bosnia and Herzegovina/Bosnia-and-Herzegovina/'g gisaid_hcov-19_2020_09_28_19.tsv   
+sed -i 's/Sri Lanka/Sri-Lanka/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/Puerto Rico/Puerto-Rico/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/Faroe Islands/Faroe-Islands/'g gisaid_hcov-19_2020_09_28_19.tsv
+sed -i 's/South Korea/South-Korea/'g gisaid_hcov-19_2020_09_28_19.tsv
+
 ############################################
 ### India analysis: released vs deceased ###
 ############################################
@@ -640,15 +653,14 @@ mv India.deceased-released.SnpFreq2 India.deceased-released.SnpFreq
 ### Saudi Arabia analysis: released vs deceased ##
 ##################################################
 
-grep "Saudi" gisaid_hcov-19_2020_09_28_19.tsv > Saudi.tsv
-mkdir Saudi
-cp Saudi.tsv reformatted.tab covid19-refseq.fasta* ./Saudi
-rm Saudi.tsv
-cd Saudi/
-sed -i 's/Saudi Arabia/SaudiArabia/'g reformatted.tab
-sed -i 's/Saudi Arabia/SaudiArabia/'g Saudi.tsv
-grep "Live" Saudi.tsv > Live.tsv
-grep "Deceased" Saudi.tsv > Deceased.tsv
+grep "Saudi-Arabia" gisaid_hcov-19_2020_09_28_19.tsv > Saudi-Arabia.tsv
+mkdir Saudi-Arabia
+cp Saudi-Arabia.tsv reformatted.tab covid19-refseq.fasta* ./Saudi-Arabia
+rm Saudi-Arabia.tsv
+cd Saudi-Arabia/
+
+grep "Live" Saudi-Arabia.tsv > Live.tsv
+grep "Deceased" Saudi-Arabia.tsv > Deceased.tsv
 awk '{print $1}' Live.tsv > Live.names
 awk '{print $1}' Deceased.tsv > Deceased.names
 
