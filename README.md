@@ -571,7 +571,7 @@ merged.tabular contain all parameters calculated by inStrain for each genome, ag
 
 
 # VI) GISAID patient metadata analysis
-We present a basic analysis of variants in case-control data (i.e. released-deceased patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program, as did for India, Saudi-Arabia, USA and Brazil patient viral frequencies in the manuscript. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv), available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020, as follows: 
+We present a basic analysis of variants in case-control data (i.e. deceased-released patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program using patient sequencing datasets with known outcome per country. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv), available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020, as follows: 
 
 ```
 sed 's/|.*//'g gisaid_hcov-19_2020_09_28_19.fasta > reformatted.fasta  # remove everything after |
@@ -628,16 +628,12 @@ join -e 0 -j 1 <(sort deceased-released.bed1) <(sort deceased-released.DP4) > de
 rm deceased-released.bed1
 sed -i 's/ /\t/'g deceased-released.merge
 awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-released.merge > deceased-released.subset
-
-# fill empty spaces with nano : grep ">" released.fasta -c : 398, then: 398 0
-awk -F'\t' '$5 && !$6{ $6="398" }1' deceased-released.subset  > deceased-released.intermediate
-sed -i 's/ /\t/'g deceased-released.intermediate
-awk -F'\t' '$6 && !$7{ $7="0" }1' deceased-released.intermediate  > deceased-released.subset && rm deceased-released.intermediate
-sed -i 's/ /\t/'g deceased-released.subset
-
-awk '{print $0, "0"}' deceased-released.subset > deceased-released.subset1
-sed -i 's/ /\t/'g deceased-released.subset1
-awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' deceased-released.subset1 > deceased-released.subset && rm deceased-released.subset1 deceased-released.merge
+rm deceased-released.merge
+awk  '$6!=""' deceased-released.subset > India.deceased-released.SnpFreq && rm deceased-released.subset
+awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' India.deceased-released.SnpFreq > India.deceased-released.SnpFreq1                              # add column after column 5
+awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' India.deceased-released.SnpFreq1 > India.deceased-released.SnpFreq2                             # add column at the end
+rm India.deceased-released.SnpFreq India.deceased-released.SnpFreq1
+mv India.deceased-released.SnpFreq2 India.deceased-released.SnpFreq
 
 
 ##################################################
@@ -657,8 +653,8 @@ awk '{print $1}' Live.tsv > Live.names
 awk '{print $1}' Deceased.tsv > Deceased.names
 
 # Live
-grep -w -F -f Live.names ../reformatted.tab > live.tab                               # grep in reformatted.tab       
-seqkit tab2fx live.tab > live.fasta && rm live.tab                                   # tabular to fasta
+grep -w -F -f Live.names ../reformatted.tab > live.tab                                                   # grep in reformatted.tab       
+seqkit tab2fx live.tab > live.fasta && rm live.tab                                                       # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta live.fasta > live.sam
 samtools view -bS live.sam > live.bam
 samtools sort -o live.sorted.bam live.bam
@@ -682,25 +678,21 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' deceased.left.DP4 > deceased.
 
 
 ### Processing DP4 fields for snpFreq
-vcfcombine deceased.left.vcf live.left.vcf > deceased-live.vcf                                                           # vcflib
-vcf2bed < deceased-live.vcf > deceased-live.bed                                                                          # BEDOPS
-awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' deceased-live.bed > deceased-live.bed1                                          # awk GNU 
-join -a 1 -e 0 -j 1 <(sort deceased.left.DP4) <(sort live.left.DP4) > deceased-live.DP4                                  # join GNU 
-sed -i 's/ /\t/'g deceased-live.DP4                                                                                      # sed GNU 
-join -e 0 -j 1 <(sort deceased-live.bed1) <(sort deceased-live.DP4) > deceased-live.merge     
-rm deceased-live.bed1
-sed -i 's/ /\t/'g deceased-live.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-live.merge > deceased-live.subset
-
-# fill empty spaces with nano : grep ">" live.fasta -c : 216, then: 216 0
-awk -F'\t' '$5 && !$6{ $6="216" }1' deceased-live.subset  > deceased-live.intermediate
-sed -i 's/ /\t/'g deceased-live.intermediate
-awk -F'\t' '$6 && !$7{ $7="0" }1' deceased-live.intermediate  > deceased-live.subset && rm deceased-live.intermediate
-sed -i 's/ /\t/'g deceased-live.subset
-
-awk '{print $0, "0"}' deceased-live.subset > deceased-live.subset1
-sed -i 's/ /\t/'g deceased-live.subset1
-awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' deceased-live.subset1 > deceased-live.subset && rm deceased-live.subset1 deceased-live.merge
+vcfcombine deceased.left.vcf live.left.vcf > deceased-released.vcf                                                       # vcflib
+vcf2bed < deceased-released.vcf > deceased-released.bed                                                                  # BEDOPS
+awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' deceased-released.bed > deceased-released.bed1                                  # awk GNU 
+join -a 1 -e 0 -j 1 <(sort deceased.left.DP4) <(sort live.left.DP4) > deceased-released.DP4                              # join GNU 
+sed -i 's/ /\t/'g deceased-released.DP4                                                                                  # sed GNU 
+join -e 0 -j 1 <(sort deceased-released.bed1) <(sort deceased-released.DP4) > deceased-released.merge     
+rm deceased-released.bed1
+sed -i 's/ /\t/'g deceased-released.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-released.merge > deceased-released.subset
+rm deceased-released.merge
+awk  '$6!=""' deceased-released.subset > Saudi-Arabia.deceased-released.SnpFreq && rm deceased-released.subset
+awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' Saudi-Arabia.deceased-released.SnpFreq > Saudi-Arabia.deceased-released.SnpFreq1         # add column after column 5
+awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' Saudi-Arabia.deceased-released.SnpFreq1 > Saudi-Arabia.deceased-released.SnpFreq2        # add column at the end
+rm Saudi-Arabia.deceased-released.SnpFreq Saudi-Arabia.deceased-released.SnpFreq1
+mv Saudi-Arabia.deceased-released.SnpFreq2 Saudi-Arabia.deceased-released.SnpFreq
 
 
 ########################################
@@ -718,8 +710,8 @@ awk '{print $1}' Released.tsv > Released.names
 awk '{print $1}' Deceased.tsv > Deceased.names
 
 # Released
-grep -w -F -f Released.names ../reformatted.tab > Released.tab               # grep in reformatted.tab       
-seqkit tab2fx Released.tab > Released.fasta && rm Released.tab               # tabular to fasta
+grep -w -F -f Released.names ../reformatted.tab > Released.tab                                    # grep in reformatted.tab       
+seqkit tab2fx Released.tab > Released.fasta && rm Released.tab                                    # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
 samtools view -bS Released.sam > Released.bam
 samtools sort -o Released.sorted.bam Released.bam
@@ -730,8 +722,8 @@ rm Released.sam Released.bam Released.vcf
 awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.left.AF
 
 # Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
-seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
+grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                                    # grep in reformatted.tab       
+seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                                    # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
 samtools view -bS Deceased.sam > Deceased.bam
 samtools sort -o Deceased.sorted.bam Deceased.bam
@@ -751,17 +743,13 @@ sed -i 's/ /\t/'g Deceased-Released.DP4                                         
 join -e 0 -j 1 <(sort Deceased-Released.bed1) <(sort Deceased-Released.DP4) > Deceased-Released.merge     
 rm Deceased-Released.bed1
 sed -i 's/ /\t/'g Deceased-Released.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > Deceased-Released.subset
-
-# fill empty spaces with nano : grep ">" Released.fasta -c : 87, then: 87 0
-awk -F'\t' '$5 && !$6{ $6="87" }1' Deceased-Released.subset  > Deceased-Released.subset.intermediate
-sed -i 's/ /\t/'g Deceased-Released.subset.intermediate
-awk -F'\t' '$6 && !$7{ $7="0" }1' Deceased-Released.subset.intermediate  > Deceased-Released.subset && rm Deceased-Released.intermediate
-sed -i 's/ /\t/'g Deceased-Released.subset
-
-awk '{print $0, "0"}' Deceased-Released.subset > Deceased-Released.subset1
-sed -i 's/ /\t/'g Deceased-Released.subset1
-awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Released.subset1 > Deceased-Released.subset && rm Deceased-Released.subset1 Deceased-Released.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > deceased-released.subset
+rm Deceased-Released.merge
+awk  '$6!=""' deceased-released.subset > USA.deceased-released.SnpFreq && rm deceased-released.subset
+awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' USA.deceased-released.SnpFreq > USA.deceased-released.SnpFreq1                  # add column after column 5
+awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' USA.deceased-released.SnpFreq1 > USA.deceased-released.SnpFreq2                 # add column at the end
+rm USA.deceased-released.SnpFreq USA.deceased-released.SnpFreq1
+mv USA.deceased-released.SnpFreq2 USA.deceased-released.SnpFreq
 
 
 ###########################################
@@ -782,8 +770,8 @@ awk '{print $1}' Deceased.tsv > Deceased.names
 
 
 # Released
-grep -w -F -f Released.names ../reformatted.tab > Released.tab               # grep in reformatted.tab       
-seqkit tab2fx Released.tab > Released.fasta && rm Released.tab               # tabular to fasta
+grep -w -F -f Released.names ../reformatted.tab > Released.tab                                  # grep in reformatted.tab       
+seqkit tab2fx Released.tab > Released.fasta && rm Released.tab                                  # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
 samtools view -bS Released.sam > Released.bam
 samtools sort -o Released.sorted.bam Released.bam
@@ -795,8 +783,8 @@ awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.
 
 
 # Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
-seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
+grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                                  # grep in reformatted.tab       
+seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                                  # tabular to fasta
 minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
 samtools view -bS Deceased.sam > Deceased.bam
 samtools sort -o Deceased.sorted.bam Deceased.bam
@@ -816,95 +804,22 @@ sed -i 's/ /\t/'g Deceased-Released.DP4                                         
 join -e 0 -j 1 <(sort Deceased-Released.bed1) <(sort Deceased-Released.DP4) > Deceased-Released.merge     
 rm Deceased-Released.bed1
 sed -i 's/ /\t/'g Deceased-Released.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > Deceased-Released.subset
-
-# fill empty spaces with nano : grep ">" Released.fasta -c : 48, then: 48 0
-awk -F'\t' '$5 && !$6{ $6="48" }1' Deceased-Released.subset  > Deceased-Released.intermediate
-sed -i 's/ /\t/'g Deceased-Released.intermediate
-awk -F'\t' '$6 && !$7{ $7="0" }1' Deceased-Released.intermediate  > Deceased-Released.subset && rm Deceased-Released.intermediate
-sed -i 's/ /\t/'g Deceased-Released.subset
-
-awk '{print $0, "0"}' Deceased-Released.subset > Deceased-Released.subset1
-sed -i 's/ /\t/'g Deceased-Released.subset1
-awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Released.subset1 > Deceased-Released.subset && rm Deceased-Released.subset1 Deceased-Released.merge
-
-
-##########################################################
-### Brazil analysis: Released+Hospitalized vs Deceased ###
-##########################################################
-
-grep "Brazil" gisaid_hcov-19_2020_09_28_19.tsv > Brazil.tsv
-mkdir Brazil_R+H
-cp Brazil.tsv reformatted.tab covid19-refseq.fasta* ./Brazil_R+H
-rm Brazil.tsv
-cd Brazil_R+H/
-sed -i 's/Live/Released/'g Brazil.tsv
-grep "Released" Brazil.tsv > Released.tsv
-grep "Deceased" Brazil.tsv > Deceased.tsv
-grep "Hospitalized" Brazil.tsv > Hospitalized.tsv
-grep "Live" Brazil.tsv > Live.tsv
-awk '{print $1}' Released.tsv > Released.names
-awk '{print $1}' Deceased.tsv > Deceased.names
-awk '{print $1}' Hospitalized.tsv > Hospitalized.names
-cat Hospitalized.names Released.names > Live.names
-
-
-# Live
-grep -w -F -f Live.names ../reformatted.tab > Live.tab                   # grep in reformatted.tab       
-seqkit tab2fx Live.tab > Live.fasta && rm Live.tab                       # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Live.fasta > Live.sam
-samtools view -bS Live.sam > Live.bam
-samtools sort -o Live.sorted.bam Live.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 Live.sorted.bam > Live.vcf
-vcfleftalign -r ../covid19-refseq.fasta Live.vcf > Live.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Live.left.vcf > Live.left.DP4
-rm Live.sam Live.bam Live.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Live.left.DP4 > Live.left.AF
-
-
-# Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                            # grep in reformatted.tab       
-seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                            # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
-samtools view -bS Deceased.sam > Deceased.bam
-samtools sort -o Deceased.sorted.bam Deceased.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 Deceased.sorted.bam > Deceased.vcf
-vcfleftalign -r ../covid19-refseq.fasta Deceased.vcf > Deceased.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Deceased.left.vcf > Deceased.left.DP4
-rm Deceased.sam Deceased.bam Deceased.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.left.AF
-
-
-### Processing DP4 fields for snpFreq
-vcfcombine Deceased.left.vcf Live.left.vcf > Deceased-Live.vcf                                                       # vcflib 
-vcf2bed < Deceased-Live.vcf > Deceased-Live.bed                                                                      # BEDOPS
-awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Live.bed > Deceased-Live.bed1                                      # awk GNU 
-join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Live.left.DP4) > Deceased-Live.DP4                              # join GNU 
-sed -i 's/ /\t/'g Deceased-Live.DP4                                                                                  # sed GNU 
-join -e 0 -j 1 <(sort Deceased-Live.bed1) <(sort Deceased-Live.DP4) > Deceased-Live.merge     
-rm Deceased-Live.bed1
-sed -i 's/ /\t/'g Deceased-Live.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Live.merge > Deceased-Live.subset
-
-
-# fill empty spaces with nano : grep ">" Live.fasta -c : 109, then: 109 0
-awk -F'\t' '$5 && !$6{ $6="109" }1' Deceased-Live.subset  > Deceased-Live.intermediate
-sed -i 's/ /\t/'g Deceased-Live.intermediate
-awk -F'\t' '$6 && !$7{ $7="0" }1' Deceased-Live.intermediate  > Deceased-Live.subset && rm Deceased-Live.intermediate
-sed -i 's/ /\t/'g Deceased-Live.subset
-
-awk '{print $0, "0"}' Deceased-Live.subset > Deceased-Live.subset1
-sed -i 's/ /\t/'g Deceased-Live.subset1
-awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$8"\t"$6"\t"$7"\t"$8}' Deceased-Live.subset1 > Deceased-Live.subset && rm Deceased-Live.subset1 Deceased-Live.merge
+awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > deceased-released.subset
+rm Deceased-Released.merge
+awk  '$6!=""' deceased-released.subset > Brazil.deceased-released.SnpFreq && rm deceased-released.subset
+awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' Brazil.deceased-released.SnpFreq > Brazil.deceased-released.SnpFreq1            # add column after column 5
+awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' Brazil.deceased-released.SnpFreq1 > Brazil.deceased-released.SnpFreq2           # add column at the end
+rm Brazil.deceased-released.SnpFreq Brazil.deceased-released.SnpFreq1
+mv Brazil.deceased-released.SnpFreq2 Brazil.deceased-released.SnpFreq
 ```
-After these steps, upload to galaxy: https://usegalaxy.org/ (rename files for simplicity)
-- deceased-released.subset: from India
-- deceased-live.subset: from Saudi Arabia
-- Deceased-Released.subset: from USA
-- Deceased-Released.subset: from Brazil 
-- Deceased-Live.subset: from Brazil (Released + Hospitalized vs deceased).
 
-and execute snpFreq in each file, with the following parameters:
+After these steps, upload to galaxy: https://usegalaxy.org/
+- India.deceased-released.SnpFreq: from India
+- Saudi-Arabia.deceased-released.SnpFreq: from Saudi Arabia
+- USA.deceased-released.SnpFreq: from USA
+- Brazil.deceased-released.SnpFreq: from Brazil 
+
+and execute snpFreq in each file, with the following parameters: (Reference allele, Alternate allele, Heterozygous : AA aa Aa)
 
 - Format of input: select Alleles, precounted
 - Column with genotype 1 count for group 1: 4
