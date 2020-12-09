@@ -181,8 +181,11 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) we can obtain aggregated variants from merged.GISAID.fasta.gz dataset in a folder called "GISAID_merge", as follows:
 
 ```
+# Clone Repository
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
+
+# As example, download merged.GISAID.fasta.gz in "GISAID_merge", gunzip and execute the pipeline
 mkdir GISAID_merge && cd GISAID_merge
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 30
