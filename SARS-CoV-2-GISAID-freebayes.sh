@@ -1,18 +1,20 @@
 #!/bin/bash
-set -euxo pipefail
+set -e 
+set -o pipefail
+
 {
 
-GISAID.fasta="${1}"
+GISAID_fasta=${1}
 Reference=${2}
 Threads=${3}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
+  echo "Usage: ./`basename $0` [GISAID_fasta] [Reference] [Threads]"
   echo ""
   echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
-  echo "[GISAID.fasta] : GISAID genomes in FASTA format"
+  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
   echo ""
   echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
   echo ""
@@ -23,11 +25,11 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
+  echo "Usage: ./`basename $0` [GISAID_fasta] [Reference] [Threads]"
   echo ""
   echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
-  echo "[GISAID.fasta] : GISAID genomes in FASTA format"
+  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
   echo ""
   echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
   echo ""
@@ -37,11 +39,11 @@ if [ "$1" == "-help" ]; then
 fi
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
+  echo "Usage: ./`basename $0` [GISAID_fasta] [Reference] [Threads]"
   echo ""
   echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
-  echo "[GISAID.fasta] : GISAID genomes in FASTA format"
+  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
   echo ""
   echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
   echo ""
@@ -52,11 +54,11 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
+  echo "Usage: ./`basename $0` [GISAID_fasta] [Reference] [Threads]"
   echo ""
   echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
-  echo "[GISAID.fasta] : GISAID genomes in FASTA format"
+  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
   echo ""
   echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
   echo ""
@@ -65,10 +67,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [GISAID_fasta] [Reference] [Threads]"; exit 1; }
 
 if [ $# -ne 3 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
+  echo 1>&2 "Usage: ./`basename $0` [GISAID_fasta] [Reference] [Threads]"
   exit 3
 fi
 
