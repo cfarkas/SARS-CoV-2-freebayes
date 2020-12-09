@@ -201,6 +201,7 @@ echo ""
 echo "merged.GISAID.AF_1%.vcf contain merged variants (Viral Frequency >=1%)"
 echo ""
 echo "merged.GISAID.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header and suitable for plotting"
+echo ""
 echo "All done."
 
 ###############################################################
