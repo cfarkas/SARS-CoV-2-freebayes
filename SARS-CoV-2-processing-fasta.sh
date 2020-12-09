@@ -89,7 +89,6 @@ echo ""
 seqkit split --by-id ${fasta_name}.fasta
 cd ${fasta_name}.fasta.split/
 for name in *.fasta; do mv -i -- "$name" "${name#*id_}" ; done
-rm ${fasta_name}.fasta 
 echo "Split is done. Continue with FASTA alignments"
 echo ""
 
@@ -97,8 +96,8 @@ echo ""
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
 samtools faidx ${2}
-fasta= ls -1 *.fasta
-for fasta in *.fasta; do
+fasta= ls -1 EPI_ISL_*.fasta
+for fasta in EPI_ISL_*.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
 samtools view -bS ${fasta}.sam > ${fasta}.bam
 samtools sort -o ${fasta}.sorted.bam ${fasta}.bam
@@ -110,7 +109,7 @@ done
 ### fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
-ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+ulimit -s 299999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 ### Renaming files in bash
 echo "Renaming files in bash"
