@@ -175,6 +175,9 @@ wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e
 wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz
 ```
+
+### Example 
+
 As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) we can obtain aggregated variants from merged.GISAID.fasta.gz dataset in a folder called "GISAID_merge", as follows:
 
 ```
@@ -185,7 +188,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 30
 ```
 
--This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf).
+-This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf) inside the folder "GISAID_merge".
 -NOTE: this script will fail with more than 100000 GISAID FASTA samples and is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here:
 
 
