@@ -74,7 +74,7 @@ if [ $# -ne 3 ]; then
 fi
 
 ### Split fasta files
-echo "fix names in FASTA file"
+echo "fixing names in FASTA file"
 echo ""
 ulimit -s 99999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 sed -i 's/ /-/'g ${1}
