@@ -25,7 +25,7 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
   echo ""
-  echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants.""
+  echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
   echo "[GISAID.fasta] : GISAID genomes in FASTA format"
   echo ""
@@ -39,7 +39,7 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
   echo ""
-  echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants.""
+  echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
   echo "[GISAID.fasta] : GISAID genomes in FASTA format"
   echo ""
@@ -54,7 +54,7 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
   echo ""
-  echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants.""
+  echo "This program will call variants using freebayes in given GISAID fasta sequences files to obtain major viral variants."
   echo ""
   echo "[GISAID.fasta] : GISAID genomes in FASTA format"
   echo ""
@@ -172,7 +172,7 @@ echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
 gzip merged.GISAID.vcf
-ulimit -s 80000
+ulimit -s 99999
 gzip *.fasta 
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
