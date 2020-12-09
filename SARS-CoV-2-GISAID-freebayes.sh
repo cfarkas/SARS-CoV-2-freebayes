@@ -71,7 +71,6 @@ if [ $# -ne 3 ]; then
   echo 1>&2 "Usage: ./`basename $0` [GISAID.fasta] [Reference] [Threads]"
   exit 3
 fi
-dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
 ### Split fasta files
 echo "fix names in FASTA file"
@@ -100,7 +99,7 @@ echo ""
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
 samtools faidx ${2}
-fasta= ls -1 *.fasta
+fasta=ls -1 *.fasta
 for fasta in *.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
 samtools view -bS ${fasta}.sam > ${fasta}.bam
@@ -119,7 +118,7 @@ echo ""
 # fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
-ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+ulimit -s 99999 && vcf=ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
 echo "Renaming files in bash"
@@ -131,7 +130,7 @@ echo "Calculating Number of Variants per genome"
 echo ""
 ulimit -s 99999
 {
-vcf= ls -1 *.vcf
+vcf=ls -1 *.vcf
 for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
 done
 #
