@@ -149,12 +149,12 @@ echo ""
 ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
 
 # Left only genotypes in merged VCF
-echo "Left only genotypes in merged VCF"
+echo "Fixing genotypes in merged VCF"
 echo ""
 vcfkeepgeno merged.GISAID.vcf GT > merged.GISAID.GT.vcf
 
 # Split variants and header from merged.GT.vcf
-echo "Split variants and header from merged.GT.vcf"
+echo "Splitting variants and header from merged.GT.vcf"
 echo ""
 grep "#" merged.GISAID.GT.vcf > header
 grep -v "#" merged.GISAID.GT.vcf > variants.vcf
@@ -165,20 +165,20 @@ sed -i 's|1/0|1|'g variants.vcf
 sed -i 's/[.]/0/'g variants.vcf   # convert point to zeros 
 
 # Reconstitute vcf file
-echo "Reconstitute vcf file"
+echo "Reconstituting vcf file"
 echo ""
 cat header variants.vcf > merged.GISAID.fixed.vcf
 rm header variants.vcf
 sed -i 's/NC_04551202/NC_045512.2/'g merged.GISAID.fixed.vcf
 
 # left-align vcf file and fix names
-echo "left-align vcf file and fix names"
+echo "left-aligning vcf file and fix names"
 echo ""
 vcfleftalign -r ${2} merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
 sed -i 's/|unknown//'g merged.GISAID.left.vcf
 
 # calculate AF
-echo "calculate AF with vcflib"
+echo "calculating AF with vcflib"
 echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
@@ -187,7 +187,7 @@ ulimit -s 99999
 gzip *.fasta 
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
-echo "Filter variants by Viral Frequency: 0.0099 (1%)"
+echo "Filtering variants by Viral Frequency: 0.0099 (1%)"
 echo ""
 vcffilter -f "AF > 0.0099" merged.GISAID.AF.vcf > merged.GISAID.AF_1%.vcf
 grep -v "##" merged.GISAID.AF_1%.vcf > merged.GISAID.AF_1%.table
