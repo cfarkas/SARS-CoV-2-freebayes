@@ -148,7 +148,7 @@ rm logfile_variants_GISAID_freebayes
 echo "Merge VCFs using jacquard"
 echo ""
 ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
-
+echo ""
 # Left only genotypes in merged VCF
 echo "Fixing genotypes in merged VCF"
 echo ""
@@ -179,7 +179,7 @@ vcfleftalign -r ${2} merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
 sed -i 's/|unknown//'g merged.GISAID.left.vcf
 
 # calculate AF
-echo "calculating AF with vcflib"
+echo "calculating viral frequency with vcflib"
 echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
