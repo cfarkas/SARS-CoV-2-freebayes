@@ -2,7 +2,7 @@
 set -euxo pipefail
 {
 
-GISAID.fasta=${1}
+GISAID.fasta="${1}"
 Reference=${2}
 Threads=${3}
 
