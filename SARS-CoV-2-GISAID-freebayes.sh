@@ -101,7 +101,7 @@ echo ""
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
 samtools faidx ${2}
-fasta=ls -1 *.fasta
+fasta= ls -1 *.fasta
 for fasta in *.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
 samtools view -bS ${fasta}.sam > ${fasta}.bam
@@ -132,7 +132,7 @@ echo "Calculating Number of Variants per genome"
 echo ""
 ulimit -s 99999
 {
-vcf=ls -1 *.vcf
+vcf= ls -1 *.vcf
 for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
 done
 #
