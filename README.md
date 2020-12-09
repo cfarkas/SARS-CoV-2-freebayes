@@ -149,9 +149,9 @@ This execution will:
 We provided SRA_Accessions_Aug_03_2020.tabular, containing a curated list of 17560 SARS-CoV-2 worldwide datasets until August 03, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to collect variants from July_28_2020_North_America.txt datasets using 30 threads:
 
 ```
-./SARS-CoV-2-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
+./SARS-CoV-2-NGS-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
 ```
-will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 138 of SARS-CoV-2-freebayes.sh script.
+will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 139 of SARS-CoV-2-NGS-freebayes.sh script.
 
 
 # II) Collecting Variants (GISAID FASTA genomes)
