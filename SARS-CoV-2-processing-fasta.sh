@@ -116,7 +116,7 @@ ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do 
 echo "Renaming files in bash"
 echo ""
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
-
+cd ..
 echo ""
 echo "#######################################################"
 echo "All done. Variants were called from aligned FASTA files"
