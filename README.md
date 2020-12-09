@@ -164,14 +164,23 @@ will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in li
 -  gisaid_South_America_08_03_2020.fasta
 -  merged.GISAID.fasta.gz (merge)
 
-all these fasta files are available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020 
+all these fasta files are available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020 and can be downloaded with wget: 
 
-For simplicity, in a given folder, any fasta collection can be renamed to "merged.GISAID.fasta" and run the provided commands. As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
+```
+wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz
+wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz
+wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz
+wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz
+wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz
+wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz
+wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz
+```
+As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
 
 ```
 ### Split fasta files
 
-ulimit -s 80000   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
+ulimit -s 99999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 gunzip merged.GISAID.fasta.gz
 sed -i 's/ /-/'g merged.GISAID.fasta
 sed -i "s|hCoV-19/.*./2020||"g merged.GISAID.fasta
@@ -206,13 +215,13 @@ done
 ### Merge of Variants
 
 # fixing VCF files for merge
-ulimit -s 80000 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
 
 # Calculating Number of Variants per genome
-ulimit -s 80000
+ulimit -s 99999
 {
 vcf= ls -1 *.vcf
 for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
