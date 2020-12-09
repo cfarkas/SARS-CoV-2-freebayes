@@ -88,7 +88,7 @@ echo "Splitting fasta files with seqkit"
 echo ""
 seqkit split --by-id ${fasta_name}.fasta
 cd ${fasta_name}.fasta.split/
-for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/${fasta_name}.id_//g')";  done
+for name in *.fasta; do mv -i -- "$name" "${name#*id_}" ; done
 rm ${fasta_name}.fasta 
 echo "Split is done. Continue with FASTA alignments"
 echo ""
