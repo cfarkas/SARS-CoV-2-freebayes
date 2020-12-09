@@ -142,6 +142,7 @@ grep -v "EPI_ISL_" logfile_variants_GISAID_freebayes > variants_per_sample
 paste vcf_files variants_per_sample > logfile_variants_GISAID
 rm vcf_files variants_per_sample
 sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
+rm logfile_variants_GISAID_freebayes
 
 # Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
