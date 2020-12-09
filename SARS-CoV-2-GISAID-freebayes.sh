@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euxo pipefail
 {
 
 GISAID.fasta=${1}
