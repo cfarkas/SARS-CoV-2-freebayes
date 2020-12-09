@@ -74,9 +74,8 @@ fi
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
 ### Split fasta files
-echo "Splitting fasta files"
+echo "fix names in FASTA file"
 echo ""
-
 ulimit -s 99999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 sed -i 's/ /-/'g ${1}
 sed -i "s|hCoV-19/.*./2020||"g ${1}
@@ -86,13 +85,16 @@ sed -i 's/>\t/>/'g ${1}
 seqkit fx2tab ${1} > merged.GISAID.tabular
 awk '{print $1"\t"$3}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
 seqkit tab2fx merged.GISAID.tab > merged.GISAID.fasta && rm merged.GISAID.tab
+echo "Splitting fasta files with seqkit"
+echo ""
 seqkit split --by-id merged.GISAID.fasta
 cd merged.GISAID.fasta.split/
 for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/merged.GISAID.id_//g')";  done
 cd ..
 cp ./merged.GISAID.fasta.split/EPI*.fasta ./
 rm -r -f merged.GISAID.fasta.split merged.GISAID.fasta ${1}
-
+echo "Split is done. Continue with FASTA alignments"
+echo ""
 
 ### Align fasta files to reference (covid19-refseq.fasta, provided in this repository) and call variants with freebayes (option C 1)
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
@@ -107,19 +109,26 @@ freebayes -f ${2} -C 1 ${fasta}.sorted.bam > ${fasta}.vcf
 vcfleftalign -r ${2} ${fasta}.vcf > ${fasta}.left.vcf
 rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
 done
-
+echo "Done. Continue with variant aggregation"
+echo ""
 
 ### Merge of Variants
 echo "Merging variants with Jacquard"
 echo ""
 
 # fixing VCF files for merge
+echo "fixing VCF files for merge"
+echo ""
 ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
+echo "Renaming files in bash"
+echo ""
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
 
 # Calculating Number of Variants per genome
+echo "Calculating Number of Variants per genome"
+echo ""
 ulimit -s 99999
 {
 vcf= ls -1 *.vcf
@@ -135,6 +144,8 @@ rm vcf_files variants_per_sample
 sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
 
 # Merge VCFs using jacquard
+echo "Merge VCFs using jacquard"
+echo ""
 ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
 
 # Left only genotypes in merged VCF
