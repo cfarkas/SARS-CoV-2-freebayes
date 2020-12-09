@@ -135,7 +135,7 @@ git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cd SARS-CoV-2-freebayes
 samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
-bash SARS-CoV-2-freebayes.sh SRA_list covid19-refseq.fasta Threads
+./SARS-CoV-2-freebayes.sh SRA_list covid19-refseq.fasta Threads
 ```
 This execution will:
 
