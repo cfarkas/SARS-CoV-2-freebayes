@@ -120,7 +120,7 @@ echo ""
 # fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
-ulimit -s 99999 && vcf=ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
 echo "Renaming files in bash"
