@@ -175,103 +175,18 @@ wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e
 wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz
 ```
-As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) place merged.GISAID.fasta.gz and covid19-refseq.fasta in a folder and do:
+As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) we can obtain aggregated variants from merged.GISAID.fasta.gz dataset in a folder called "GISAID_merge", as follows:
 
 ```
-### Split fasta files
-
-ulimit -s 99999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
-gunzip merged.GISAID.fasta.gz
-sed -i 's/ /-/'g merged.GISAID.fasta
-sed -i "s|hCoV-19/.*./2020||"g merged.GISAID.fasta
-sed -i "s|hCoV-19/.*./2019||"g merged.GISAID.fasta
-sed -i 's/|/\t/'g merged.GISAID.fasta
-sed -i 's/>\t/>/'g merged.GISAID.fasta
-seqkit fx2tab merged.GISAID.fasta > merged.GISAID.tabular
-awk '{print $1"\t"$3}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
-seqkit tab2fx merged.GISAID.tab > merged.GISAID.fasta && rm merged.GISAID.tab
-seqkit split --by-id merged.GISAID.fasta
-cd merged.GISAID.fasta.split/
-for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/merged.GISAID.id_//g')";  done
-cd ..
-cp ./merged.GISAID.fasta.split/EPI*.fasta ./
-rm -r -f merged.GISAID.fasta.split merged.GISAID.fasta
-
-
-### Align fasta files to reference (covid19-refseq.fasta, provided in this repository) and call variants with freebayes (option C 1)
-
-samtools faidx covid19-refseq.fasta
-fasta= ls -1 *.fasta
-for fasta in *.fasta; do
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta ${fasta} > ${fasta}.sam
-samtools view -bS ${fasta}.sam > ${fasta}.bam
-samtools sort -o ${fasta}.sorted.bam ${fasta}.bam
-freebayes -f covid19-refseq.fasta -C 1 ${fasta}.sorted.bam > ${fasta}.vcf
-vcfleftalign -r /home/user/MITACS/July_12_2020/SARS-CoV-2_illumina_analysis/1/covid19-refseq.fasta ${fasta}.vcf > ${fasta}.left.vcf
-rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
-done
-
-
-### Merge of Variants
-
-# fixing VCF files for merge
-ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
-
-# Renaming files in bash
-for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
-
-# Calculating Number of Variants per genome
-ulimit -s 99999
-{
-vcf= ls -1 *.vcf
-for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
-done
-#
-} | tee logfile_variants_GISAID_freebayes
-#
-grep "EPI_ISL_" logfile_variants_GISAID_freebayes > vcf_files
-grep -v "EPI_ISL_" logfile_variants_GISAID_freebayes > variants_per_sample
-paste vcf_files variants_per_sample > logfile_variants_GISAID
-rm vcf_files variants_per_sample
-sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
-
-# Merge VCFs using jacquard
-ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
-
-# Left only genotypes in merged VCF
-vcfkeepgeno merged.GISAID.vcf GT > merged.GISAID.GT.vcf
-
-# Split variants and header from merged.GT.vcf
-grep "#" merged.GISAID.GT.vcf > header
-grep -v "#" merged.GISAID.GT.vcf > variants.vcf
-
-sed -i 's|1/1|1|'g variants.vcf   
-sed -i 's|0/1|1|'g variants.vcf   
-sed -i 's|1/0|1|'g variants.vcf  
-sed -i 's/[.]/0/'g variants.vcf   # convert point to zeros 
-
-# Reconstitute vcf file
-cat header variants.vcf > merged.GISAID.fixed.vcf
-rm header variants.vcf
-sed -i 's/NC_04551202/NC_045512.2/'g merged.GISAID.fixed.vcf
-
-# left-align vcf file and fix names
-vcfleftalign -r covid19-refseq.fasta merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
-sed -i 's/|unknown//'g merged.GISAID.left.vcf
-
-# calculate AF
-vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
-rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
-gzip merged.GISAID.vcf
-ulimit -s 80000
-gzip *.fasta
-
-# Filter variants by Viral Frequency: 0.0099 (1%)
-vcffilter -f "AF > 0.0099" merged.GISAID.AF.vcf > merged.GISAID.AF_1%.vcf
-grep -v "##" merged.GISAID.AF_1%.vcf > merged.GISAID.AF_1%.table
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
+samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
+mkdir GISAID_merge && cd GISAID_merge
+wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 30
 ```
 
-Users can do the same for each fasta collection file to collect aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf). 
+-This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf).
+-NOTE: this script will fail with more than 100000 GISAID FASTA samples and is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here:
 
 
 # III) Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
