@@ -67,26 +67,7 @@ if [ $# -ne 1 ]; then
   exit 3
 fi
 
-### Calculating Number of Variants per genome
-echo ""
-echo "Calculating Number of Variants per genome"
-echo ""
-ulimit -s 299999
-{
-vcf= ls -1 *.vcf
-for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
-done
-#
-} | tee logfile_variants_GISAID_freebayes
-#
-grep "EPI_ISL_" logfile_variants_GISAID_freebayes > vcf_files
-grep -v "EPI_ISL_" logfile_variants_GISAID_freebayes > variants_per_sample
-paste vcf_files variants_per_sample > logfile_variants_GISAID
-rm vcf_files variants_per_sample
-sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
-rm logfile_variants_GISAID_freebayes
-
-# Merge VCFs using jacquard
+### Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
 ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
