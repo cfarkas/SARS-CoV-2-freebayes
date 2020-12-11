@@ -192,6 +192,7 @@ echo ""
 vcfleftalign -r ${2} merged.fixed.vcf > merged.left.vcf
 sed -i 's/|unknown//'g merged.left.vcf
 
+# Calculating Viral Frequencies
 echo "calculate AF with vcflib"
 echo ""
 vcffixup merged.left.vcf > merged.AF.vcf
@@ -201,11 +202,23 @@ vcfintersect -i problematic_sites_sarsCov2.vcf merged.AF.vcf -r ${2} --invert > 
 rm merged.fixed.vcf merged.left.vcf merged.AF.vcf
 mv merged.AF.clean.vcf merged.AF.vcf
 
-echo "Filter variants by AF: 0.0099 (Viral frequency >= 1%)"
+# Filter variants by Viral Frequency: 0.0099 (1%)
+echo "Filtering variants by Viral Frequency: 0.0099 (1%)"
 echo ""
-vcffilter -f "AF > 0.0099"  merged.AF.vcf > merged.AF_0.01.vcf
+vcffilter -f "AF > 0.0099" merged.AF.vcf > merged.AF_1%.vcf
+grep -v "##" merged.AF_1%.vcf > merged.AF_1%.table
 
-echo "All done. Merged vcf files are called merged.AF.vcf, merged.AF_0.01.vcf and merged.AF_0.005.vcf and are located in current directory"
+echo "#######"
+echo "Summary:"
+echo "#######"
+echo ""
+echo "merged.AF.vcf contain merged variants, problematic sites excluded. See https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473."
+echo ""
+echo "merged.AF_1%.vcf contain merged variants (Viral Frequency >=1%)"
+echo ""
+echo "merged.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
+echo ""
+echo "All done."
 
 ###############################################################
 #
