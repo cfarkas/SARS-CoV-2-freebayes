@@ -67,6 +67,8 @@ if [ $# -ne 1 ]; then
   exit 3
 fi
 
+begin=`date +%s`
+
 ### Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
@@ -130,6 +132,10 @@ echo ""
 echo "merged.GISAID.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
 echo ""
 echo "All done."
+
+end=`date +%s`
+elapsed=`expr $end - $begin`
+echo Time taken: $elapsed
 
 ###############################################################
 #
