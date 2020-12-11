@@ -316,7 +316,8 @@ gzip SnpEff-eff_merged.GISAID.vcf
 
 
 # IV) πN-πS calculation per geographical region
-To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020. In a folder (i.e. piN-piS) do:
+To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020. In a folder (i.e. piN-piS). From scratch, do: 
+
 ```
 mkdir piN-piS
 cd ./piN-piS/
@@ -325,20 +326,17 @@ gunzip *
 gffread GCF_009858895.2_ASM985889v3_genomic.gff -T -o SARS-CoV-2.gtf
 git clone https://github.com/chasewnelson/SNPGenie.git
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
+samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
 
-################
-### Analysis ###
-################
+##################################
+### Analysis, using 10 threads ###
+##################################
 
 ### Africa
+mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz 
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Africa_08_03_2020.fasta > Africa_alignment.sam
-samtools view -bS Africa_alignment.sam > Africa_alignment.bam
-samtools sort -o Africa_alignment.sorted.bam Africa_alignment.bam
-samtools index Africa_alignment.sorted.bam
-freebayes -f covid19-refseq.fasta -F 0.001 Africa_alignment.sorted.bam > Africa_alignment.vcf
-vcfleftalign -r covid19-refseq.fasta Africa_alignment.vcf > Africa.left.vcf
-perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Africa.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Africa
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+perl ../SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Africa.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Africa_SNPGenie
 
 
 ### Asia
