@@ -199,7 +199,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 -This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 1% (merged.GISAID.AF_1%.vcf) inside the folder "GISAID_merge". Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). 
 
--NOTE: It is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020, ~230000 genomes).
+-NOTE: It is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020, ~230000 genomes). Users may change ulimit -s and -n parameters, see README_ulimit file in this repository to do that in Ubuntu-based systems. 
 
 ### Number of variants per genome
 
