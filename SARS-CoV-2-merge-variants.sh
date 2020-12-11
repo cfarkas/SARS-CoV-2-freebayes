@@ -109,7 +109,7 @@ wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/pro
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
 vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${2} --invert > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
-gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf 
+gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf
 ulimit -s 299999
 gzip *.fasta 
 
@@ -123,9 +123,11 @@ echo "#######"
 echo "Summary:"
 echo "#######"
 echo ""
-echo "merged.GISAID.AF.vcf contain merged variants"
+echo "merged.GISAID.AF.raw.vcf.gz contain all merged variants"
 echo ""
-echo "merged.GISAID.AF_1%.vcf contain merged variants with viral frequency >=1%."
+echo "merged.GISAID.AF.vcf contain merged variants, problematic sites excluded. See https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473."
+echo ""
+echo "merged.GISAID.AF_1%.vcf contain merged variants with viral Frequency >=1%."
 echo ""
 echo "merged.GISAID.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
 echo ""
