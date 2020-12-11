@@ -115,6 +115,8 @@ ulimit -s 299999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do
 echo "Renaming files in bash"
 echo ""
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
+ulimit -s 299999
+gzip *.fasta 
 cd ..
 echo ""
 echo "#######################################################"
