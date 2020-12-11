@@ -318,13 +318,14 @@ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_AS
 gunzip *
 gffread GCF_009858895.2_ASM985889v3_genomic.gff -T -o SARS-CoV-2.gtf
 git clone https://github.com/chasewnelson/SNPGenie.git
-
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 
 ################
 ### Analysis ###
 ################
 
 ### Africa
+wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz 
 minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Africa_08_03_2020.fasta > Africa_alignment.sam
 samtools view -bS Africa_alignment.sam > Africa_alignment.bam
 samtools sort -o Africa_alignment.sorted.bam Africa_alignment.bam
