@@ -104,9 +104,12 @@ sed -i 's/|unknown//'g merged.GISAID.left.vcf
 # calculate AF
 echo "calculating viral frequency with vcflib"
 echo ""
-vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
+vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.raw.vcf
+wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${2} --invert > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
-gzip merged.GISAID.vcf
+gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf 
 ulimit -s 299999
 gzip *.fasta 
 
@@ -122,9 +125,9 @@ echo "#######"
 echo ""
 echo "merged.GISAID.AF.vcf contain merged variants"
 echo ""
-echo "merged.GISAID.AF_1%.vcf contain merged variants (Viral Frequency >=1%)"
+echo "merged.GISAID.AF_1%.vcf contain merged variants with viral frequency >=1%."
 echo ""
-echo "merged.GISAID.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header and suitable for plotting"
+echo "merged.GISAID.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
 echo ""
 echo "All done."
 
