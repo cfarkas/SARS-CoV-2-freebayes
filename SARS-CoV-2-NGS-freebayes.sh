@@ -140,20 +140,6 @@ a= ls -1 *.bam
 for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${2}.fai 2000) ${3} -f ${2} -F 0.49 -b ${a} > ${a}.freebayes.vcf
 done
 
-###############
-### Logfile ###
-###############
-echo "generating logfile with variants : logfile_variants_SRA_freebayes"
-echo ""
-ulimit -s 299999   
-{
-vcf= ls -1 *.vcf
-for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
-done
-#
-} | tee logfile_variants_SRA_freebayes
-#
-
 #######################################
 ### Merging variants using jacquard ###
 #######################################
@@ -163,7 +149,6 @@ echo "for information, please see: https://jacquard.readthedocs.io/en/v0.42/over
 echo ""
 # Removing 0-byte files in folder
 find . -size 0 -delete
-ulimit -s 299999  
 echo "Merge VCFs using jacquard"
 echo ""
 ulimit -n 1000000
