@@ -74,7 +74,6 @@ fi
 
 begin=`date +%s`
 
-ulimit -s 299999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 echo "Downloading SRA files from the given list of accessions"
 prefetch --max-size 800G -O ./ --option-file ${1}
 echo "SRA files were downloaded in current directory"
