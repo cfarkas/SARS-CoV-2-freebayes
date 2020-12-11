@@ -78,7 +78,6 @@ begin=`date +%s`
 ### Split fasta files
 echo "fixing names in FASTA file"
 echo ""
-ulimit -s 299999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 sed -i 's/ /-/'g ${1}
 sed -i "s|hCoV-19/.*./2020||"g ${1}
 sed -i "s|hCoV-19/.*./2019||"g ${1}
