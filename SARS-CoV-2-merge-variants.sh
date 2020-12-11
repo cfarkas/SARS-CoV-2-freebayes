@@ -110,8 +110,6 @@ sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
 vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${2} --invert > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
 gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf
-ulimit -s 299999
-gzip *.fasta 
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
 echo "Filtering variants by Viral Frequency: 0.0099 (1%)"
