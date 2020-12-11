@@ -185,7 +185,7 @@ As an example for merged.GISAID.fasta.gz (containing all genomes per geographica
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
 
-# As example, download merged.GISAID.fasta.gz in "GISAID_merge", gunzip and execute the pipeline
+# As example, download merged.GISAID.fasta.gz inside "GISAID_merge" folder, gunzip and execute the pipeline
 mkdir GISAID_merge && cd GISAID_merge
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 30
@@ -197,7 +197,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 ### Number of variants per genome
 
-Users can calculate number of variants per genome. Inside all_variants folder, do:
+Users can compute the number of variants per genome. Inside all_variants folder, do:
 
 ```
 ulimit -s 299999
@@ -215,7 +215,7 @@ rm vcf_files variants_per_sample
 sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
 rm logfile_variants_GISAID_freebayes
 ```
-
+logfile_variants_GISAID file contains the GISAID accession along with the number of detected variants. 
 
 # III) Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
 In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
