@@ -71,7 +71,8 @@ if [ $# -ne 3 ]; then
   echo 1>&2 "Usage: ./`basename $0` [SRA_list] [Reference] [Threads]"
   exit 3
 fi
-dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+
+begin=`date +%s`
 
 ulimit -s 299999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 echo "Downloading SRA files from the given list of accessions"
@@ -221,6 +222,10 @@ echo ""
 echo "merged.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
 echo ""
 echo "All done."
+
+end=`date +%s`
+elapsed=`expr $end - $begin`
+echo Time taken: $elapsed
 
 ###############################################################
 #
