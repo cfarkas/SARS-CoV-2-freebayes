@@ -73,7 +73,7 @@ if [ $# -ne 3 ]; then
 fi
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
-ulimit -s 99999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
+ulimit -s 299999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 echo "Downloading SRA files from the given list of accessions"
 prefetch --max-size 800G -O ./ --option-file ${1}
 echo "SRA files were downloaded in current directory"
@@ -144,7 +144,7 @@ done
 ###############
 echo "generating logfile with variants : logfile_variants_SRA_freebayes"
 echo ""
-ulimit -s 99999   
+ulimit -s 299999   
 {
 vcf= ls -1 *.vcf
 for vcf in *.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
@@ -162,7 +162,7 @@ echo "for information, please see: https://jacquard.readthedocs.io/en/v0.42/over
 echo ""
 # Removing 0-byte files in folder
 find . -size 0 -delete
-ulimit -s 99999  
+ulimit -s 299999  
 echo "Merge VCFs using jacquard"
 echo ""
 ulimit -n 1000000
@@ -195,12 +195,12 @@ sed -i 's/|unknown//'g merged.left.vcf
 # Calculating Viral Frequencies
 echo "calculate AF with vcflib"
 echo ""
-vcffixup merged.left.vcf > merged.AF.vcf
+vcffixup merged.left.vcf > merged.AF.raw.vcf
 wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
-vcfintersect -i problematic_sites_sarsCov2.vcf merged.AF.vcf -r ${2} --invert > merged.AF.clean.vcf
-rm merged.fixed.vcf merged.left.vcf merged.AF.vcf
-mv merged.AF.clean.vcf merged.AF.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf merged.AF.raw.vcf -r ${2} --invert > merged.AF.vcf
+rm merged.fixed.vcf merged.left.vcf
+gzip merged.vcf merged.AF.raw.vcf
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
 echo "Filtering variants by Viral Frequency: 0.0099 (1%)"
@@ -212,9 +212,11 @@ echo "#######"
 echo "Summary:"
 echo "#######"
 echo ""
+echo "merged.AF.raw.vcf.gz contain all merged variants."
+echo ""
 echo "merged.AF.vcf contain merged variants, problematic sites excluded. See https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473."
 echo ""
-echo "merged.AF_1%.vcf contain merged variants (Viral Frequency >=1%)"
+echo "merged.AF_1%.vcf contain merged variants with viral frequency >=1%."
 echo ""
 echo "merged.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
 echo ""
