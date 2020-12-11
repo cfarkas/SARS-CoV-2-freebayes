@@ -73,6 +73,8 @@ if [ $# -ne 3 ]; then
   exit 3
 fi
 
+begin=`date +%s`
+
 ### Split fasta files
 echo "fixing names in FASTA file"
 echo ""
@@ -191,6 +193,10 @@ echo ""
 echo "merged.GISAID.AF_1%.table contain merged variants (Viral Frequency >=1%), without VCF header, suitable for plotting"
 echo ""
 echo "All done."
+
+end=`date +%s`
+elapsed=`expr $end - $begin`
+echo Time taken: $elapsed
 
 ###############################################################
 #
