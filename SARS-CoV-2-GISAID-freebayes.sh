@@ -164,9 +164,13 @@ sed -i 's/|unknown//'g merged.GISAID.left.vcf
 echo "calculating viral frequency with vcflib"
 echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.vcf
-rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
+wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.vcf -r ${2} --invert > merged.GISAID.AF.clean.vcf
+rm merged.GISAID.AF.vcf merged.GISAID.fixed.vcf merged.GISAID.left.vcf
+mv merged.GISAID.AF.clean.vcf merged.GISAID.AF.vcf
 gzip merged.GISAID.vcf
-ulimit -s 99999
+ulimit -s 299999
 gzip *.fasta 
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
@@ -179,7 +183,7 @@ echo "#######"
 echo "Summary:"
 echo "#######"
 echo ""
-echo "merged.GISAID.AF.vcf contain merged variants"
+echo "merged.GISAID.AF.vcf contain merged variants, problematic sites excluded. See https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473."
 echo ""
 echo "merged.GISAID.AF_1%.vcf contain merged variants (Viral Frequency >=1%)"
 echo ""
