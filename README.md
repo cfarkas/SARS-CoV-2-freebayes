@@ -310,7 +310,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 
 
 # IV) πN-πS calculation per geographical region
-To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). In a folder (i.e. piN-piS) place covid19-refseq.fasta and the fasta collections per geographical region. Then do:
+To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020. In a folder (i.e. piN-piS) do:
 ```
 mkdir piN-piS
 cd ./piN-piS/
