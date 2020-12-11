@@ -109,13 +109,12 @@ done
 ### fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
-ulimit -s 299999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 ### Renaming files in bash
 echo "Renaming files in bash"
 echo ""
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
-ulimit -s 299999
 gzip *.fasta 
 cd ..
 echo ""
