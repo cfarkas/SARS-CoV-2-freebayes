@@ -97,7 +97,13 @@ For information, please see :https://jacquard.readthedocs.io/en/v0.42/installati
 pip install jacquard
 ```
 
-### (8) Installing seqkit
+### 8) Installing pyfasta
+For information, please see : https://pypi.org/project/pyfasta/
+```
+pip install pyfasta
+```
+
+### 9) Installing seqkit
 SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
 ```
 wget https://github.com/shenwei356/seqkit/releases/download/v0.12.1/seqkit_linux_386.tar.gz
@@ -106,7 +112,7 @@ tar -xvf seqkit_linux_386.tar
 sudo cp seqkit /usr/local/bin/
 ```
 
-### (9) Installing BEDOPS
+### 10) Installing BEDOPS
 For information, please see: https://bedops.readthedocs.io/en/latest/content/installation.html#linux
 ```
 wget https://github.com/bedops/bedops/releases/download/v2.4.39/bedops_linux_x86_64-v2.4.39.tar.bz2
@@ -114,7 +120,7 @@ tar jxvf bedops_linux_x86_64-v2.4.39.tar.bz2
 cp bin/* /usr/local/bin/
 ```
 
-### (10) Installing inStrain 
+### 11) Installing inStrain 
 Tool for highly accurate genome comparisons, analysis of coverage, microdiversity, linkage and sensitive SNP detection. For information, please see: https://instrain.readthedocs.io/en/latest/
 
 ```
