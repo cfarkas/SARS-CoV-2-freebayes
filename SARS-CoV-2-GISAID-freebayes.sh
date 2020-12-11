@@ -78,7 +78,7 @@ begin=`date +%s`
 ### Split fasta files
 echo "fixing names in FASTA file"
 echo ""
-ulimit -s 99999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
+ulimit -s 299999   # To increase permamently open file limit in your workstation/machine, see "README_ulimit" for instructions.
 sed -i 's/ /-/'g ${1}
 sed -i "s|hCoV-19/.*./2020||"g ${1}
 sed -i "s|hCoV-19/.*./2019||"g ${1}
@@ -121,7 +121,7 @@ echo ""
 # fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
-ulimit -s 99999 && vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
+vcf= ls -1 *.fasta.left.vcf; for vcf in *.fasta.left.vcf; do sed -i "s|0/0|1/1|"g ${vcf}; done
 
 # Renaming files in bash
 echo "Renaming files in bash"
@@ -171,7 +171,6 @@ sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
 vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${2} --invert > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
 gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf
-ulimit -s 299999
 gzip *.fasta 
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
