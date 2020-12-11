@@ -195,8 +195,9 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 -NOTE: It is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020, ~230000 genomes)
 
+### Number of variants per genome
 
-Users can calculate number of variants per genome. Inside GISAID_merge folder, do:
+Users can calculate number of variants per genome. Inside all_variants folder, do:
 
 ```
 ulimit -s 299999
