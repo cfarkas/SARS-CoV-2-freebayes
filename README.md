@@ -205,10 +205,10 @@ ulimit -n 1000000 && ulimit -s 299999  # Changing stack size and open file numbe
 
 ### Number of variants per genome
 
-Users can compute the number of variants per genome. Inside all_variants folder, do:
+Users can compute the number of variants per genome as follows. Inside all_variants folder, do:
 
 ```
-ulimit -s 299999
+ulimit -s 299999 && ulimit -n 1000000
 {
 vcf= ls -1 EPI_*.vcf
 for vcf in EPI_*.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
@@ -334,10 +334,11 @@ samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-C
 ### Analysis, using 10 threads ###
 ##################################
 
-### Africa
+### Africa                           
 mkdir GISAID_Africa && cd GISAID_Africa
-wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz 
-../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
+ulimit -s 299999 && ulimit -n 1000000 
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 perl ../SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Africa.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Africa_SNPGenie
 
 
