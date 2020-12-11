@@ -178,7 +178,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 ### Execution
 
-As an example for merged.GISAID.fasta.gz (containing all genomes per geographical region) we can obtain aggregated variants from merged.GISAID.fasta.gz dataset in a folder called "GISAID_merge", as follows:
+As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes) we can obtain aggregated variants from merged.GISAID.fasta.gz dataset in a folder called "GISAID_merge", as follows:
 
 ```
 # Clone Repository
@@ -193,7 +193,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 -This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf) inside the folder "GISAID_merge". Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). 
 
--NOTE: It is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020, ~230000 genomes)
+-NOTE: It is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020, ~230000 genomes).
 
 ### Number of variants per genome
 
@@ -216,6 +216,7 @@ sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
 rm logfile_variants_GISAID_freebayes
 ```
 logfile_variants_GISAID file contains the GISAID accession along with the number of detected variants. 
+
 
 # III) Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
 In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
