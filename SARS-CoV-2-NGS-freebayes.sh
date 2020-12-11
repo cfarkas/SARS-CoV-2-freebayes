@@ -195,15 +195,15 @@ sed -i 's/|unknown//'g merged.left.vcf
 echo "calculate AF with vcflib"
 echo ""
 vcffixup merged.left.vcf > merged.AF.vcf
-rm merged.fixed.vcf merged.left.vcf
+wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf merged.AF.vcf -r ${2} --invert > merged.AF.clean.vcf
+rm merged.fixed.vcf merged.left.vcf merged.AF.vcf
+mv merged.AF.clean.vcf merged.AF.vcf
 
-echo "Filter variants by AF: 0.0099 (1%, founders)"
+echo "Filter variants by AF: 0.0099 (Viral frequency >= 1%)"
 echo ""
 vcffilter -f "AF > 0.0099"  merged.AF.vcf > merged.AF_0.01.vcf
-
-echo "Filter variants by AF: 0.0049 (0.5%)"
-echo ""
-vcffilter -f "AF > 0.00499"  merged.AF.vcf > merged.AF_0.005.vcf
 
 echo "All done. Merged vcf files are called merged.AF.vcf, merged.AF_0.01.vcf and merged.AF_0.005.vcf and are located in current directory"
 
