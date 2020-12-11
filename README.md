@@ -193,7 +193,27 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 -This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 5% (merged.GISAID.AF_5%.vcf) inside the folder "GISAID_merge". Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). 
 
--NOTE: this script will fail with more than 100000 GISAID FASTA samples and is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki
+-NOTE: It is recommended to process large FASTA collections by chunks, we provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020, ~230000 genomes)
+
+
+Users can calculate number of variants per genome. Inside GISAID_merge folder, do:
+
+```
+ulimit -s 299999
+{
+vcf= ls -1 EPI_*.vcf
+for vcf in EPI_*.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_GISAID_freebayes
+#
+grep "EPI_ISL_" logfile_variants_GISAID_freebayes > vcf_files
+grep -v "EPI_ISL_" logfile_variants_GISAID_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_GISAID
+rm vcf_files variants_per_sample
+sed -i 's/.fa.left.vcf//'g logfile_variants_GISAID
+rm logfile_variants_GISAID_freebayes
+```
 
 
 # III) Collecting variants per Protein (SnpEff-classified GISAID merged variants) : working with SnpEff-eff_merged.GISAID.vcf file. 
