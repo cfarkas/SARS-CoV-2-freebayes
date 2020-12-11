@@ -74,7 +74,6 @@ fi
 ### Split fasta files
 echo "fixing names in FASTA file"
 echo ""
-ulimit -s 299999
 fasta_name=$(echo ${1} | sed "s/.fasta//")
 sed -i 's/ /-/'g ${1}
 sed -i "s|hCoV-19/.*./2020||"g ${1}
