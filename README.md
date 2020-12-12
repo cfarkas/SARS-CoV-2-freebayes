@@ -334,12 +334,12 @@ samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-C
 ### Analysis, using 10 threads ###
 ##################################
 
-### Africa                           
+### Africa                                 
 mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
 ulimit -s 299999 && ulimit -n 1000000 
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-perl ../SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Africa.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Africa_SNPGenie
+perl ../SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=merged.GISAID.AF.vcf --fastafile=../SARS-CoV-2-freebayes/covid19-refseq.fasta --gtffile=../SARS-CoV-2.gtf --outdir=Africa_SNPGenie
 
 
 ### Asia
