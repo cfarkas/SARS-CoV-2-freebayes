@@ -95,6 +95,7 @@ echo ""
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
 samtools faidx ${2}
+ulimit -n 1000000 && ulimit -s 299999
 fasta= ls -1 EPI_ISL_*.fasta
 for fasta in EPI_ISL_*.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
