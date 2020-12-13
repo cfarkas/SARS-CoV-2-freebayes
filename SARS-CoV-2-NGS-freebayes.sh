@@ -150,7 +150,7 @@ echo ""
 find . -size 0 -delete
 echo "Merge VCFs using jacquard"
 echo ""
-ulimit -n 1000000 && ulimit -s 299999 && jacquard merge --include_all ./ merged.vcf
+ulimit -n 1000000 && jacquard merge --include_all ./ merged.vcf
 
 echo "Left only genotypes in merged VCF"
 echo ""
