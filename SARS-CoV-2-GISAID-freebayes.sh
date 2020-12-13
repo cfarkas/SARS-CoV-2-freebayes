@@ -130,7 +130,7 @@ for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | se
 # Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
-ulimit -n 1000000 jacquard merge --include_all ./ merged.GISAID.vcf
+ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
 echo ""
 # Left only genotypes in merged VCF
 echo "Fixing genotypes in merged VCF"
