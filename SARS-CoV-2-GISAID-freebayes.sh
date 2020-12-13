@@ -114,10 +114,6 @@ done
 echo "Done. Continue with variant aggregation"
 echo ""
 
-### Merge of Variants
-echo "Merging variants with Jacquard"
-echo ""
-
 # fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
