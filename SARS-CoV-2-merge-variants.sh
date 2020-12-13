@@ -72,7 +72,7 @@ begin=`date +%s`
 ### Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
-ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
+jacquard merge --include_all ./ merged.GISAID.vcf
 echo ""
 # Left only genotypes in merged VCF
 echo "Fixing genotypes in merged VCF"
