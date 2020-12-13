@@ -103,7 +103,6 @@ done
 
 echo "Aligning illumina datasets againts reference with minimap, using n threads."
 echo ""
-
 b= ls -1 *.fastq.gz.fastp.gz
 for b in *.fastq.gz.fastp.gz; do minimap2 -ax sr ${2} ${b} > ${b}.sam -t ${3}
 samtools sort ${b}.sam > ${b}.sam.sorted.bam -@ ${3}
@@ -150,7 +149,7 @@ echo ""
 find . -size 0 -delete
 echo "Merge VCFs using jacquard"
 echo ""
-jacquard merge --include_all ./ merged.vcf
+ulimit -n 1000000 && jacquard merge --include_all ./ merged.vcf
 
 echo "Left only genotypes in merged VCF"
 echo ""
