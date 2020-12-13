@@ -152,7 +152,7 @@ This execution will:
 
 ### Example 
 
-We provided SRA_Accessions_Aug_03_2020.tabular, containing a curated list of 17560 SARS-CoV-2 worldwide datasets until August 03, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to become root since these steps will crush for merging variants from a large number of genomes (n>50000).  
+We provided SRA_Accessions_Aug_03_2020.tabular, containing a curated list of 17560 SARS-CoV-2 worldwide datasets until August 03, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to increase open file limit and stack size accordingly at the number of genomes to process, otherwise these steps will crush. see README_ulimit for details in Ubuntu. 
 
 ```
 ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit, see README_ulimit for details.
