@@ -101,7 +101,6 @@ echo ""
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
 samtools faidx ${2}
-ulimit -n 1000000 && ulimit -s 299999
 fasta= ls -1 *.fasta
 for fasta in *.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
@@ -127,7 +126,7 @@ for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | se
 # Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
-ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
+jacquard merge --include_all ./ merged.GISAID.vcf
 echo ""
 # Left only genotypes in merged VCF
 echo "Fixing genotypes in merged VCF"
