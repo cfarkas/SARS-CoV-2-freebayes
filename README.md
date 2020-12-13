@@ -152,7 +152,7 @@ This execution will:
 
 ### Example 
 
-We provided SRA_Accessions_Aug_03_2020.tabular, containing a curated list of 17560 SARS-CoV-2 worldwide datasets until August 03, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, to collect variants from July_28_2020_North_America.txt datasets using 30 threads in Ubuntu:
+We provided SRA_Accessions_Aug_03_2020.tabular, containing a curated list of 17560 SARS-CoV-2 worldwide datasets until August 03, 2020. We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to become root since these steps will crush for merging variants from a large number of genomes (n>50000).  
 
 ```
 sudo -i  # become root. if you can increase ulimit in your workstation, there is no need for this. 
