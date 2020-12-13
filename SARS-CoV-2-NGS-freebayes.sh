@@ -210,6 +210,10 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 
+mdate=`date +'%d/%m/%Y %H:%M:%S'`
+mcpu=$[100-$(vmstat 1 2|tail -1|awk '{print $15}')]%
+mmem=`free | grep Mem | awk '{print $3/$2 * 100.0}'`
+echo "$mdate | $mcpu | $mmem" >> ./stats-cpu
 ###############################################################
 #
 } | tee logfile
