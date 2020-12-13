@@ -100,6 +100,7 @@ echo ""
 ### Align fasta files to reference (covid19-refseq.fasta, provided in this repository) and call variants with freebayes (option C 1)
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
+ulimit -n 1000000 && ulimit -s 299999 
 samtools faidx ${2}
 fasta= ls -1 *.fasta
 for fasta in *.fasta; do
@@ -126,7 +127,7 @@ for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | se
 # Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
-jacquard merge --include_all ./ merged.GISAID.vcf
+ulimit -n 1000000 && jacquard merge --include_all ./ merged.GISAID.vcf
 echo ""
 # Left only genotypes in merged VCF
 echo "Fixing genotypes in merged VCF"
