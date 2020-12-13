@@ -193,7 +193,7 @@ As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes) w
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
 
-# In the previous directory, also download merged.GISAID.fasta.gz inside "GISAID_merge" folder and decompress.
+# In the previous directory, download merged.GISAID.fasta.gz inside "GISAID_merge" folder and decompress.
 mkdir GISAID_merge && cd GISAID_merge
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
 
