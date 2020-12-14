@@ -81,7 +81,7 @@ sed -i "s|hCoV-19/.*./2019||"g ${1}
 sed -i 's/|/\t/'g ${1}
 sed -i 's/>\t/>/'g ${1}
 seqkit fx2tab ${1} > merged.GISAID.tabular
-awk '{print $1"\t"$2}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
+awk '{print $1"\t"$NF}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
 seqkit tab2fx merged.GISAID.tab > ${fasta_name}.fasta && rm merged.GISAID.tab
 echo "Splitting fasta files with seqkit"
 echo ""
