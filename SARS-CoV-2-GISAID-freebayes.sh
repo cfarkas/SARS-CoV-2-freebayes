@@ -88,6 +88,7 @@ awk '{print $1"\t"$3}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GI
 seqkit tab2fx merged.GISAID.tab > merged.GISAID.fasta && rm merged.GISAID.tab
 echo "Splitting fasta files with seqkit"
 echo ""
+ulimit -n 1000000 && ulimit -s 299999
 seqkit split --by-id merged.GISAID.fasta
 cd merged.GISAID.fasta.split/
 for filename in *.fasta; do mv "./$filename" "./$(echo "$filename" | sed -e 's/merged.GISAID.id_//g')";  done
