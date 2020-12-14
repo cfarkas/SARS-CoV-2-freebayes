@@ -107,6 +107,7 @@ for fasta in *.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
 samtools view -bS ${fasta}.sam > ${fasta}.bam
 samtools sort -o ${fasta}.sorted.bam ${fasta}.bam
+samtools index ${fasta}.sorted.bam
 freebayes -f ${2} -C 1 ${fasta}.sorted.bam > ${fasta}.vcf
 vcfleftalign -r ${2} ${fasta}.vcf > ${fasta}.left.vcf
 rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
