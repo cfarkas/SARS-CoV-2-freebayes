@@ -115,6 +115,7 @@ done
 ######################
 
 echo "Renaming files in bash"
+echo ""
 for filename in *.bam; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fastq.gz.fastp.gz.sam.sorted//g')";  done
 
 ######################
@@ -178,7 +179,7 @@ vcfleftalign -r ${2} merged.fixed.vcf > merged.left.vcf
 sed -i 's/|unknown//'g merged.left.vcf
 
 # Calculating Viral Frequencies
-echo "calculating viral frequencies with vcflib"
+echo "Calculating viral frequencies with vcflib"
 echo ""
 vcffixup merged.left.vcf > merged.AF.raw.vcf
 wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
