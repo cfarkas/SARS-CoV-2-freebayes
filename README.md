@@ -132,7 +132,7 @@ Complete instructions can be found in https://vcftools.github.io/downloads.html.
 
 ```
 ### Installing vcftools
-git clone https://github.com/vcftools/vcftools.git
+git clone https://github.com/jydu/vcftools.git
 cd vcftools/
 ./autogen.sh
 export PERL5LIB=/path/to/your/vcftools-directory/src/perl/ 
