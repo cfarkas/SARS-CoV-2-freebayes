@@ -127,11 +127,14 @@ Tool for highly accurate genome comparisons, analysis of coverage, microdiversit
 pip install instrain
 ```
 
-### (Optional) Obtaining and Installing VCFtools
-Complete instructions can be found in https://vcftools.github.io/downloads.html. Users with privileges can accomplish with sudo as follows: 
+### 12) Obtaining and Installing VCFtools
+We employed the version of Julien Y. Dutheil https://github.com/jydu/vcftools that includes the --haploid flag. Safe install can be achieved with root (sudo -i) as follows: 
 
 ```
-### Installing vcftools
+### Installing vcftools 
+sudo -i
+cd /home/user/ # go to home directory or another directory
+sudo apt-get install libz-dev zlib1g-dev  # zlib requirements in Ubuntu
 git clone https://github.com/jydu/vcftools.git
 cd vcftools/
 ./autogen.sh
@@ -139,6 +142,7 @@ export PERL5LIB=/path/to/your/vcftools-directory/src/perl/
 ./configure
 make
 make install
+exit
 ```
 
 # I) Colecting Variants (Sequence Read Archive datasets)
@@ -333,136 +337,69 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-# IV) πN-πS calculation per geographical region
-To estimate synonymous and nonsynonymous nucleotide diversity (π), we will employ SNPgenie program, written in Perl (no specific requeirements for installation) (https://github.com/chasewnelson/SNPGenie). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020. In a folder (i.e. piN-piS). From scratch, do: 
+# IV) nucleotide diversity and Tajima's D calculation per geographical region
+To estimate nucleotide diversity (π) and Tajima's D parameters we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. In a folder (i.e. diversity). From scratch, do: 
 
 ```
-mkdir piN-piS
-cd ./piN-piS/
+mkdir diversity
+cd ./diversity/
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.gff.gz
 gunzip *
 gffread GCF_009858895.2_ASM985889v3_genomic.gff -T -o SARS-CoV-2.gtf
-git clone https://github.com/chasewnelson/SNPGenie.git
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
 
-##################################
-### Analysis, using 10 threads ###
-##################################
+### Full analysis, using 10 threads 
 
 ### Africa                                 
 mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-perl ../SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=merged.GISAID.AF.vcf --fastafile=../SARS-CoV-2-freebayes/covid19-refseq.fasta --gtffile=../SARS-CoV-2.gtf --outdir=Africa_SNPGenie
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Africa
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa
 
+### Asia                                 
+mkdir GISAID_Asia && cd GISAID_Asia
+wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz && gunzip gisaid_Asia_08_03_2020.fasta.gz
+ulimit -n 1000000 && ulimit -s 299999
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Asia
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Asia
 
-### Asia
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Asia_08_03_2020.fasta > Asia_alignment.sam
-samtools view -bS Asia_alignment.sam > Asia_alignment.bam
-samtools sort -o Asia_alignment.sorted.bam Asia_alignment.bam
-samtools index Asia_alignment.sorted.bam
-freebayes -f covid19-refseq.fasta -F 0.001 Asia_alignment.sorted.bam > Asia_alignment.vcf
-vcfleftalign -r covid19-refseq.fasta Asia_alignment.vcf > Asia.left.vcf
-perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Asia.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Asia
+### Europe                                 
+mkdir GISAID_Europe && cd GISAID_Europe
+wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz && gunzip gisaid_Europe_08_03_2020.fasta.gz
+ulimit -n 1000000 && ulimit -s 299999
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Europe
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Europe
 
+### North_America                                
+mkdir GISAID_North_America && cd GISAID_North_America  
+wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz && gunzip gisaid_North_America_08_03_2020.fasta.gz
+ulimit -n 1000000 && ulimit -s 299999
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out North_America
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out North_America
 
-### Europe
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Europe_08_03_2020.fasta > Europe_alignment.sam
-samtools view -bS Europe_alignment.sam > Europe_alignment.bam
-samtools sort -o Europe_alignment.sorted.bam Europe_alignment.bam
-samtools index Europe_alignment.sorted.bam
-# Split Variant calling for large datasets (memory issues)
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:1-5000 Europe_alignment.sorted.bam > Europe_alignment_1_5000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:5001-6000 Europe_alignment.sorted.bam > Europe_alignment_5001_6000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:6001-7000 Europe_alignment.sorted.bam > Europe_alignment_6001_7000.vcf #
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:7001-8000 Europe_alignment.sorted.bam > Europe_alignment_7001_8000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:8001-9000 Europe_alignment.sorted.bam > Europe_alignment_8001_9000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:9001-10000 Europe_alignment.sorted.bam > Europe_alignment_9001_10000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:10001-11000 Europe_alignment.sorted.bam > Europe_alignment_10001_11000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:11001-12000 Europe_alignment.sorted.bam > Europe_alignment_11001_12000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:13001-14000 Europe_alignment.sorted.bam > Europe_alignment_13001_14000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:14001-15000 Europe_alignment.sorted.bam > Europe_alignment_14001_15000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:15001-16000 Europe_alignment.sorted.bam > Europe_alignment_15001_16000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:16001-17000 Europe_alignment.sorted.bam > Europe_alignment_16001_17000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:17001-18000 Europe_alignment.sorted.bam > Europe_alignment_17001_18000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:18001-19000 Europe_alignment.sorted.bam > Europe_alignment_18001_19000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:19001-20000 Europe_alignment.sorted.bam > Europe_alignment_19001_20000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:20001-21000 Europe_alignment.sorted.bam > Europe_alignment_20001_21000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:21001-22000 Europe_alignment.sorted.bam > Europe_alignment_21001_22000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:22001-23000 Europe_alignment.sorted.bam > Europe_alignment_22001_23000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:23001-24000 Europe_alignment.sorted.bam > Europe_alignment_23001_24000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:24001-25000 Europe_alignment.sorted.bam > Europe_alignment_24001_25000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:25001-26000 Europe_alignment.sorted.bam > Europe_alignment_25001_26000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:26001-27000 Europe_alignment.sorted.bam > Europe_alignment_26001_27000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:27001-28000 Europe_alignment.sorted.bam > Europe_alignment_27001_28000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:28001-29903 Europe_alignment.sorted.bam > Europe_alignment_28001_29903.vcf
+### South_America                                
+mkdir GISAID_South_America && cd GISAID_South_America
+wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz && gunzip gisaid_South_America_08_03_2020.fasta.gz
+ulimit -n 1000000 && ulimit -s 299999
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out South_America
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out South_America
 
-vcfcombine Europe_alignment_* > Europe_alignment.vcf
-rm Europe_alignment_*.vcf
-
-vcfleftalign -r covid19-refseq.fasta Europe_alignment.vcf > Europe.left.vcf
-perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Europe.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Europe
-
-
-### North_America
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_North_America_08_03_2020.fasta > North_America_alignment.sam
-samtools view -bS North_America_alignment.sam > North_America_alignment.bam
-samtools sort -o North_America_alignment.sorted.bam North_America_alignment.bam
-samtools index North_America_alignment.sorted.bam
-# Split Variant calling for large datasets (memory issues)
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:1-5000 North_America_alignment.sorted.bam > North_America_alignment_1_5000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:5001-6000 North_America_alignment.sorted.bam > North_America_alignment_5001_6000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:6001-7000 North_America_alignment.sorted.bam > North_America_alignment_6001_7000.vcf #
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:7001-8000 North_America_alignment.sorted.bam > North_America_alignment_7001_8000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:8001-9000 North_America_alignment.sorted.bam > North_America_alignment_8001_9000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:9001-10000 North_America_alignment.sorted.bam > North_America_alignment_9001_10000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:10001-11000 North_America_alignment.sorted.bam > North_America_alignment_10001_11000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:11001-12000 North_America_alignment.sorted.bam > North_America_alignment_11001_12000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:13001-14000 North_America_alignment.sorted.bam > North_America_alignment_13001_14000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:14001-15000 North_America_alignment.sorted.bam > North_America_alignment_14001_15000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:15001-16000 North_America_alignment.sorted.bam > North_America_alignment_15001_16000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:16001-17000 North_America_alignment.sorted.bam > North_America_alignment_16001_17000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:17001-18000 North_America_alignment.sorted.bam > North_America_alignment_17001_18000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:18001-19000 North_America_alignment.sorted.bam > North_America_alignment_18001_19000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:19001-20000 North_America_alignment.sorted.bam > North_America_alignment_19001_20000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:20001-21000 North_America_alignment.sorted.bam > North_America_alignment_20001_21000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:21001-22000 North_America_alignment.sorted.bam > North_America_alignment_21001_22000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:22001-23000 North_America_alignment.sorted.bam > North_America_alignment_22001_23000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:23001-24000 North_America_alignment.sorted.bam > North_America_alignment_23001_24000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:24001-25000 North_America_alignment.sorted.bam > North_America_alignment_24001_25000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:25001-26000 North_America_alignment.sorted.bam > North_America_alignment_25001_26000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:26001-27000 North_America_alignment.sorted.bam > North_America_alignment_26001_27000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:27001-28000 North_America_alignment.sorted.bam > North_America_alignment_27001_28000.vcf
-freebayes -f covid19-refseq.fasta -F 0.001 --region NC_045512.2:28001-29903 North_America_alignment.sorted.bam > North_America_alignment_28001_29903.vcf
-
-vcfcombine North_America_alignment_* > North_America_alignment.vcf
-rm North_America_alignment_*.vcf
-
-vcfleftalign -r covid19-refseq.fasta North_America_alignment.vcf > North_America.left.vcf
-perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=North_America.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=North_America
-
-
-### South_America
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_South_America_08_03_2020.fasta > South_America_alignment.sam
-samtools view -bS South_America_alignment.sam > South_America_alignment.bam
-samtools sort -o South_America_alignment.sorted.bam South_America_alignment.bam
-samtools index South_America_alignment.sorted.bam
-freebayes -f covid19-refseq.fasta -F 0.001 South_America_alignment.sorted.bam > South_America_alignment.vcf
-vcfleftalign -r covid19-refseq.fasta South_America_alignment.vcf > South_America.left.vcf
-perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=South_America.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=South_America
-
-
-### Oceania
-minimap2 -ax asm5 -t 50 covid19-refseq.fasta gisaid_Oceania_08_03_2020.fasta > Oceania_alignment.sam
-samtools view -bS Oceania_alignment.sam > Oceania_alignment.bam
-samtools sort -o Oceania_alignment.sorted.bam Oceania_alignment.bam
-samtools index Oceania_alignment.sorted.bam
-freebayes -f covid19-refseq.fasta -F 0.001 Oceania_alignment.sorted.bam > Oceania_alignment.vcf
-vcfleftalign -r covid19-refseq.fasta Oceania_alignment.vcf > Oceania.left.vcf
-perl ./SNPGenie/snpgenie.pl --vcfformat=4 --snpreport=Oceania.left.vcf --fastafile=covid19-refseq.fasta --gtffile=SARS-CoV-2.gtf --outdir=Oceania
+### Oceania                               
+mkdir GISAID_Oceania && cd GISAID_Oceania
+wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz && gunzip gisaid_Oceania_08_03_2020.fasta.gz
+ulimit -n 1000000 && ulimit -s 299999
+../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Oceania
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Oceania
 ```
+
 
 # V) inStrain analysis of SRA sequencing cohorts (microdiversity)
 To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze Sequence Read Archive datasets from USA as done in the manuscript, do the following: 
@@ -545,308 +482,3 @@ sed -i s'/.bam.freebayes.vcf//'g logfile_variants_AF_5%_freebayes.tabular
 
 ```
 merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_AF_5%_freebayes.tabular contain variants with viral frequency over 5%, per genome.  
-
-
-# VI) GISAID patient metadata analysis
-We present a basic analysis of variants in case-control data (i.e. deceased-released patients), by using BASH enviroment and R statistical environment combined with Fisher's exact test to identify SNPs with a significant difference in the viral frequencies between the two groups (the last two operations performed by snpFreq program, available in galaxy). Here are the BASH steps to obtain suitable inputs for the snpFreq program using patient sequencing datasets with known outcome per country. We will use GISAID genomes with patient metadata until September 28, 2020 (gisaid_hcov-19_2020_09_28_19.fasta, n=7634) and the associated patient metadata file (gisaid_hcov-19_2020_09_28_19.tsv), available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020, as follows: 
-
-```
-sed 's/|.*//'g gisaid_hcov-19_2020_09_28_19.fasta > reformatted.fasta  # remove everything after |
-seqkit fx2tab reformatted.fasta > reformatted.tab
-
-sed -i 's/Hong Kong/Hong-Kong/'g gisaid_hcov-19_2020_09_28_19.tsv                            # Fix names in TSV for grep
-sed -i 's/Saudi Arabia/Saudi-Arabia/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/SaudiArabia/Saudi-Arabia/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/Costa Rica/Costa-Rica/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/South Africa/South-Africa/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/United Arab Emirates/United-Arab-Emirates/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/Czech Republic/Czech-Republic/'g gisaid_hcov-19_2020_09_28_19.tsv       
-sed -i 's/Bosnia and Herzegovina/Bosnia-and-Herzegovina/'g gisaid_hcov-19_2020_09_28_19.tsv   
-sed -i 's/Sri Lanka/Sri-Lanka/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/Puerto Rico/Puerto-Rico/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/Faroe Islands/Faroe-Islands/'g gisaid_hcov-19_2020_09_28_19.tsv
-sed -i 's/South Korea/South-Korea/'g gisaid_hcov-19_2020_09_28_19.tsv
-
-sed -i 's/Hong Kong/Hong-Kong/'g reformatted.tab                                             # Fix names in fasta (as tab) for grep
-sed -i 's/Saudi Arabia/Saudi-Arabia/'g reformatted.tab
-sed -i 's/SaudiArabia/Saudi-Arabia/'g reformatted.tab
-sed -i 's/Costa Rica/Costa-Rica/'g reformatted.tab
-sed -i 's/South Africa/South-Africa/'g reformatted.tab
-sed -i 's/United Arab Emirates/United-Arab-Emirates/'g reformatted.tab
-sed -i 's/Czech Republic/Czech-Republic/'g reformatted.tab
-sed -i 's/Bosnia and Herzegovina/Bosnia-and-Herzegovina/'g reformatted.tab
-sed -i 's/Sri Lanka/Sri-Lanka/'g reformatted.tab
-sed -i 's/Puerto Rico/Puerto-Rico/'g reformatted.tab
-sed -i 's/Faroe Islands/Faroe-Islands/'g reformatted.tab
-sed -i 's/South Korea/South-Korea/'g reformatted.tab
-
-
-############################################
-### India analysis: released vs deceased ###
-############################################
-
-grep "India" gisaid_hcov-19_2020_09_28_19.tsv > India.tsv
-mkdir India
-cp India.tsv covid19-refseq.fasta* ./India
-rm India.tsv
-cd India/
-
-grep "Released" India.tsv > Released.tsv
-grep "Deceased" India.tsv > Deceased.tsv
-awk '{print $1}' Deceased.tsv > Deceased.names
-awk '{print $1}' Released.tsv > Released.names
-
-# Released
-grep -w -F -f Released.names ../reformatted.tab > released.tab                                           # grep in reformatted.tab       
-seqkit tab2fx released.tab > released.fasta && rm released.tab                                           # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta released.fasta > released.sam
-samtools view -bS released.sam > released.bam
-samtools sort -o released.sorted.bam released.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 released.sorted.bam > released.vcf
-vcfleftalign -r ../covid19-refseq.fasta released.vcf > released.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' released.left.vcf > released.left.DP4
-rm released.sam released.bam released.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' released.left.DP4 > released.left.AF
-
-
-# Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                           # grep in reformatted.tab       
-seqkit tab2fx deceased.tab > deceased.fasta && rm deceased.tab                                           # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta deceased.fasta > deceased.sam
-samtools view -bS deceased.sam > deceased.bam
-samtools sort -o deceased.sorted.bam deceased.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 deceased.sorted.bam > deceased.vcf
-vcfleftalign -r ../covid19-refseq.fasta deceased.vcf > deceased.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' deceased.left.vcf > deceased.left.DP4
-rm deceased.sam deceased.bam deceased.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' deceased.left.DP4 > deceased.left.AF
-
-
-### Processing DP4 fields for snpFreq
-vcfcombine deceased.left.vcf released.left.vcf > deceased-released.vcf                                                                   # vcflib
-vcf2bed < deceased-released.vcf > deceased-released.bed                                                                                  # BEDOPS
-awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' deceased-released.bed > deceased-released.bed1                                                  # awk GNU 
-join -a 1 -e 0 -j 1 <(sort deceased.left.DP4) <(sort released.left.DP4) > deceased-released.DP4                                          # join GNU 
-sed -i 's/ /\t/'g deceased-released.DP4                                                                                                  # sed GNU 
-join -e 0 -j 1 <(sort deceased-released.bed1) <(sort deceased-released.DP4) > deceased-released.merge     
-rm deceased-released.bed1
-sed -i 's/ /\t/'g deceased-released.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-released.merge > deceased-released.subset
-rm deceased-released.merge
-awk  '$6!=""' deceased-released.subset > India.deceased-released.SnpFreq && rm deceased-released.subset
-awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' India.deceased-released.SnpFreq > India.deceased-released.SnpFreq1                              # add column after column 5
-awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' India.deceased-released.SnpFreq1 > India.deceased-released.SnpFreq2                             # add column at the end
-rm India.deceased-released.SnpFreq India.deceased-released.SnpFreq1
-mv India.deceased-released.SnpFreq2 India.deceased-released.SnpFreq
-
-
-##################################################
-### Saudi Arabia analysis: released vs deceased ##
-##################################################
-
-grep "Saudi-Arabia" gisaid_hcov-19_2020_09_28_19.tsv > Saudi-Arabia.tsv
-mkdir Saudi-Arabia
-cp Saudi-Arabia.tsv covid19-refseq.fasta* ./Saudi-Arabia
-rm Saudi-Arabia.tsv
-cd Saudi-Arabia/
-
-grep "Live" Saudi-Arabia.tsv > Live.tsv
-grep "Deceased" Saudi-Arabia.tsv > Deceased.tsv
-awk '{print $1}' Live.tsv > Live.names
-awk '{print $1}' Deceased.tsv > Deceased.names
-
-# Live
-grep -w -F -f Live.names ../reformatted.tab > live.tab                                                   # grep in reformatted.tab       
-seqkit tab2fx live.tab > live.fasta && rm live.tab                                                       # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta live.fasta > live.sam
-samtools view -bS live.sam > live.bam
-samtools sort -o live.sorted.bam live.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 live.sorted.bam > live.vcf
-vcfleftalign -r ../covid19-refseq.fasta live.vcf > live.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' live.left.vcf > live.left.DP4
-rm live.sam live.bam live.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' live.left.DP4 > live.left.AF
-
-# Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > deceased.tab                                           # grep in reformatted.tab       
-seqkit tab2fx deceased.tab > deceased.fasta && rm deceased.tab                                           # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta deceased.fasta > deceased.sam
-samtools view -bS deceased.sam > deceased.bam
-samtools sort -o deceased.sorted.bam deceased.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 deceased.sorted.bam > deceased.vcf
-vcfleftalign -r ../covid19-refseq.fasta deceased.vcf > deceased.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' deceased.left.vcf > deceased.left.DP4
-rm deceased.sam deceased.bam deceased.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' deceased.left.DP4 > deceased.left.AF
-
-
-### Processing DP4 fields for snpFreq
-vcfcombine deceased.left.vcf live.left.vcf > deceased-released.vcf                                                       # vcflib
-vcf2bed < deceased-released.vcf > deceased-released.bed                                                                  # BEDOPS
-awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' deceased-released.bed > deceased-released.bed1                                  # awk GNU 
-join -a 1 -e 0 -j 1 <(sort deceased.left.DP4) <(sort live.left.DP4) > deceased-released.DP4                              # join GNU 
-sed -i 's/ /\t/'g deceased-released.DP4                                                                                  # sed GNU 
-join -e 0 -j 1 <(sort deceased-released.bed1) <(sort deceased-released.DP4) > deceased-released.merge     
-rm deceased-released.bed1
-sed -i 's/ /\t/'g deceased-released.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' deceased-released.merge > deceased-released.subset
-rm deceased-released.merge
-awk  '$6!=""' deceased-released.subset > Saudi-Arabia.deceased-released.SnpFreq && rm deceased-released.subset
-awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' Saudi-Arabia.deceased-released.SnpFreq > Saudi-Arabia.deceased-released.SnpFreq1         # add column after column 5
-awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' Saudi-Arabia.deceased-released.SnpFreq1 > Saudi-Arabia.deceased-released.SnpFreq2        # add column at the end
-rm Saudi-Arabia.deceased-released.SnpFreq Saudi-Arabia.deceased-released.SnpFreq1
-mv Saudi-Arabia.deceased-released.SnpFreq2 Saudi-Arabia.deceased-released.SnpFreq
-
-
-########################################
-### USA analysis: Released, Deceased ###
-########################################
-
-grep "USA" gisaid_hcov-19_2020_09_28_19.tsv > USA.tsv
-mkdir USA
-cp USA.tsv covid19-refseq.fasta* ./USA
-rm USA.tsv
-cd USA/
-grep "Released" USA.tsv > Released.tsv
-grep "Deceased" USA.tsv > Deceased.tsv
-awk '{print $1}' Released.tsv > Released.names
-awk '{print $1}' Deceased.tsv > Deceased.names
-
-# Released
-grep -w -F -f Released.names ../reformatted.tab > Released.tab                                    # grep in reformatted.tab       
-seqkit tab2fx Released.tab > Released.fasta && rm Released.tab                                    # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
-samtools view -bS Released.sam > Released.bam
-samtools sort -o Released.sorted.bam Released.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 Released.sorted.bam > Released.vcf
-vcfleftalign -r ../covid19-refseq.fasta Released.vcf > Released.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Released.left.vcf > Released.left.DP4
-rm Released.sam Released.bam Released.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.left.AF
-
-# Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                                    # grep in reformatted.tab       
-seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                                    # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
-samtools view -bS Deceased.sam > Deceased.bam
-samtools sort -o Deceased.sorted.bam Deceased.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 Deceased.sorted.bam > Deceased.vcf
-vcfleftalign -r ../covid19-refseq.fasta Deceased.vcf > Deceased.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Deceased.left.vcf > Deceased.left.DP4
-rm Deceased.sam Deceased.bam Deceased.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.left.AF
-
-
-### Processing DP4 fields for snpFreq
-vcfcombine Deceased.left.vcf Released.left.vcf > Deceased-Released.vcf                                                   # vcflib
-vcf2bed < Deceased-Released.vcf > Deceased-Released.bed                                                                  # BEDOPS
-awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Released.bed > Deceased-Released.bed1                                  # awk GNU 
-join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Released.left.DP4) > Deceased-Released.DP4                          # join GNU 
-sed -i 's/ /\t/'g Deceased-Released.DP4                                                                                  # sed GNU 
-join -e 0 -j 1 <(sort Deceased-Released.bed1) <(sort Deceased-Released.DP4) > Deceased-Released.merge     
-rm Deceased-Released.bed1
-sed -i 's/ /\t/'g Deceased-Released.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > deceased-released.subset
-rm Deceased-Released.merge
-awk  '$6!=""' deceased-released.subset > USA.deceased-released.SnpFreq && rm deceased-released.subset
-awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' USA.deceased-released.SnpFreq > USA.deceased-released.SnpFreq1                  # add column after column 5
-awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' USA.deceased-released.SnpFreq1 > USA.deceased-released.SnpFreq2                 # add column at the end
-rm USA.deceased-released.SnpFreq USA.deceased-released.SnpFreq1
-mv USA.deceased-released.SnpFreq2 USA.deceased-released.SnpFreq
-
-
-###########################################
-### Brazil analysis: Released, Deceased ###
-###########################################
-
-grep "Brazil" gisaid_hcov-19_2020_09_28_19.tsv > Brazil.tsv
-mkdir Brazil
-cp Brazil.tsv covid19-refseq.fasta* ./Brazil
-rm Brazil.tsv
-cd Brazil/
-sed -i 's/Live/Released/'g Brazil.tsv
-grep "Released" Brazil.tsv > Released.tsv
-grep "Deceased" Brazil.tsv > Deceased.tsv
-grep "Live" Brazil.tsv > Live.tsv
-awk '{print $1}' Released.tsv > Released.names
-awk '{print $1}' Deceased.tsv > Deceased.names
-
-
-# Released
-grep -w -F -f Released.names ../reformatted.tab > Released.tab                                  # grep in reformatted.tab       
-seqkit tab2fx Released.tab > Released.fasta && rm Released.tab                                  # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Released.fasta > Released.sam
-samtools view -bS Released.sam > Released.bam
-samtools sort -o Released.sorted.bam Released.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 Released.sorted.bam > Released.vcf
-vcfleftalign -r ../covid19-refseq.fasta Released.vcf > Released.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Released.left.vcf > Released.left.DP4
-rm Released.sam Released.bam Released.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Released.left.DP4 > Released.left.AF
-
-
-# Deceased
-grep -w -F -f Deceased.names ../reformatted.tab > Deceased.tab                                  # grep in reformatted.tab       
-seqkit tab2fx Deceased.tab > Deceased.fasta && rm Deceased.tab                                  # tabular to fasta
-minimap2 -ax asm5 -t 50 ../covid19-refseq.fasta Deceased.fasta > Deceased.sam
-samtools view -bS Deceased.sam > Deceased.bam
-samtools sort -o Deceased.sorted.bam Deceased.bam
-freebayes -f ../covid19-refseq.fasta -F 0.01 Deceased.sorted.bam > Deceased.vcf
-vcfleftalign -r ../covid19-refseq.fasta Deceased.vcf > Deceased.left.vcf
-bcftools query -f'[%POS\t%REF\t%ALT\t%AO\t%RO\n]' Deceased.left.vcf > Deceased.left.DP4
-rm Deceased.sam Deceased.bam Deceased.vcf
-awk '{print $1"\t"$2"\t"$3"\t"(($4)/($4+$5)*100)}' Deceased.left.DP4 > Deceased.left.AF
-
-
-### Processing DP4 fields for snpFreq
-vcfcombine Deceased.left.vcf Released.left.vcf > Deceased-Released.vcf                                                   # vcflib
-vcf2bed < Deceased-Released.vcf > Deceased-Released.bed                                                                  # BEDOPS
-awk '{print $3"\t"$6"\t"$7"\t"$1"\t"$2}' Deceased-Released.bed > Deceased-Released.bed1                                  # awk GNU 
-join -a 1 -e 0 -j 1 <(sort Deceased.left.DP4) <(sort Released.left.DP4) > Deceased-Released.DP4                          # join GNU 
-sed -i 's/ /\t/'g Deceased-Released.DP4                                                                                  # sed GNU 
-join -e 0 -j 1 <(sort Deceased-Released.bed1) <(sort Deceased-Released.DP4) > Deceased-Released.merge     
-rm Deceased-Released.bed1
-sed -i 's/ /\t/'g Deceased-Released.merge
-awk '{print $4"\t"$5"\t"$1"\t"$9"\t"$8"\t"$13"\t"$12}' Deceased-Released.merge > deceased-released.subset
-rm Deceased-Released.merge
-awk  '$6!=""' deceased-released.subset > Brazil.deceased-released.SnpFreq && rm deceased-released.subset
-awk 'BEGIN{FS=OFS="\t"}{$5 = $5 OFS 0}1' Brazil.deceased-released.SnpFreq > Brazil.deceased-released.SnpFreq1            # add column after column 5
-awk 'BEGIN{FS=OFS="\t"}{$n = $n OFS 0}1' Brazil.deceased-released.SnpFreq1 > Brazil.deceased-released.SnpFreq2           # add column at the end
-rm Brazil.deceased-released.SnpFreq Brazil.deceased-released.SnpFreq1
-mv Brazil.deceased-released.SnpFreq2 Brazil.deceased-released.SnpFreq
-```
-
-After these steps, upload to galaxy: https://usegalaxy.org/
-- India.deceased-released.SnpFreq: from India
-- Saudi-Arabia.deceased-released.SnpFreq: from Saudi Arabia
-- USA.deceased-released.SnpFreq: from USA
-- Brazil.deceased-released.SnpFreq: from Brazil 
-
-and execute snpFreq in each file, with the following parameters: (Reference allele, Alternate allele, Heterozygous : AA aa Aa)
-
-- Format of input: select Alleles, precounted
-- Column with genotype 1 count for group 1: 4
-- Column with genotype 2 count for group 1: 5
-- Column with genotype 3 count for group 1: 6
-- Column with genotype 1 count for group 2: 7
-- Column with genotype 2 count for group 2: 8
-- Column with genotype 3 count for group 2: 9
-
-snpFreq results per country are available here: https://usegalaxy.org/u/carlosfarkas/h/gisaid-patient-metadata-sept28-2020
-
-The p-values from Fisher's exact test can be converted to negative logarithm in base 10 by using R. As an example, for Brazil output, called snpFreq_Brazil.tabular:
-
-```
-R
-data1<-read.table("snpFreq_Brazil.tabular", header = FALSE, sep = "\t")
-dim(data1)
-
-library(dplyr)
-data1.1<-select(data1,V3,V17)
-data1.1$log <- -log(data1.1$V17, 10)
-row.names(data1.1)<-data1.1$V3
-data1.2<-select(data1.1,log)
-names(data1.2)[names(data1.2) == "log"] <- "-log10(p_value)"
-write.table(data1.2, file = "snpFreq_Brazil-log.tab", append = FALSE, quote = TRUE, sep = "\t", eol = "\n", na = "NA", dec = ".", row.names = TRUE, col.names = TRUE)
-```
-The snpFreq_Brazil-log.tab file now contains the -log10(p-values) per variant. 
