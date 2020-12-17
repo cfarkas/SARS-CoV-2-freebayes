@@ -140,10 +140,6 @@ export PERL5LIB=/path/to/your/vcftools-directory/src/perl/
 make
 make install
 ```
-or via conda
-```
-conda install -c bioconda vcftools
-```
 
 # I) Colecting Variants (Sequence Read Archive datasets)
 
