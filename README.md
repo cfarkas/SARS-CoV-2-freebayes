@@ -1,7 +1,7 @@
 # SARS-CoV-2-freebayes
 Analysis of SARS-CoV-2 genome variants collected with freebayes variant caller.
 
-# Requirements: 
+## Requirements: 
 
 ### 1) Installing minimap2 aligner (for install details, please see: https://github.com/lh3/minimap2)
 ```
@@ -145,7 +145,7 @@ make install
 exit
 ```
 
-# I) Colecting Variants (Sequence Read Archive datasets)
+## I) Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
@@ -179,7 +179,7 @@ ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit
 will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 139 of SARS-CoV-2-NGS-freebayes.sh script.
 
 
-# II) Collecting Variants (GISAID FASTA genomes)
+## II) Collecting Variants (GISAID FASTA genomes)
 - By using freebayes we can call variants from GISAID SARS-CoV-2 FASTA genomes and merge these variants in a single VCF containing all sample names. The fasta collections from GISAID are the following:
 -  gisaid_Africa_08_03_2020.fasta
 -  gisaid_Asia_08_03_2020.fasta
@@ -246,7 +246,7 @@ rm logfile_variants_GISAID_freebayes
 logfile_variants_GISAID file contains the GISAID accession along with the number of detected variants. 
 
 
-# III) Collecting variants per protein on SnpEff-classified GISAID variants
+## III) Collecting variants per protein on SnpEff-classified GISAID variants
 In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
 ```
 grep "#" -v SnpEff-eff_merged.GISAID.vcf > variants.vcf
@@ -337,7 +337,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-# IV) Nucleotide diversity and Tajima's D calculation per geographical region
+## IV) Nucleotide diversity and Tajima's D calculation per geographical region
 To estimate nucleotide diversity (π) and Tajima's D parameters we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. In a folder (i.e. diversity). From scratch, do: 
 
 ```
@@ -401,7 +401,7 @@ vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Oceania
 ```
 
 
-# V) inStrain analysis of SRA sequencing cohorts (microdiversity)
+## V) inStrain analysis of SRA sequencing cohorts (microdiversity)
 To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze Sequence Read Archive datasets from USA as done in the manuscript, do the following: 
 
 ```
