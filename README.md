@@ -112,22 +112,14 @@ tar -xvf seqkit_linux_386.tar
 sudo cp seqkit /usr/local/bin/
 ```
 
-### 10) Installing BEDOPS
-For information, please see: https://bedops.readthedocs.io/en/latest/content/installation.html#linux
-```
-wget https://github.com/bedops/bedops/releases/download/v2.4.39/bedops_linux_x86_64-v2.4.39.tar.bz2
-tar jxvf bedops_linux_x86_64-v2.4.39.tar.bz2
-cp bin/* /usr/local/bin/
-```
-
-### 11) Installing inStrain 
+### 10) Installing inStrain 
 Tool for highly accurate genome comparisons, analysis of coverage, microdiversity, linkage and sensitive SNP detection. For information, please see: https://instrain.readthedocs.io/en/latest/
 
 ```
 pip install instrain
 ```
 
-### 12) Obtaining and Installing VCFtools
+### 11) Obtaining and Installing VCFtools
 We employed the version of Julien Y. Dutheil https://github.com/jydu/vcftools that includes the --haploid flag. Safe install can be achieved with root (sudo -i) as follows: 
 
 ```
