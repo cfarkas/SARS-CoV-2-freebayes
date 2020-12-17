@@ -127,6 +127,20 @@ Tool for highly accurate genome comparisons, analysis of coverage, microdiversit
 pip install instrain
 ```
 
+### (Optional) Obtaining and Installing VCFtools
+Complete instructions can be found in https://vcftools.github.io/downloads.html. Users with privileges can accomplish with sudo as follows: 
+
+```
+### Installing vcftools
+git clone https://github.com/vcftools/vcftools.git
+cd vcftools/
+./autogen.sh
+export PERL5LIB=/path/to/your/vcftools-directory/src/perl/ 
+./configure
+make
+make install
+```
+
 # I) Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
