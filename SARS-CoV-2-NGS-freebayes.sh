@@ -155,7 +155,7 @@ echo "Left only genotypes in merged VCF"
 echo ""
 vcfkeepgeno merged.vcf GT > merged.GT.vcf
 
-echo "Split variants and header from merged.GT.vcf"
+echo "Splitting variants and header from merged.GT.vcf"
 echo ""
 grep "#" merged.GT.vcf > header
 grep -v "#" merged.GT.vcf > variants.vcf
@@ -166,17 +166,19 @@ sed -i 's|1/0|1|'g variants.vcf   # convert diploid to haploid
 sed -i 's/[.]/0/'g variants.vcf   # convert points to zeros
 
 # Reconstitute vcf file
+echo "Reconstituting vcf file"
+echo ""
 cat header variants.vcf > merged.fixed.vcf
 rm header variants.vcf
 sed -i 's/NC_04551202/NC_045512.2/'g merged.fixed.vcf
 
-echo "left-align vcf file and fix names"
+echo "left-aligning vcf file and fixing names"
 echo ""
 vcfleftalign -r ${2} merged.fixed.vcf > merged.left.vcf
 sed -i 's/|unknown//'g merged.left.vcf
 
 # Calculating Viral Frequencies
-echo "calculate AF with vcflib"
+echo "calculating viral frequencies with vcflib"
 echo ""
 vcffixup merged.left.vcf > merged.AF.raw.vcf
 wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
