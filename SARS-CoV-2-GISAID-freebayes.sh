@@ -154,7 +154,7 @@ rm header variants.vcf
 sed -i 's/NC_04551202/NC_045512.2/'g merged.GISAID.fixed.vcf
 
 # left-align vcf file and fix names
-echo "left-aligning vcf file and fix names"
+echo "left-aligning vcf file and fixing names"
 echo ""
 vcfleftalign -r ${2} merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
 sed -i 's/|unknown//'g merged.GISAID.left.vcf
