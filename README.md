@@ -337,7 +337,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-## IV) Nucleotide diversity and Tajima's D calculation per geographical region
+# IV) Nucleotide diversity and Tajima's D calculation per geographical region
 To estimate nucleotide diversity (π) and Tajima's D parameters we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. In a folder (i.e. diversity). From scratch, do: 
 
 ```
