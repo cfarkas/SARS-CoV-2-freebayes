@@ -170,6 +170,26 @@ ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit
 ```
 will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 139 of SARS-CoV-2-NGS-freebayes.sh script.
 
+### Number of variants per genome
+
+Users can compute the number of variants per genome as follows. Inside SARS-CoV-2 folder containing VCF files, do:
+
+```
+ulimit -n 1000000 && ulimit -s 299999
+{
+vcf= ls -1 *.bam.freebayes.vcf
+for vcf in *.bam.freebayes.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
+done
+#
+} | tee logfile_variants_NGS_freebayes
+#
+grep "EPI_ISL_" logfile_variants_NGS_freebayes > vcf_files
+grep -v "EPI_ISL_" logfile_variants_NGS_freebayes > variants_per_sample
+paste vcf_files variants_per_sample > logfile_variants_NGS
+rm vcf_files variants_per_sample
+sed -i 's/.fa.left.vcf//'g logfile_variants_NGS
+rm logfile_variants_NGS_freebayes
+```
 
 ## II) Collecting Variants (GISAID FASTA genomes)
 - By using freebayes we can call variants from GISAID SARS-CoV-2 FASTA genomes and merge these variants in a single VCF containing all sample names. The fasta collections from GISAID are the following:
