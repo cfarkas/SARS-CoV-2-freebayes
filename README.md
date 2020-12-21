@@ -183,11 +183,10 @@ done
 #
 } | tee logfile_variants_NGS_freebayes
 #
-grep "EPI_ISL_" logfile_variants_NGS_freebayes > vcf_files
-grep -v "EPI_ISL_" logfile_variants_NGS_freebayes > variants_per_sample
+grep ".vcf" logfile_variants_NGS_freebayes > vcf_files
+grep -v ".vcf" logfile_variants_NGS_freebayes > variants_per_sample
 paste vcf_files variants_per_sample > logfile_variants_NGS
 rm vcf_files variants_per_sample
-sed -i 's/.fa.left.vcf//'g logfile_variants_NGS
 rm logfile_variants_NGS_freebayes
 ```
 
