@@ -186,8 +186,7 @@ done
 grep ".vcf" logfile_variants_NGS_freebayes > vcf_files
 grep -v ".vcf" logfile_variants_NGS_freebayes > variants_per_sample
 paste vcf_files variants_per_sample > logfile_variants_NGS
-rm vcf_files variants_per_sample
-rm logfile_variants_NGS_freebayes
+rm vcf_files variants_per_sample logfile_variants_NGS_freebayes
 ```
 
 ## II) Collecting Variants (GISAID FASTA genomes)
