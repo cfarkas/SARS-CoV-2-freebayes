@@ -372,6 +372,7 @@ vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50    
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50      # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Africa.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Africa.1        # 1 bp sliding window
+cd ..
 
 ### Asia                                 
 mkdir GISAID_Asia && cd GISAID_Asia
@@ -382,6 +383,7 @@ vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50    # 
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50      # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Asia.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Asia.1        # 1 bp sliding window
+cd ..
 
 ### Europe                                 
 mkdir GISAID_Europe && cd GISAID_Europe
@@ -392,6 +394,7 @@ vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50    
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Europe.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Europe.1        # 1 bp sliding window
+cd ..
 
 ### North_America                                
 mkdir GISAID_North_America && cd GISAID_North_America  
@@ -402,6 +405,7 @@ vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50      # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out North_America.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out North_America.1        # 1 bp sliding window
+cd ..
 
 ### South_America                                
 mkdir GISAID_South_America && cd GISAID_South_America
@@ -412,6 +416,7 @@ vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50      # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out South_America.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out South_America.1        # 1 bp sliding window
+cd ..
 
 ### Oceania                               
 mkdir GISAID_Oceania && cd GISAID_Oceania
