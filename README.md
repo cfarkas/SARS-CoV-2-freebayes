@@ -347,8 +347,10 @@ gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
-## IV) Nucleotide diversity calculation per geographical region
-To estimate nucleotide diversity (π), we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. In a folder (i.e. diversity). From scratch, do: 
+## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
+To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. In a folder (i.e. diversity). An exellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
+
+From scratch, do: 
 
 ```
 mkdir diversity
@@ -367,6 +369,7 @@ wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e6
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Africa
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa
 
 ### Asia                                 
 mkdir GISAID_Asia && cd GISAID_Asia
@@ -374,6 +377,7 @@ wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69c
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Asia
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Asia
 
 ### Europe                                 
 mkdir GISAID_Europe && cd GISAID_Europe
@@ -381,6 +385,7 @@ wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e6
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Europe
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Europe
 
 ### North_America                                
 mkdir GISAID_North_America && cd GISAID_North_America  
@@ -388,6 +393,7 @@ wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out North_America
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out North_America
 
 ### South_America                                
 mkdir GISAID_South_America && cd GISAID_South_America
@@ -395,6 +401,7 @@ wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out South_America
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out South_America
 
 ### Oceania                               
 mkdir GISAID_Oceania && cd GISAID_Oceania
@@ -402,6 +409,7 @@ wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Oceania
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Oceania
 ```
 
 
