@@ -348,7 +348,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
-To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. An exellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
+To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
 
 The whole analysis from scratch can be done in a folder (i.e. diversity), as follows: 
 
@@ -369,47 +369,59 @@ wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e6
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Africa
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50    # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Africa.1      # 1 bp sliding window
 
 ### Asia                                 
 mkdir GISAID_Asia && cd GISAID_Asia
 wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz && gunzip gisaid_Asia_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Asia
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Asia
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Asia.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Asia.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Asia.1        # 1 bp sliding window
 
 ### Europe                                 
 mkdir GISAID_Europe && cd GISAID_Europe
 wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz && gunzip gisaid_Europe_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Europe
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Europe
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Europe.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Europe.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Europe.1        # 1 bp sliding window
 
 ### North_America                                
 mkdir GISAID_North_America && cd GISAID_North_America  
 wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz && gunzip gisaid_North_America_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out North_America
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out North_America
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out North_America.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out North_America.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out North_America.1        # 1 bp sliding window
 
 ### South_America                                
 mkdir GISAID_South_America && cd GISAID_South_America
 wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz && gunzip gisaid_South_America_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out South_America
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out South_America
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out South_America.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out South_America.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out South_America.1        # 1 bp sliding window
 
 ### Oceania                               
 mkdir GISAID_Oceania && cd GISAID_Oceania
 wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz && gunzip gisaid_Oceania_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Oceania
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Oceania
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Oceania.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Oceania.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Oceania.1        # 1 bp sliding window
 ```
 
 
