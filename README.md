@@ -368,10 +368,10 @@ mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Africa
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50    # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Africa.1      # 1 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Africa.100  # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Africa.1        # 1 bp sliding window
 
 ### Asia                                 
 mkdir GISAID_Asia && cd GISAID_Asia
