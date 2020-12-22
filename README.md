@@ -368,9 +368,9 @@ mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Africa.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Africa.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Africa.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Africa.1        # 1 bp sliding window
 
 ### Asia                                 
@@ -378,9 +378,9 @@ mkdir GISAID_Asia && cd GISAID_Asia
 wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz && gunzip gisaid_Asia_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Asia.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Asia.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Asia.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Asia.1        # 1 bp sliding window
 
 ### Europe                                 
@@ -388,9 +388,9 @@ mkdir GISAID_Europe && cd GISAID_Europe
 wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz && gunzip gisaid_Europe_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Europe.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Europe.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Europe.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Europe.1        # 1 bp sliding window
 
 ### North_America                                
@@ -398,9 +398,9 @@ mkdir GISAID_North_America && cd GISAID_North_America
 wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz && gunzip gisaid_North_America_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out North_America.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out North_America.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out North_America.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out North_America.1        # 1 bp sliding window
 
 ### South_America                                
@@ -408,9 +408,9 @@ mkdir GISAID_South_America && cd GISAID_South_America
 wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz && gunzip gisaid_South_America_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out South_America.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out South_America.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out South_America.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out South_America.1        # 1 bp sliding window
 
 ### Oceania                               
@@ -418,9 +418,9 @@ mkdir GISAID_Oceania && cd GISAID_Oceania
 wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz && gunzip gisaid_Oceania_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 100 --haploid --out Oceania.100  # 100 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 100 --haploid --out Oceania.100    # 100 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Oceania.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Oceania.10      # 10 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Oceania.1        # 1 bp sliding window
 ```
 
