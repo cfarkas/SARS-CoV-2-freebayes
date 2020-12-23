@@ -257,7 +257,7 @@ logfile_variants_GISAID file contains the GISAID accession along with the number
 
 
 ## III) Annotate and collect variants per protein on SnpEff-classified VCF variants
-merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip. compressed merged VCF files from GISAID genomes and SRA are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. Prior to SnpEff annotation, tt is preferable to subset these files by selecting one individual sample in the vcf (dropping all the others samples) as follows:
+merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. Prior to SnpEff annotation, tt is preferable to subset these files by selecting one individual sample in the vcf (dropping all the others samples) as follows:
 
 ```
 mkdir SnpEff-SARS-CoV-2
