@@ -348,7 +348,7 @@ gzip SnpEff-eff_merged.GISAID.vcf
 
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
-To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling analysis including the vcftools analysis. An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
+To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling and vcftools analysis, using a sliding window of 50 bp (can be changed). An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
 
 The whole analysis from scratch can be done in a folder (i.e. diversity), as follows: 
 
@@ -370,8 +370,6 @@ ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50      # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Africa.10      # 10 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Africa.1        # 1 bp sliding window
 cd ..
 
 ### Asia                                 
@@ -381,8 +379,6 @@ ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50      # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Asia.10      # 10 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Asia.1        # 1 bp sliding window
 cd ..
 
 ### Europe                                 
@@ -392,8 +388,6 @@ ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Europe.10      # 10 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Europe.1        # 1 bp sliding window
 cd ..
 
 ### North_America                                
@@ -403,8 +397,6 @@ ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50      # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out North_America.10      # 10 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out North_America.1        # 1 bp sliding window
 cd ..
 
 ### South_America                                
@@ -414,8 +406,6 @@ ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50      # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out South_America.10      # 10 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out South_America.1        # 1 bp sliding window
 cd ..
 
 ### Oceania                               
@@ -425,8 +415,6 @@ ulimit -n 1000000 && ulimit -s 299999
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Oceania.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 10 --haploid --out Oceania.10      # 10 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 1 --haploid --out Oceania.1        # 1 bp sliding window
 ```
 
 
