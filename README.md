@@ -275,7 +275,8 @@ gzip merged.SRA.Jul-28-2020.vcf
 vcfkeepsamples merged.GISAID.Nov-30-2020.vcf EPI_ISL_402119 > merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf
 gzip merged.GISAID.Nov-30-2020.vcf
 ```
-Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf can be uploaded and annotated in Galaxy (https://usegalaxy.org/) using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). The annoated output (i.e.: SnpEff-eff_merged.GISAID.vcf) can be processed as follows:
+Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). The output (i.e.: SnpEff-eff_merged.GISAID.vcf) 
+the output can be processed in the following way:
 ```
 grep "#" -v SnpEff-eff_merged.GISAID.vcf > variants.vcf
 awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
