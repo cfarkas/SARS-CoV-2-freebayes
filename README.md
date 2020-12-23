@@ -256,8 +256,26 @@ rm logfile_variants_GISAID_freebayes
 logfile_variants_GISAID file contains the GISAID accession along with the number of detected variants. 
 
 
-## III) Collecting variants per protein on SnpEff-classified GISAID variants
-In a given folder, place SnpEff-eff_merged.GISAID.vcf (available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020) and do the following: 
+## III) Annotate and collect variants per protein on SnpEff-classified VCF variants
+merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip. compressed merged VCF files from GISAID genomes and SRA are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. Prior to SnpEff annotation, tt is preferable to subset these files by selecting one individual sample in the vcf (dropping all the others samples) as follows:
+
+```
+mkdir SnpEff-SARS-CoV-2
+cd SnpEff-SARS-CoV-2
+wget -O merged.GISAID.Aug-03-2020.vcf.gz https://usegalaxy.org/datasets/bbd44e69cb8906b580d64fc18488c56a/display?to_ext=gff3.gz
+wget -O merged.SRA.Jul-28-2020.vcf.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5f816689b9933202f/display?to_ext=gff3.gz
+wget -O merged.GISAID.Nov-30-2020.vcf.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5509c81bce034b0a2/display?to_ext=gff3.gz
+gunzip merged.GISAID.Aug-03-2020.vcf.gz # ~ 3.4 GB
+gunzip merged.GISAID.Nov-30-2020.vcf.gz # ~ 17 GB
+gunzip merged.SRA.Jul-28-2020.vcf.gz    # ~ 547 Mb
+vcfkeepsamples merged.GISAID.Aug-03-2020.vcf EPI_ISL_402119 > merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf
+gzip merged.GISAID.Aug-03-2020.vcf
+vcfkeepsamples merged.SRA.Jul-28-2020.vcf ERR4082713 > merged.SRA.Jul-28-2020.ERR4082713.vcf
+gzip merged.SRA.Jul-28-2020.vcf
+vcfkeepsamples merged.GISAID.Nov-30-2020.vcf EPI_ISL_402119 > merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf
+gzip merged.GISAID.Nov-30-2020.vcf
+```
+Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf can be uploaded and annotated in Galaxy (https://usegalaxy.org/) using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). The annoated output (i.e.: SnpEff-eff_merged.GISAID.vcf) can be processed as follows:
 ```
 grep "#" -v SnpEff-eff_merged.GISAID.vcf > variants.vcf
 awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
@@ -343,7 +361,6 @@ sed -i 's/AC=//'g missense_variant.GISAID.counts
 sed -i 's/AC=//'g stop_gained.GISAID.counts
 sed -i 's/AC=//'g synonymous_variant.GISAID.counts
 sed -i 's/AC=//'g frameshift_variant.GISAID.counts
-gzip SnpEff-eff_merged.GISAID.vcf
 ```
 
 
