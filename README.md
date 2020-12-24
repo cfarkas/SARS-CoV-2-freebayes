@@ -168,7 +168,7 @@ We provided a curated list of 17560 SARS-CoV-2 worldwide datasets until July 28,
 ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit, see README_ulimit for details.
 ./SARS-CoV-2-NGS-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
 ```
-will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 139 of SARS-CoV-2-NGS-freebayes.sh script.
+will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 139 of SARS-CoV-2-NGS-freebayes.sh script or filter with vcffilter (see vcffilter --help).
 
 ### Number of variants per genome
 
