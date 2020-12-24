@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 {
 
 SRA_list=${1}
