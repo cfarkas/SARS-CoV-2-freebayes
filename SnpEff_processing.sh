@@ -156,8 +156,9 @@ sed -i 's/AC=//'g missense_variant.counts
 sed -i 's/AC=//'g stop_gained.counts
 sed -i 's/AC=//'g synonymous_variant.counts
 sed -i 's/AC=//'g frameshift_variant.counts
-echo "all done"
-echo "Check variants_per_protein folder, containing the provided VCF file splitted by SARS-CoV-2 protein"
-echo ".SnpEff contain parsed synonymous, missense, nonsense and frameshift variants"
-echo ".SnpEff contain parsed synonymous, missense, nonsense and frameshift frequency counts"
-echo ""
+echo "#########"
+echo "All done"
+echo "Check variants_per_protein folder, containing the provided VCF file, splitted by SARS-CoV-2 protein"
+echo ".SnpEff files contain parsed synonymous, missense, nonsense and frameshift variants"
+echo ".counts files contain parsed synonymous, missense, nonsense and frameshift frequency counts"
+echo "#########"
