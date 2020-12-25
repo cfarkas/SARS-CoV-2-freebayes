@@ -65,7 +65,7 @@ if [ $# -ne 1 ]; then
   exit 3
 fi
 
-echo "Processing SnpEff annotated file"
+echo "Parsing SnpEff annotated file by protein"
 echo ""
 grep "#" -v ${1} > variants.vcf
 awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
@@ -132,17 +132,16 @@ done
 #
 } | tee logfile_variants
 #
-
 grep ".variants" logfile_variants > features
 grep -v ".variants" logfile_variants > variants_per_feature
 paste features variants_per_feature > logfile_variants
 rm features variants_per_feature
 cd ..
-
+echo ""
 echo "Computing the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)"
 echo ""
-grep "missense_variant" ${1} > missense_variant.GISAID.SnpEff
-grep "stop_gained" ${1} > stop_gained.GISAID.SnpEff
+grep "missense_variant" ${1} > missense_variant.SnpEff
+grep "stop_gained" ${1} > stop_gained.SnpEff
 grep "synonymous_variant" ${1} > synonymous_variant.SnpEff
 grep "frameshift_variant" ${1} > frameshift_variant.SnpEff
 sed -i 's/;/\t/'g missense_variant.SnpEff
