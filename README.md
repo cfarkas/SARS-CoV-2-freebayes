@@ -257,7 +257,7 @@ logfile_variants_GISAID file contains the GISAID accession along with the number
 
 
 ## III) Annotate and collect variants per protein on SnpEff-classified VCF variants
-merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. Prior to SnpEff annotation, tt is preferable to subset these files by selecting one individual sample in the vcf (dropping all the others samples) as follows:
+merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip for storage. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. Prior to SnpEff annotation, it is preferable to lightweight these files by selecting one individual sample in the vcf (dropping all the others samples) as follows:
 
 ```
 mkdir SnpEff-SARS-CoV-2
@@ -275,27 +275,29 @@ gzip merged.SRA.Jul-28-2020.vcf
 vcfkeepsamples merged.GISAID.Nov-30-2020.vcf EPI_ISL_402119 > merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf
 gzip merged.GISAID.Nov-30-2020.vcf
 ```
-Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). SnpEff outputs are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2 and can be processed as follows:
+Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). As example, SnpEff outputs are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2 and can be processed as follows:
 ```
 # SRA variants
-mkdir SnpEff-Jul-28-2020.SRA && cd SnpEff-Jul-28-2020.SRA                                                               # Create folder and enter it
-wget -O SnpEff-Jul-28-2020.SRA.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5b7e3ff0964c68fa2/display?to_ext=vcf   # Download data or provide your own annotated vcf file
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git                                                           # Download repo
-./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Jul-28-2020.SRA.vcf                                                  # execute SnpEff_processing.sh 
+mkdir SnpEff-Jul-28-2020.SRA && cd SnpEff-Jul-28-2020.SRA                                                               # 1) Create folder and enter it
+wget -O SnpEff-Jul-28-2020.SRA.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5b7e3ff0964c68fa2/display?to_ext=vcf   # 2) Download annotated vcf file
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*.sh                  # 3) Download repo and change permissions
+./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Jul-28-2020.SRA.vcf                                                  # 4) execute SnpEff_processing.sh 
+cd ..
 
 # GISAID variants: August 03, 2020                        
-mkdir SnpEff-Aug-03-2020.GISAID && cd SnpEff-Aug-03-2020.GISAID                                                          # Create folder and enter it
-wget -O SnpEff-Aug-03-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5117bba070d8c6bca/display?to_ext=vcf # Download data or provide your own annotated vcf file
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git                                                            # Download repo
-./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Aug-03-2020.GISAID.vcf                                                # execute SnpEff_processing.sh 
+mkdir SnpEff-Aug-03-2020.GISAID && cd SnpEff-Aug-03-2020.GISAID                                                          # 1) Create folder and enter it
+wget -O SnpEff-Aug-03-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5117bba070d8c6bca/display?to_ext=vcf # 2) Download annotated vcf file
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*.sh                   # 3) Download repo and change permissions
+./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Aug-03-2020.GISAID.vcf                                                # 4) execute SnpEff_processing.sh 
+cd ..
 
 # GISAID variants: November 30, 2020
-mkdir SnpEff-Nov-30-2020.GISAID && cd SnpEff-Nov-30-2020.GISAID                                                          # Create folder and enter it
-wget -O SnpEff-Nov-30-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5743f34d0337d9459/display?to_ext=vcf # Download data or provide your own annotated vcf file
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git                                                            # Download repo
-./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Nov-30-2020.GISAID.vcf                                                # execute SnpEff_processing.sh 
+mkdir SnpEff-Nov-30-2020.GISAID && cd SnpEff-Nov-30-2020.GISAID                                                          # 1) Create folder and enter it
+wget -O SnpEff-Nov-30-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5743f34d0337d9459/display?to_ext=vcf # 2) Download annotated vcf file
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*.sh                   # 3) Download repo and change permissions
+./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Nov-30-2020.GISAID.vcf                                                # 4) execute SnpEff_processing.sh 
 ```
-In each folder, variants_per_protein subfolder contain variants per protein. *.SnpEff files contains parsed variants per consequence and *.counts files contains associated counts. We suggest user-provided vcf files should be processed using SnpEff_processing.sh script in a specific folder, as presented here.
+In each folder, variants_per_protein subfolder contain variants per protein. *.SnpEff files contains parsed variants per consequence and *.counts files contains associated counts. We suggest user-provided vcf files should be processed in a likewise manner, placing the vcf file in a specific folder and executing steps 3) and 4).
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
 To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling and vcftools analysis, using a sliding window of 50 bp (can be changed). An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
