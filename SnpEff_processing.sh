@@ -164,4 +164,3 @@ echo "Check variants_per_protein folder, containing the provided VCF file splitt
 echo "*.SnpEff contain parsed synonymous, missense, nonsense and frameshift variants"
 echo "*.SnpEff contain parsed synonymous, missense, nonsense and frameshift frequency counts"
 echo ""
-
