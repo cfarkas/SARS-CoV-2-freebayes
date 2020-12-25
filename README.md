@@ -281,7 +281,7 @@ wget -O SnpEff-Jul-28-2020.SRA.vcf https://usegalaxy.org/datasets/bbd44e69cb8906
 wget -O SnpEff-Aug-03-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5117bba070d8c6bca/display?to_ext=vcf
 wget -O SnpEff-Nov-30-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5743f34d0337d9459/display?to_ext=vcf
 ```
-The output (i.e.: SnpEff-Nov-30-2020.GISAID.vcf) can be processed in the following way:
+An SnpEff annotated vcf (i.e.: SnpEff-Nov-30-2020.GISAID.vcf) can be placed in a specific folder and process it in the following way:
 ```
 grep "#" -v SnpEff-Nov-30-2020.GISAID.vcf > variants.vcf
 awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
@@ -348,13 +348,18 @@ done
 #
 } | tee logfile_variants
 #
+
+grep ".variants" logfile_variants > features
+grep -v ".variants" logfile_variants > variants_per_feature
+paste features variants_per_feature > logfile_variants
+rm features variants_per_feature
 cd ..
 
 ### Compute the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)  ###
-grep "missense_variant" SnpEff-eff_merged.GISAID.vcf > missense_variant.GISAID.SnpEff
-grep "stop_gained" SnpEff-eff_merged.GISAID.vcf > stop_gained.GISAID.SnpEff
-grep "synonymous_variant" SnpEff-eff_merged.GISAID.vcf > synonymous_variant.GISAID.SnpEff
-grep "frameshift_variant" SnpEff-eff_merged.GISAID.vcf > frameshift_variant.GISAID.SnpEff
+grep "missense_variant" SnpEff-Nov-30-2020.GISAID.vcf > missense_variant.GISAID.SnpEff
+grep "stop_gained" SnpEff-Nov-30-2020.GISAID.vcf > stop_gained.GISAID.SnpEff
+grep "synonymous_variant" SnpEff-Nov-30-2020.GISAID.vcf > synonymous_variant.GISAID.SnpEff
+grep "frameshift_variant" SnpEff-Nov-30-2020.GISAID.vcf > frameshift_variant.GISAID.SnpEff
 sed -i 's/;/\t/'g missense_variant.GISAID.SnpEff
 sed -i 's/;/\t/'g stop_gained.GISAID.SnpEff
 sed -i 's/;/\t/'g synonymous_variant.GISAID.SnpEff
@@ -368,7 +373,7 @@ sed -i 's/AC=//'g stop_gained.GISAID.counts
 sed -i 's/AC=//'g synonymous_variant.GISAID.counts
 sed -i 's/AC=//'g frameshift_variant.GISAID.counts
 ```
-
+variants_per_protein folder contain variants per protein. *.SnpEff files contains parsed variants per consequence and *.counts files contains associated counts. SnpEff-Nov-30-2020.GISAID.vcf   
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
 To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling and vcftools analysis, using a sliding window of 50 bp (can be changed). An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
