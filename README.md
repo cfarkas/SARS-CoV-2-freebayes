@@ -442,7 +442,7 @@ To estimate nucleotide diversity (microdiversity within a sequencing sample), an
 mkdir inStrain_USA
 cd inStrain_USA
 
-# Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular), using 40 threads
+# Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular), using 40 threads (takes ~ 4.36 hrs)
 
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
@@ -515,4 +515,4 @@ rm vcf_files variants_per_sample
 sed -i s'/.bam.freebayes.vcf//'g logfile_variants_AF_5%_freebayes.tabular
 
 ```
-merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_AF_5%_freebayes.tabular contain variants with viral frequency over 5%, per genome.  
+merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_AF_5%_freebayes.tabular contain variants with viral frequency over 5%, per genome.
