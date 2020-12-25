@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e 
 
-{
-
 SnpEff_vcf=${1}
 
 if [ "$1" == "-h" ]; then
