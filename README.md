@@ -275,105 +275,27 @@ gzip merged.SRA.Jul-28-2020.vcf
 vcfkeepsamples merged.GISAID.Nov-30-2020.vcf EPI_ISL_402119 > merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf
 gzip merged.GISAID.Nov-30-2020.vcf
 ```
-Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). SnpEff outputs are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2 and can be downloaded as follows:
+Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (Galaxy Version 4.5covid19). SnpEff outputs are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2 and can be processed as follows:
 ```
-wget -O SnpEff-Jul-28-2020.SRA.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5b7e3ff0964c68fa2/display?to_ext=vcf
-wget -O SnpEff-Aug-03-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5117bba070d8c6bca/display?to_ext=vcf
-wget -O SnpEff-Nov-30-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5743f34d0337d9459/display?to_ext=vcf
+# SRA variants
+mkdir SnpEff-Jul-28-2020.SRA && cd SnpEff-Jul-28-2020.SRA                                                               # Create folder and enter it
+wget -O SnpEff-Jul-28-2020.SRA.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5b7e3ff0964c68fa2/display?to_ext=vcf   # Download data or provide your own annotated vcf file
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git                                                           # Download repo
+./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Jul-28-2020.SRA.vcf                                                  # execute SnpEff_processing.sh 
+
+# GISAID variants: August 03, 2020                        
+mkdir SnpEff-Aug-03-2020.GISAID && cd SnpEff-Aug-03-2020.GISAID                                                          # Create folder and enter it
+wget -O SnpEff-Aug-03-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5117bba070d8c6bca/display?to_ext=vcf # Download data or provide your own annotated vcf file
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git                                                            # Download repo
+./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Aug-03-2020.GISAID.vcf                                                # execute SnpEff_processing.sh 
+
+# GISAID variants: November 30, 2020
+mkdir SnpEff-Nov-30-2020.GISAID && cd SnpEff-Nov-30-2020.GISAID                                                          # Create folder and enter it
+wget -O SnpEff-Nov-30-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5743f34d0337d9459/display?to_ext=vcf # Download data or provide your own annotated vcf file
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git                                                            # Download repo
+./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Nov-30-2020.GISAID.vcf                                                # execute SnpEff_processing.sh 
 ```
-An SnpEff annotated vcf (i.e.: SnpEff-Nov-30-2020.GISAID.vcf) can be placed in a specific folder and process it in the following way:
-```
-grep "#" -v SnpEff-Nov-30-2020.GISAID.vcf > variants.vcf
-awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
-sed -i 's/|/\t/'g SnpEff.sites
-sed -i 's/Ala/A/'g SnpEff.sites
-sed -i 's/Arg/R/'g SnpEff.sites
-sed -i 's/Asn/N/'g SnpEff.sites
-sed -i 's/Asp/D/'g SnpEff.sites
-sed -i 's/Cys/C/'g SnpEff.sites
-sed -i 's/Glu/E/'g SnpEff.sites
-sed -i 's/Gln/Q/'g SnpEff.sites
-sed -i 's/Gly/G/'g SnpEff.sites
-sed -i 's/His/H/'g SnpEff.sites
-sed -i 's/His/H/'g SnpEff.sites
-sed -i 's/Ile/I/'g SnpEff.sites
-sed -i 's/Leu/L/'g SnpEff.sites
-sed -i 's/Lys/K/'g SnpEff.sites
-sed -i 's/Met/M/'g SnpEff.sites
-sed -i 's/Phe/F/'g SnpEff.sites
-sed -i 's/Pro/P/'g SnpEff.sites
-sed -i 's/Ser/S/'g SnpEff.sites
-sed -i 's/Thr/T/'g SnpEff.sites
-sed -i 's/Trp/W/'g SnpEff.sites
-sed -i 's/Tyr/Y/'g SnpEff.sites
-sed -i 's/Val/V/'g SnpEff.sites
-
-rm variants.vcf
-grep "protein_coding" SnpEff.sites > SnpEff.coding.sites
-mkdir variants_per_protein
-grep "GU280_gp04" SnpEff.coding.sites > ./variants_per_protein/E.variants
-grep "GU280_gp05" SnpEff.coding.sites > ./variants_per_protein/M.variants
-grep "GU280_gp10" SnpEff.coding.sites > ./variants_per_protein/N.variants
-grep "GU280_gp11" SnpEff.coding.sites > ./variants_per_protein/ORF10.variants
-grep "YP_009725297.1" SnpEff.coding.sites > ./variants_per_protein/leader_protein.variants
-grep "YP_009725298.1" SnpEff.coding.sites > ./variants_per_protein/nsp2.variants
-grep "YP_009725299.1" SnpEff.coding.sites > ./variants_per_protein/nsp3.variants
-grep "YP_009725300.1" SnpEff.coding.sites > ./variants_per_protein/nsp4.variants
-grep "YP_009725301.1" SnpEff.coding.sites > ./variants_per_protein/3C-like-proteinase.variants
-grep "YP_009725302.1" SnpEff.coding.sites > ./variants_per_protein/nsp6.variants
-grep "YP_009725303.1" SnpEff.coding.sites > ./variants_per_protein/nsp7.variants
-grep "YP_009725304.1" SnpEff.coding.sites > ./variants_per_protein/nsp8.variants
-grep "YP_009725305.1" SnpEff.coding.sites > ./variants_per_protein/nsp9.variants
-grep "YP_009725306.1" SnpEff.coding.sites > ./variants_per_protein/nsp10.variants
-grep "YP_009725307.1" SnpEff.coding.sites > ./variants_per_protein/RNA-dependent-RNA-polymerase.variants
-grep "YP_009725308.1" SnpEff.coding.sites > ./variants_per_protein/helicase.variants
-grep "YP_009725309.1" SnpEff.coding.sites > ./variants_per_protein/3-to-5-exonuclease.variants
-grep "YP_009725310.1" SnpEff.coding.sites > ./variants_per_protein/endoRNAse.variants
-grep "YP_009725311.1" SnpEff.coding.sites > ./variants_per_protein/2-O-ribose-methyltransferase.variants
-grep "YP_009725312.1" SnpEff.coding.sites > ./variants_per_protein/nsp11.variants
-grep "GU280_gp03" SnpEff.coding.sites > ./variants_per_protein/ORF3a.variants
-grep "GU280_gp06" SnpEff.coding.sites > ./variants_per_protein/ORF6.variants
-grep "GU280_gp07" SnpEff.coding.sites > ./variants_per_protein/ORF7a.variants
-grep "GU280_gp08" SnpEff.coding.sites > ./variants_per_protein/ORF7b.variants
-grep "GU280_gp09" SnpEff.coding.sites > ./variants_per_protein/ORF8.variants
-grep "GU280_gp02" SnpEff.coding.sites > ./variants_per_protein/S.variants
-grep "intergenic_region" SnpEff.sites > ./variants_per_protein/intergenic_region.variants
-
-cd variants_per_protein
-
-{
-file= ls -1 *.variants
-for file in *.variants; do cat ${file} | wc -l
-done
-#
-} | tee logfile_variants
-#
-
-grep ".variants" logfile_variants > features
-grep -v ".variants" logfile_variants > variants_per_feature
-paste features variants_per_feature > logfile_variants
-rm features variants_per_feature
-cd ..
-
-### Compute the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)  ###
-grep "missense_variant" SnpEff-Nov-30-2020.GISAID.vcf > missense_variant.GISAID.SnpEff
-grep "stop_gained" SnpEff-Nov-30-2020.GISAID.vcf > stop_gained.GISAID.SnpEff
-grep "synonymous_variant" SnpEff-Nov-30-2020.GISAID.vcf > synonymous_variant.GISAID.SnpEff
-grep "frameshift_variant" SnpEff-Nov-30-2020.GISAID.vcf > frameshift_variant.GISAID.SnpEff
-sed -i 's/;/\t/'g missense_variant.GISAID.SnpEff
-sed -i 's/;/\t/'g stop_gained.GISAID.SnpEff
-sed -i 's/;/\t/'g synonymous_variant.GISAID.SnpEff
-sed -i 's/;/\t/'g frameshift_variant.GISAID.SnpEff
-awk '{print $8}' missense_variant.GISAID.SnpEff > missense_variant.GISAID.counts
-awk '{print $8}' stop_gained.GISAID.SnpEff > stop_gained.GISAID.counts
-awk '{print $8}' synonymous_variant.GISAID.SnpEff > synonymous_variant.GISAID.counts
-awk '{print $8}' frameshift_variant.GISAID.SnpEff > frameshift_variant.GISAID.counts
-sed -i 's/AC=//'g missense_variant.GISAID.counts
-sed -i 's/AC=//'g stop_gained.GISAID.counts
-sed -i 's/AC=//'g synonymous_variant.GISAID.counts
-sed -i 's/AC=//'g frameshift_variant.GISAID.counts
-```
-variants_per_protein folder contain variants per protein. *.SnpEff files contains parsed variants per consequence and *.counts files contains associated counts. SnpEff-Nov-30-2020.GISAID.vcf   
+In each folder, variants_per_protein subfolder contain variants per protein. *.SnpEff files contains parsed variants per consequence and *.counts files contains associated counts. We suggest user-provided vcf files should be processed using SnpEff_processing.sh script in a specific folder, as presented here.
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
 To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute from scratch variant calling and vcftools analysis, using a sliding window of 50 bp (can be changed). An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
