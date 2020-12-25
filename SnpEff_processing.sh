@@ -148,7 +148,7 @@ grep "stop_gained" ${1} > stop_gained.GISAID.SnpEff
 grep "synonymous_variant" ${1} > synonymous_variant.SnpEff
 grep "frameshift_variant" ${1} > frameshift_variant.SnpEff
 sed -i 's/;/\t/'g missense_variant.SnpEff
-sed -i 's/;/\t/'g stop_gained.GISAID.SnpEff
+sed -i 's/;/\t/'g stop_gained.SnpEff
 sed -i 's/;/\t/'g synonymous_variant.SnpEff
 sed -i 's/;/\t/'g frameshift_variant.SnpEff
 awk '{print $8}' missense_variant.SnpEff > missense_variant.counts
@@ -161,6 +161,6 @@ sed -i 's/AC=//'g synonymous_variant.counts
 sed -i 's/AC=//'g frameshift_variant.counts
 echo "all done"
 echo "Check variants_per_protein folder, containing the provided VCF file splitted by SARS-CoV-2 protein"
-echo "*.SnpEff contain parsed synonymous, missense, nonsense and frameshift variants"
-echo "*.SnpEff contain parsed synonymous, missense, nonsense and frameshift frequency counts"
+echo ".SnpEff contain parsed synonymous, missense, nonsense and frameshift variants"
+echo ".SnpEff contain parsed synonymous, missense, nonsense and frameshift frequency counts"
 echo ""
