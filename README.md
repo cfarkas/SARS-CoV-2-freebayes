@@ -306,7 +306,7 @@ The whole analysis from scratch can be done in a folder (i.e. diversity), as fol
 
 ```
 mkdir diversity
-cd ./diversity/
+cd diversity
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.gff.gz
 gunzip *
 gffread GCF_009858895.2_ASM985889v3_genomic.gff -T -o SARS-CoV-2.gtf
