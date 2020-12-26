@@ -371,7 +371,7 @@ vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50     
 
 
 ## V) inStrain analysis of SRA sequencing cohorts (microdiversity)
-To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze Sequence Read Archive datasets from USA as done in the manuscript, do the following: 
+To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze a cohort of Sequence Read Archive datasets from USA, do the following: 
 
 ```
 mkdir inStrain_USA
