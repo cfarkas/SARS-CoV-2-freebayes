@@ -173,5 +173,6 @@ echo "Check variants_per_protein folder, containing the provided VCF file, split
 echo ".SnpEff files contain parsed synonymous, missense, nonsense and frameshift variants"
 echo ".counts files contain parsed synonymous, missense, nonsense and frameshift frequency counts"
 echo "SnpEff.AAchanges.percentages contains viral frequencies (in %) of missense, framshift and stop-gained changes ocurring in SARS-CoV-2 proteins"
+echo "SnpEff.AAchanges.percentages.sorted contains ordered viral frequencies (in %) of missense, framshift and stop-gained changes ocurring in SARS-CoV-2 proteins"
 echo "SnpEff.AAchanges contains viral frequencies of missense, framshift and stop-gained changes ocurring in SARS-CoV-2 proteins"
 echo "#########"
