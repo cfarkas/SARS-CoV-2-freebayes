@@ -137,6 +137,12 @@ grep -v ".variants" logfile_variants > variants_per_feature
 paste features variants_per_feature > logfile_variants
 rm features variants_per_feature
 cd ..
+awk '{print $5"\t"$8"\t"$15}' SnpEff.coding.sites > SnpEff.coding.sites.subset
+sed -i s'/;AF=/\t/'g SnpEff.coding.sites.subset
+sed -i s'/;AN=/\t/'g SnpEff.coding.sites.subset
+awk '{print $2"\t"$4"\t"$5}' SnpEff.coding.sites.subset > SnpEff.AAchanges && rm SnpEff.coding.sites.subset
+sed -i s'/p.//'g SnpEff.AAchanges
+awk '{print $1*100"\t"$2"\t"$3}' SnpEff.AAchanges > SnpEff.%AAchanges
 echo ""
 echo "Computing the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)"
 echo ""
@@ -161,4 +167,5 @@ echo "All done"
 echo "Check variants_per_protein folder, containing the provided VCF file, splitted by SARS-CoV-2 protein"
 echo ".SnpEff files contain parsed synonymous, missense, nonsense and frameshift variants"
 echo ".counts files contain parsed synonymous, missense, nonsense and frameshift frequency counts"
+echo "SnpEff.%AAchanges contains viral frequencies (in %) of aminoacid changes ocurring in SARS-CoV-2 proteins"
 echo "#########"
