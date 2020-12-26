@@ -166,6 +166,7 @@ sed -i s'/;AN=/\t/'g SnpEff.coding.sites.subset
 awk '{print $2"\t"$4"\t"$5}' SnpEff.coding.sites.subset > SnpEff.AAchanges && rm SnpEff.coding.sites.subset
 sed -i s'/p.//'g SnpEff.AAchanges
 awk '{print $1*100"\t"$2"\t"$3}' SnpEff.AAchanges > SnpEff.AAchanges.percentages
+sort -k1,1nr -k2,2 SnpEff.AAchanges.percentages > SnpEff.AAchanges.percentages.sorted
 echo "#########"
 echo "All done"
 echo "Check variants_per_protein folder, containing the provided VCF file, splitted by SARS-CoV-2 protein"
