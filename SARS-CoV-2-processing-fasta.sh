@@ -83,13 +83,9 @@ sed -i 's/>\t/>/'g ${1}
 seqkit fx2tab ${1} > merged.GISAID.tabular
 awk '{print $1"\t"$NF}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
 seqkit tab2fx merged.GISAID.tab > ${fasta_name}.fasta && rm merged.GISAID.tab
-echo "Splitting fasta files with seqkit"
+echo "Splitting fasta files with faidx"
 echo ""
-ulimit -n 1000000 && ulimit -s 299999
-seqkit split --by-id ${fasta_name}.fasta
-cd ${fasta_name}.fasta.split/
-for name in *.fasta; do mv -i -- "$name" "${name#*id_}" ; done
-for name in *.fasta; do mv -i -- "$name" "${name#*id_}" ; done
+faidx --split-files ${1}
 echo "Split is done. Continue with FASTA alignments"
 echo ""
 
