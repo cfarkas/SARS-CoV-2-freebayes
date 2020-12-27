@@ -224,7 +224,7 @@ samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-C
 mkdir GISAID_merge && cd GISAID_merge
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
 
-# Execute the pipeline from SARS-CoV-2-freebayes folder as follows. Using 10 threads:
+# Execute the pipeline from SARS-CoV-2-freebayes folder. Using 10 threads:
 ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit, see README_ulimit for details.
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 ```
