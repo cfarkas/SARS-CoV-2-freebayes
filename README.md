@@ -103,7 +103,13 @@ For information, please see : https://pypi.org/project/pyfasta/
 pip install pyfasta
 ```
 
-### 9) Installing seqkit
+### 9) Installing pyfaidx
+For information, please see : https://pypi.org/project/pyfaidx/
+```
+pip install pyfaidx
+```
+
+### 10) Installing seqkit
 SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
 ```
 wget https://github.com/shenwei356/seqkit/releases/download/v0.12.1/seqkit_linux_386.tar.gz
@@ -112,14 +118,14 @@ tar -xvf seqkit_linux_386.tar
 sudo cp seqkit /usr/local/bin/
 ```
 
-### 10) Installing inStrain 
+### 11) Installing inStrain 
 Tool for highly accurate genome comparisons, analysis of coverage, microdiversity, linkage and sensitive SNP detection. For information, please see: https://instrain.readthedocs.io/en/latest/
 
 ```
 pip install instrain
 ```
 
-### 11) Obtaining and Installing VCFtools
+### 12) Obtaining and Installing VCFtools
 We employed the version of Julien Y. Dutheil https://github.com/jydu/vcftools that includes the --haploid flag. Safe install can be achieved with root (sudo -i) as follows: 
 
 ```
