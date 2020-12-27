@@ -88,7 +88,7 @@ echo "Splitting fasta files with faidx (python)"
 echo ""
 mkdir ${fasta_name} && mv merged.GISAID.fasta ./${fasta_name}
 cd ${fasta_name}
-faidx --split-files ${1}
+faidx --split-files merged.GISAID.fasta
 echo "Split is done. Continue with FASTA alignments"
 echo ""
 
