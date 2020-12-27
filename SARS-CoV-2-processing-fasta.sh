@@ -106,7 +106,7 @@ freebayes -f ${2} -C 1 ${fasta}.sorted.bam > ${fasta}.vcf
 vcfleftalign -r ${2} ${fasta}.vcf > ${fasta}.left.vcf
 rm ${fasta}.sam ${fasta}.bam ${fasta}.sorted.bam ${fasta}.vcf
 done
-
+rm merged.GISAID.fasta*
 ### fixing VCF files for merge
 echo "fixing VCF files for merge"
 echo ""
