@@ -89,6 +89,7 @@ grep "EPI_" merged.GISAID.tab > merged.GISAID.tabular && rm merged.GISAID.tab
 seqkit tab2fx merged.GISAID.tabular > merged.GISAID.fasta && rm merged.GISAID.tabular
 echo "Splitting fasta files with faidx (python)"
 faidx --split-files merged.GISAID.fasta
+rm merged.GISAID.fasta*
 echo "Split is done. Continue with FASTA alignments"
 echo ""
 
