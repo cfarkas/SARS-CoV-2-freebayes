@@ -89,6 +89,7 @@ ulimit -n 1000000 && ulimit -s 299999
 seqkit split --by-id ${fasta_name}.fasta
 cd ${fasta_name}.fasta.split/
 for name in *.fasta; do mv -i -- "$name" "${name#*id_}" ; done
+for name in *.fasta; do mv -i -- "$name" "${name#*id_}" ; done
 echo "Split is done. Continue with FASTA alignments"
 echo ""
 
