@@ -87,7 +87,7 @@ seqkit fx2tab ${1} > merged.GISAID.tabular
 awk '{print $1"\t"$NF}' merged.GISAID.tabular > merged.GISAID.tab && rm merged.GISAID.tabular
 seqkit tab2fx merged.GISAID.tab > merged.GISAID.fasta && rm merged.GISAID.tab
 echo "Splitting fasta files with faidx (python)"
-faidx --split-files ${1}
+faidx --split-files merged.GISAID.fasta
 echo "Split is done. Continue with FASTA alignments"
 echo ""
 
