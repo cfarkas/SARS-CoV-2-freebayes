@@ -97,8 +97,8 @@ echo "Aligning fasta files to reference and call variants with freebayes (option
 echo ""
 ulimit -n 1000000 && ulimit -s 299999 
 samtools faidx ${2}
-fasta= ls -1 *.fasta
-for fasta in *.fasta; do
+fasta= ls -1 EPI*.fasta
+for fasta in EPI*.fasta; do
 minimap2 -ax asm5 -t ${3} ${2} ${fasta} > ${fasta}.sam
 samtools view -bS ${fasta}.sam > ${fasta}.bam
 samtools sort -o ${fasta}.sorted.bam ${fasta}.bam
