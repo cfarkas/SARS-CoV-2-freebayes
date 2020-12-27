@@ -11,7 +11,7 @@ if [ "$1" == "-h" ]; then
   echo ""
   echo "This script will merge variants using jacquard and the calculate viral frequencies"
   echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
+  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
   echo ""
   exit 0
 fi
@@ -22,11 +22,7 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "This script will merge variants using jacquard and the calculate viral frequencies"
   echo ""
-  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
+  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
   echo ""
   exit 0
 fi
@@ -36,11 +32,7 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "This script will merge variants using jacquard and the calculate viral frequencies"
   echo ""
-  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
+  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
   echo ""
   exit 0
 fi
@@ -51,11 +43,7 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "This script will merge variants using jacquard and the calculate viral frequencies"
   echo ""
-  echo "[GISAID_fasta] : GISAID genomes in FASTA format"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
+  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
   echo ""
   exit 0
 fi
