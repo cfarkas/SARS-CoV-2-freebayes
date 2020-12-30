@@ -147,9 +147,10 @@ exit
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
-- Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, for curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
+- SRA_list: Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, for curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
 - SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
-- number of threads for calculations 
+- VF: viral frequency threshold for variant calling (a number between 0-1). As example 0.5, would mean 50% viral frequency variants as threshold. 
+- Threads: number of threads for calculations 
 
 Execution (from scratch): 
 ```
@@ -157,24 +158,24 @@ git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cd SARS-CoV-2-freebayes
 samtools faidx covid19-refseq.fasta
 chmod 755 SARS-CoV-2* covid19-refseq.fasta*
-./SARS-CoV-2-freebayes.sh SRA_list covid19-refseq.fasta Threads
+./SARS-CoV-2-NGS-freebayes.sh SRA_list covid19-refseq.fasta VF Threads
 ```
 This execution will:
 
 - Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list
 - Align trimmed reads against SARS-CoV-2 reference genome (NC_045512.2) by using minimap2
-- Call variants (viral frequency >= 0.5) by using freebayes as frequency-based pooled caller
+- Call variants at a certain viral frequency by using freebayes as frequency-based pooled caller
 - Merge all variants in a single VCF file by using jacquard. This VCF file also contains viral frequencies in the AF field (AF=AO/AO+RO). See AO and RO fields for alternative and reference allele counts.
 
 ### Example 
 
-We provided a curated list of 17560 SARS-CoV-2 worldwide datasets until July 28, 2020 (see SRA_Accessions_Jul_28_2020.tabular). We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to increase open file limit and stack size accordingly at the number of genomes to process, otherwise these steps will crush. see README_ulimit for details in Ubuntu. 
+We provided a curated list of 17560 SARS-CoV-2 worldwide datasets until July 28, 2020 (see SRA_Accessions_Jul_28_2020.tabular). We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to increase open file limit and stack size accordingly at the number of genomes to process, otherwise these steps may crush. see README_ulimit for details in Ubuntu. 
 
 ```
 ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit, see README_ulimit for details.
-./SARS-CoV-2-NGS-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 30
+./SARS-CoV-2-NGS-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 0.4999 30
 ```
-will collect variants (VF>=0.5) in each Sample. To change VF, edit F value in line 139 of SARS-CoV-2-NGS-freebayes.sh script or filter with vcffilter (see vcffilter --help).
+will collect variants (VF>=0.5) in each Sample.
 
 ### Number of variants per genome
 
