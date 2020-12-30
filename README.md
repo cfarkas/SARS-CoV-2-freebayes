@@ -147,7 +147,7 @@ exit
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
-- SRA_list: Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, for curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
+- SRA_list: Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, containing curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
 - SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - VF: viral frequency threshold for variant calling (a number between 0-1). As example 0.5, would mean 50% viral frequency variants as threshold. 
 - Threads: number of threads for calculations 
