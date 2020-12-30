@@ -74,7 +74,7 @@ fi
 
 [ $# -eq 0 ] && { echo "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"; exit 1; }
 
-if [ $# -ne 3 ]; then
+if [ $# -ne 4 ]; then
   echo 1>&2 "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"
   exit 3
 fi
