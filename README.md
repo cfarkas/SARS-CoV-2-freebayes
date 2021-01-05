@@ -448,7 +448,7 @@ vcf= ls -1 *.freebayes.vcf
 for vcf in *.freebayes.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
 done
 #
-} | tee logfile_variants_AF_5%_freebayes
+} | tee logfile_variants_AF_30%_freebayes
 #
 grep ".bam.freebayes.vcf" logfile_variants_VF_30%_freebayes > vcf_files
 grep -v ".bam.freebayes.vcf" logfile_variants_VF_30%_freebayes > variants_per_sample
