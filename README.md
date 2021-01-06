@@ -143,6 +143,13 @@ make install
 exit
 ```
 
+### (Optional) Installing VCFtoolz : Tools for working with Variant Call Format files (for plotting VCF files)
+for information about this tool see https://vcftoolz.readthedocs.io/en/latest/installation.html
+```
+pip install vcftoolz   # python2.7
+pip3 install vcftoolz  # python >=3
+```
+
 ## I) Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
