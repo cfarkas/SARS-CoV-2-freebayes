@@ -18,13 +18,9 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "Usage: ./`basename $0` [SnpEff_vcf]"
   echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-ga"
+  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
   echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
   echo ""
   exit 0
 fi
@@ -32,13 +28,9 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "Usage: ./`basename $0` [SnpEff_vcf]"
   echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-ga"
+  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
   echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
   echo ""
   exit 0
 fi
@@ -47,13 +39,9 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "Usage: ./`basename $0` [SnpEff_vcf]"
   echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-ga"
+  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
   echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
   echo ""
   exit 0
 fi
