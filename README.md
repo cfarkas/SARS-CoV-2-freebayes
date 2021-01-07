@@ -143,7 +143,7 @@ make install
 exit
 ```
 
-### (Optional) vcfstats - powerful statistics for VCF files (for plotting vcf files)
+### (Optional) Obtaining and installing vcfstats - powerful statistics for VCF files (for plotting vcf files)
 For information about this tool, check: https://pypi.org/project/vcfstats/
 ```
 pip install vcfstats     # python 2.7
