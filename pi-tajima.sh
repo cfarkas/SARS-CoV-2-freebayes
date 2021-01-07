@@ -64,10 +64,10 @@ fi
 begin=`date +%s`
 
 # Obtaining 95% confidence intervals in Tajima's D and parsing provided VCF file
-echo "Obtaining 95% confidence intervals in Tajima's D and parsing provided VCF file"
+echo "====> Obtaining 95% confidence intervals in Tajima's D and parsing provided VCF file"
 echo ""
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-echo "The working directory is the following: ${dir1}/"
+echo "====> The working directory is the following: ${dir1}/"
 echo ""
 wget https://raw.githubusercontent.com/cfarkas/SARS-CoV-2-freebayes/master/confidence_interval.R
 cp ${1} input.50.pi.D 
@@ -77,9 +77,9 @@ awk '{print "NC_045512.2""\t"($2-50)"\t"$2}' bins_95%_confidence.tab > bins_95%_
 tail -n +2 bins_95%_confidence.bed > bins_95%_conf_interval.bed && rm bins_95%_confidence.tab bins_95%_confidence.bed
 mv bins_95%_conf_interval.bed bins_95%_confidence.bed
 vcftools --vcf ${2} --bed bins_95%_confidence.bed --out 95_confidence --recode --keep-INFO-all
-
+echo ""
 # making temporal directory and parsing vcf file by protein or feature
-echo "making temporal directory and parsing vcf file by protein or feature"
+echo "====> Making temporal directory and parsing vcf file by protein or feature"
 echo ""
 mkdir vcfsplit-temporal-directory
 cp 95_confidence.recode.vcf ./vcfsplit-temporal-directory/
@@ -116,7 +116,7 @@ awk '{ if ($2>=29558 && $2<=29674) { print } }' variants.vcf > ORF10.vcfsplit
 awk '{ if ($2>=29675 && $2<=29903) { print } }' variants.vcf > three_prime_utr.vcfsplit
 
 # generating stats
-echo "generating stats"
+echo "====> Generating stats"
 echo ""
 echo "five_prime_utr" >> variants_per_feature.txt
 echo "leader_protein" >> variants_per_feature.txt
@@ -179,7 +179,7 @@ rm SARS-CoV-2_proteins variants_per_sample variants_per_feature.txt
 mv variants_per_feature variants_per_feature.tabular
 
 # Replacing chromosome name with gene names 
-echo "Replacing chromosome name with gene names"
+echo "====> Replacing chromosome name with gene names"
 echo ""
 sed -i 's/NC_045512.2/five_prime_utr/'g five_prime_utr.vcfsplit
 sed -i 's/NC_045512.2/leader_protein/'g leader_protein.vcfsplit
@@ -210,7 +210,7 @@ sed -i 's/NC_045512.2/ORF10/'g ORF10.vcfsplit
 sed -i 's/NC_045512.2/three_prime_utr/'g three_prime_utr.vcfsplit
 
 # tweaking 95_confidence.recode.vcf file replacing chromosome with proteins-feature names
-echo "tweaking 95_confidence.recode.vcf file replacing chromosome with proteins-feature names"
+echo "====> Tweaking 95_confidence.recode.vcf file replacing chromosome with proteins-feature names"
 echo ""
 cat vcfheader five_prime_utr.vcfsplit leader_protein.vcfsplit nsp2.vcfsplit nsp3.vcfsplit nsp4.vcfsplit 3C_like_proteinase.vcfsplit nsp6.vcfsplit nsp7.vcfsplit nsp8.vcfsplit nsp9.vcfsplit nsp10.vcfsplit RNA_dependent_RNA_polymerase.vcfsplit helicase.vcfsplit 3_prime-to-5_prime_exonuclease.vcfsplit endoRNAse.vcfsplit 2_prime-O-ribose_methyltransferase.vcfsplit S.vcfsplit ORF3a.vcfsplit E.vcfsplit M.vcfsplit ORF6.vcfsplit ORF7a.vcfsplit ORF7b.vcfsplit ORF8.vcfsplit N.vcfsplit ORF10.vcfsplit three_prime_utr.vcfsplit > 95_confidence.tweaked.vcf   
 rm *vcfsplit variants.vcf vcfheader
@@ -220,9 +220,9 @@ cp ./vcfsplit-temporal-directory/variants_per_feature.tabular ./
 rm -rf vcfsplit-temporal-directory
 
 # invoking vcfstats on 95_confidence.tweaked.vcf file
-echo "invoking vcfstats on 95_confidence.tweaked.vcf file"
+echo "====> Invoking vcfstats on 95_confidence.tweaked.vcf file"
 echo ""
-echo "working in postprocessing_pi_D_output_files"
+echo "====> Working in postprocessing_pi_D_output_files"
 echo ""
 mkdir postprocessing_pi_D_output_files
 vcfstats --vcf 95_confidence.tweaked.vcf \
@@ -235,11 +235,9 @@ vcfstats --vcf 95_confidence.tweaked.vcf \
 	 --formula 'AAF ~ CONTIG' \
 	 --title 'Viral frequency of variants per protein or feature' \
 	 --figtype boxplot
-
-vcfstats --vcf 95_confidence.tweaked.vcf \
-	 --outdir postprocessing_pi_D_output_files/ \
-	 --formula 'COUNT(1, VARTYPE[snp]) ~ SUBST[A>T,A>G,A>C,T>A,T>G,T>C,G>A,G>T,G>C,C>A,C>T,C>G]' \
-	 --title 'Number of substitutions of SNPs' \
+# cleaning up
+echo "====> Cleaning up .."
+echo ""
 gzip 95_confidence.tweaked.vcf 95_confidence.recode.vcf
 mv 95_confidence.tweaked.vcf.gz 95_confidence.recode.vcf.gz variants_per_feature.tabular bins_95%_confidence.bed pi_tajima.pdf ./postprocessing_pi_D_output_files/
 echo "##################"
