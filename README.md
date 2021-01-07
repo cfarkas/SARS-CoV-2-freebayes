@@ -143,6 +143,13 @@ make install
 exit
 ```
 
+### (Optional) vcfstats - powerful statistics for VCF files (for plotting vcf files)
+For information about this tool, check: https://pypi.org/project/vcfstats/
+```
+pip install vcfstats     # python 2.7
+pip3 install vcfstats    # python >= 3
+```
+
 ## I) Colecting Variants (Sequence Read Archive datasets)
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
