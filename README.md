@@ -457,4 +457,4 @@ rm vcf_files variants_per_sample
 sed -i s'/.bam.freebayes.vcf//'g logfile_variants_VF_10%_freebayes.tabular
 
 ```
-merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_VF_30%_freebayes.tabular contain variants with viral frequency over 10%, per genome.
+merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_VF_10%_freebayes.tabular contain variants with viral frequency over 10%, per genome.
