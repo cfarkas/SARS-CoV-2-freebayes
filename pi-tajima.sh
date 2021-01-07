@@ -245,7 +245,7 @@ mv 95_confidence.tweaked.vcf.gz 95_confidence.recode.vcf.gz variants_per_feature
 echo "##################"
 echo "##################"
 echo ""
-echo "All done." Check postprocessing_pi_D_output_files containing output files
+echo "All done. Check postprocessing_pi_D_output_files folder containing output files"
 echo ""
 echo "bins_95%_confidence.bed contains bins with Tajima's D values out of 95% CI. Check pi_tajima.pdf plot"
 echo ""
