@@ -164,7 +164,7 @@ Execution (from scratch):
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 cd SARS-CoV-2-freebayes
 samtools faidx covid19-refseq.fasta
-chmod 755 SARS-CoV-2* covid19-refseq.fasta*
+chmod 755 SARS-CoV-2* covid19-refseq.fasta* *.sh
 ./SARS-CoV-2-NGS-freebayes.sh SRA_list covid19-refseq.fasta VF Threads
 ```
 This execution will:
@@ -394,6 +394,7 @@ cd inStrain_USA
 # Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular), using 40 threads (takes ~ 4.36 hrs)
 
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
+chmod 755 ./SARS-CoV-2-freebayes/*.sh
 cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
 cp ./SARS-CoV-2-freebayes/covid19-refseq.fasta* ./
 samtools faidx covid19-refseq.fasta
