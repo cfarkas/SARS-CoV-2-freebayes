@@ -12,7 +12,7 @@ if [ "$1" == "-h" ]; then
   echo ""
   echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
+  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
   echo ""
   exit 0
 fi
@@ -25,7 +25,7 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
+  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
   echo ""
   exit 0
 fi
@@ -37,7 +37,7 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
+  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
   echo ""
   exit 0
 fi
@@ -50,7 +50,7 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
+  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
   echo ""
   exit 0
 fi
