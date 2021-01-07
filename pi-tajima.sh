@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
 {
-pi-tajima=${1}
+pi_tajima=${1}
 merged_vcf_file=${2}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [pi-tajima] [merged_vcf_file]"
+  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
   echo ""
   echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
   echo ""
-  echo "[pi-tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
+  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
   echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
   echo ""
@@ -19,11 +19,11 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [pi-tajima] [merged_vcf_file]"
+  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
   echo ""
   echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
   echo ""
-  echo "[pi-tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
+  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
   echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
   echo ""
@@ -31,11 +31,11 @@ if [ "$1" == "-help" ]; then
 fi
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [pi-tajima] [merged_vcf_file]"
+  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
   echo ""
   echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
   echo ""
-  echo "[pi-tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
+  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
   echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
   echo ""
@@ -44,21 +44,21 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [pi-tajima] [merged_vcf_file]"
+  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
   echo ""
   echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
   echo ""
-  echo "[pi-tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
+  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
   echo ""
   echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: ${2}"
   echo ""
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [pi-tajima] [merged_vcf_file]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"; exit 1; }
 
 if [ $# -ne 2 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [pi-tajima] [merged_vcf_file]"
+  echo 1>&2 "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
   exit 3
 fi
 begin=`date +%s`
@@ -253,7 +253,7 @@ echo "95_confidence.recode.vcf.gz contain sites in Tajima's D values out of 95% 
 echo ""
 echo "A tweaked version of the latter file conatining protein names is called 95_confidence.tweaked.vcf.gz"
 echo ""
-echo "variants_per_feature.tabular" contain number of variants per protein/feature in regions with Tajima's D outside 95% CI"
+echo "variants_per_feature.tabular contain number of variants per protein/feature in regions with Tajima's D outside 95% CI"
 echo ""
 echo "##################"
 echo "##################"
