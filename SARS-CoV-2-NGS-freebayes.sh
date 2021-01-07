@@ -3,6 +3,7 @@
 
 SRA_list=${1}
 Reference=${2}
+Frequency=${3}
 Threads=${4}
 
 if [ "$1" == "-h" ]; then
