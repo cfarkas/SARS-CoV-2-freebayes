@@ -14,7 +14,7 @@ package.check <- lapply(
 
 ### plotting confidence intervals in pi_tajima.pdf file.
 
-bins<-read.table("input.50.pi.D", header=F)
+bins<-read.table("input.pi.D", header=F)
 names(bins)[names(bins) == "V2"] <- "nucleotide_diversity"
 names(bins)[names(bins) == "V3"] <- "D"
 lower_limit=quantile(bins$D, .025)
