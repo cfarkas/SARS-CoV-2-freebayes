@@ -216,8 +216,8 @@ sed -i 's/NC_045512.2/ORF8/'g ORF8.vcfsplit
 sed -i 's/NC_045512.2/N/'g N.vcfsplit
 sed -i 's/NC_045512.2/ORF10/'g ORF10.vcfsplit
 sed -i 's/NC_045512.2/three_prime_utr/'g three_prime_utr.vcfsplit
-# tweaking 95_confidence.recode.vcf file replacing chromosome with proteins-feature names
-echo "====> Tweaking lower_confidence.recode.vcf file replacing chromosome with proteins-feature names"
+# tweaking 2.5_CI_confidence.recode.vcf file replacing chromosome with proteins-feature names
+echo "====> Tweaking 2.5_CI_confidence.recode.vcf file replacing chromosome with proteins-feature names"
 echo ""
 cat vcfheader five_prime_utr.vcfsplit leader_protein.vcfsplit nsp2.vcfsplit nsp3.vcfsplit nsp4.vcfsplit 3C_like_proteinase.vcfsplit nsp6.vcfsplit nsp7.vcfsplit nsp8.vcfsplit nsp9.vcfsplit nsp10.vcfsplit RNA_dependent_RNA_polymerase.vcfsplit helicase.vcfsplit 3_prime-to-5_prime_exonuclease.vcfsplit endoRNAse.vcfsplit 2_prime-O-ribose_methyltransferase.vcfsplit S.vcfsplit ORF3a.vcfsplit E.vcfsplit M.vcfsplit ORF6.vcfsplit ORF7a.vcfsplit ORF7b.vcfsplit ORF8.vcfsplit N.vcfsplit ORF10.vcfsplit three_prime_utr.vcfsplit > 2.5_CI_confidence.tweaked.vcf   
 rm *vcfsplit variants.vcf vcfheader
@@ -254,7 +254,7 @@ awk '{ if ($2>=28274 && $2<=29533) { print } }' variants.vcf > N.vcfsplit
 awk '{ if ($2>=29558 && $2<=29674) { print } }' variants.vcf > ORF10.vcfsplit
 awk '{ if ($2>=29675 && $2<=29903) { print } }' variants.vcf > three_prime_utr.vcfsplit
 # generating stats
-echo "====> Generating stats: : outside 97.5% CI"
+echo "====> Generating stats: outside 97.5% CI"
 echo ""
 echo "five_prime_utr" >> variants_per_feature.txt
 echo "leader_protein" >> variants_per_feature.txt
@@ -345,8 +345,8 @@ sed -i 's/NC_045512.2/ORF8/'g ORF8.vcfsplit
 sed -i 's/NC_045512.2/N/'g N.vcfsplit
 sed -i 's/NC_045512.2/ORF10/'g ORF10.vcfsplit
 sed -i 's/NC_045512.2/three_prime_utr/'g three_prime_utr.vcfsplit
-# tweaking 95_confidence.recode.vcf file replacing chromosome with proteins-feature names
-echo "====> Tweaking upper_confidence.recode.vcf file replacing chromosome with proteins-feature names"
+# tweaking 97.5_CI_confidence.recode.vcf file replacing chromosome with proteins-feature names
+echo "====> Tweaking 97.5_CI_confidence.recode.vcf file replacing chromosome with proteins-feature names"
 echo ""
 cat vcfheader five_prime_utr.vcfsplit leader_protein.vcfsplit nsp2.vcfsplit nsp3.vcfsplit nsp4.vcfsplit 3C_like_proteinase.vcfsplit nsp6.vcfsplit nsp7.vcfsplit nsp8.vcfsplit nsp9.vcfsplit nsp10.vcfsplit RNA_dependent_RNA_polymerase.vcfsplit helicase.vcfsplit 3_prime-to-5_prime_exonuclease.vcfsplit endoRNAse.vcfsplit 2_prime-O-ribose_methyltransferase.vcfsplit S.vcfsplit ORF3a.vcfsplit E.vcfsplit M.vcfsplit ORF6.vcfsplit ORF7a.vcfsplit ORF7b.vcfsplit ORF8.vcfsplit N.vcfsplit ORF10.vcfsplit three_prime_utr.vcfsplit > 97.5_CI_confidence.tweaked.vcf   
 rm *vcfsplit variants.vcf vcfheader
