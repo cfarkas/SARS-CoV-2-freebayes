@@ -74,11 +74,16 @@ cp ${1} input.pi.D
 grep -v "nan" input.pi.D > input.pi.D.clean && rm input.pi.D
 mv input.pi.D.clean input.pi.D
 Rscript confidence_interval.R input.pi.D && rm input.pi.D
-sed -i 's/V1/\tbins/'g bins_95%_confidence.tab
-awk '{print "NC_045512.2""\t"($2-50)"\t"$2}' bins_95%_confidence.tab > bins_95%_confidence.bed
-tail -n +2 bins_95%_confidence.bed > bins_95%_conf_interval.bed && rm bins_95%_confidence.tab bins_95%_confidence.bed
-mv bins_95%_conf_interval.bed bins_95%_confidence.bed
-vcftools --vcf ${2} --bed bins_95%_confidence.bed --out 95_confidence --recode --keep-INFO-all
+sed -i 's/V1/bins/'g bins_2.5%_confidence.tab
+sed -i 's/V1/bins/'g bins_97.5%_confidence.tab
+awk '{print "NC_045512.2""\t"($1-50)"\t"$1}' bins_2.5%_confidence.tab > bins_2.5%_confidence.bed
+awk '{print "NC_045512.2""\t"($1-50)"\t"$1}' bins_97.5%_confidence.tab > bins_97.5%_confidence.bed
+tail -n +2 bins_2.5%_confidence.bed > bins_2.5%_conf_interval.bed && rm bins_2.5%_confidence.tab bins_2.5%_confidence.bed
+tail -n +2 bins_97.5%_confidence.bed > bins_97.5%_conf_interval.bed && rm bins_97.5%_confidence.tab bins_97.5%_confidence.bed
+mv bins_2.5%_conf_interval.bed bins_2.5%_confidence.bed
+mv bins_97.5%_conf_interval.bed bins_97.5%_confidence.bed
+vcftools --vcf ${2} --bed bins_2.5%_confidence.bed --out upper_confidence --recode --keep-INFO-all
+vcftools --vcf ${2} --bed bins_97.5%_confidence.bed --out lower_confidence --recode --keep-INFO-all
 echo ""
 # making temporal directory and parsing vcf file by protein or feature
 echo "====> Making temporal directory and parsing vcf file by protein or feature"
