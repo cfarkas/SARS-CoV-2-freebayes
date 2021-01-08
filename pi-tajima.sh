@@ -70,7 +70,9 @@ dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "====> The working directory is the following: ${dir1}/"
 echo ""
 wget https://raw.githubusercontent.com/cfarkas/SARS-CoV-2-freebayes/master/confidence_interval.R
-cp ${1} input.50.pi.D 
+cp ${1} input.50.pi.D
+grep -v "nan" input.50.pi.D > input.50.pi.D.clean && rm input.50.pi.D
+mv input.50.pi.D.clean input.50.pi.D
 Rscript confidence_interval.R input.50.pi.D && rm input.50.pi.D
 sed -i 's/V1/\tbins/'g bins_95%_confidence.tab
 awk '{print "NC_045512.2""\t"($2-50)"\t"$2}' bins_95%_confidence.tab > bins_95%_confidence.bed
