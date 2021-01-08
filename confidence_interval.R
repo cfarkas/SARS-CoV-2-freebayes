@@ -49,9 +49,10 @@ plot(gg)
 dev.off()
 
 ### getting 2.5 and 97.5% intervals from data using subset function
-bins_subsetted <- subset(bins, bins$D > upper_limit | bins$D < lower_limit,
-select=c(V1, nucleotide_diversity, D))
-write.table(bins_subsetted, file="bins_95%_confidence.tab", sep="\t", quote = FALSE)
+upper_bins_subset <- subset(bins, bins$D > upper_limit), select=c(V1, nucleotide_diversity, D))
+lower_bins_subset <- subset(bins, bins$D < lower_limit), select=c(V1, nucleotide_diversity, D))
+write.table(upper_bins_subset, file="bins_97.5%_confidence.tab", sep="\t", quote = FALSE)
+write.table(lower_bins_subset, file="bins_2.5%_confidence.tab", sep="\t", quote = FALSE)
 proc.time()
 sessionInfo()
 quit("no")
