@@ -91,25 +91,17 @@ cp sratoolkit.2.9.6-ubuntu64/bin/fastq-dump /usr/local/bin/
 cp sratoolkit.2.9.6-ubuntu64/bin/prefetch /usr/local/bin/
 ```
 
-### 7) Installing jaqcuard
-For information, please see :https://jacquard.readthedocs.io/en/v0.42/installation.html
+### 7) Installing jaqcuard, pyfasta, pyfaidx, inStrain and vcfstats python libraries
 ```
 pip install jacquard
-```
-
-### 8) Installing pyfasta
-For information, please see : https://pypi.org/project/pyfasta/
-```
 pip install pyfasta
-```
-
-### 9) Installing pyfaidx
-For information, please see : https://pypi.org/project/pyfaidx/
-```
 pip install pyfaidx
+pip install instrain
+pip install vcfstats
 ```
+Note: use pip3 command when using python3. 
 
-### 10) Installing seqkit
+### 8) Installing seqkit
 SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
 ```
 wget https://github.com/shenwei356/seqkit/releases/download/v0.12.1/seqkit_linux_386.tar.gz
@@ -118,14 +110,7 @@ tar -xvf seqkit_linux_386.tar
 sudo cp seqkit /usr/local/bin/
 ```
 
-### 11) Installing inStrain 
-Tool for highly accurate genome comparisons, analysis of coverage, microdiversity, linkage and sensitive SNP detection. For information, please see: https://instrain.readthedocs.io/en/latest/
-
-```
-pip install instrain
-```
-
-### 12) Obtaining and Installing VCFtools
+### 9) Obtaining and Installing VCFtools
 We employed the version of Julien Y. Dutheil https://github.com/jydu/vcftools that includes the --haploid flag. Safe install can be achieved with root (sudo -i) as follows: 
 
 ```
@@ -143,11 +128,15 @@ make install
 exit
 ```
 
-### (Optional) Obtaining and installing vcfstats - powerful statistics for VCF files (for plotting vcf files)
-For information about this tool, check: https://pypi.org/project/vcfstats/
+### 10) Install ggplot2, ggrepel and vcfR R libraries 
 ```
-pip install vcfstats     # python 2.7
-pip3 install vcfstats    # python >= 3
+R   # Open R 
+install.packages("ggplot2")
+library(ggplot2)
+install.packages("ggrepel")
+library(ggrepel)
+install.packages("vcfR")
+library(vcfR)
 ```
 
 ## I) Colecting Variants (Sequence Read Archive datasets)
