@@ -29,7 +29,7 @@ geom_point()+
 ### geom_label_repel
 gg + 
   geom_label_repel(aes(label = V1),
-                  data          = subset(bins, D < upper_limit),
+                  data          = subset(bins, D > upper_limit),
                   size          = 2.5,
                   box.padding   = 0.4,
                   point.padding = 0.4,
@@ -38,7 +38,7 @@ gg +
                   direction     = "x",
                   max.overlaps  = Inf) +
   geom_label_repel(aes(label = V1),
-                  data         = subset(bins, D > lower_limit),
+                  data         = subset(bins, D < lower_limit),
                   size          = 2.5,
                   box.padding   = 0.4,
                   point.padding = 0.4,
@@ -52,9 +52,9 @@ dev.off()
 
 ### getting 2.5 and 97.5% intervals from data using subset function
 myvars <- c("V1", "nucleotide_diversity", "D")
-upper_bins_subset <- subset(bins, bins$D < upper_limit)
+upper_bins_subset <- subset(bins, bins$D > upper_limit)
 newdata_upper <- upper_bins_subset[myvars]
-lower_bins_subset <- subset(bins, bins$D > lower_limit)
+lower_bins_subset <- subset(bins, bins$D < lower_limit)
 newdata_lower <- lower_bins_subset[myvars]
 write.table(newdata_upper, file="bins_2.5%_confidence.tab", sep="\t", quote = FALSE, row.names = FALSE)
 write.table(newdata_lower, file="bins_97.5%_confidence.tab", sep="\t", quote = FALSE, row.names = FALSE)
