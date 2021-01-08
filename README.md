@@ -99,7 +99,7 @@ pip install pyfaidx
 pip install instrain
 pip install vcfstats
 ```
-Note: use pip3 command when using python3. 
+Note: use pip3 instead of pip when using python3. 
 
 ### 8) Installing seqkit
 SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
