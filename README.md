@@ -93,13 +93,13 @@ cp sratoolkit.2.9.6-ubuntu64/bin/prefetch /usr/local/bin/
 
 ### 7) Installing jaqcuard, pyfasta, pyfaidx, inStrain and vcfstats python libraries
 ```
-pip install jacquard
-pip install pyfasta
-pip install pyfaidx
-pip install instrain
-pip install vcfstats
+pip install jacquard    # elemental
+pip install pyfasta     # elemental
+pip install pyfaidx     # elemental
+pip3 install instrain   # optional to execute example V
+pip3 install vcfstats   # optional, but recomended to process tajima's D and pi values
 ```
-Note: use pip3 instead of pip when using python3. 
+Note: pip3 requires the use of python3. 
 
 ### 8) Installing seqkit
 SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
