@@ -89,8 +89,8 @@ echo ""
 echo "====> Making temporal directory and parsing vcf file by protein or feature: outside 2.5% CI"
 echo ""
 mkdir vcfsplit-temporal-directory
-cp lower_confidence.recode.vcf ./vcfsplit-temporal-directory/
-cp upper_confidence.recode.vcf ./vcfsplit-temporal-directory/
+cp 2.5_CI_confidence.recode.vcf ./vcfsplit-temporal-directory/
+cp 97.5_CI_confidence.recode.vcf ./vcfsplit-temporal-directory/
 cd vcfsplit-temporal-directory
 # Working with bins outside 2.5% CI
 echo "====> Working with bins outside 2.5% CI"
@@ -224,8 +224,8 @@ rm *vcfsplit variants.vcf vcfheader
 # Working with bins outside 97.5% CI
 echo "====> Working with bins outside 97.5% CI"
 echo ""
-grep "#" -v upper_confidence.recode.vcf > variants.vcf
-grep "#" upper_confidence.recode.vcf > vcfheader
+grep "#" -v 97.5_CI_confidence.recode.vcf > variants.vcf
+grep "#" 97.5_CI_confidence.recode.vcf > vcfheader
 awk '{ if ($2>=1 && $2<=265) { print } }' variants.vcf > five_prime_utr.vcfsplit
 awk '{ if ($2>=266 && $2<=805) { print } }' variants.vcf > leader_protein.vcfsplit
 awk '{ if ($2>=806 && $2<=2719) { print } }' variants.vcf > nsp2.vcfsplit
@@ -356,9 +356,8 @@ cp ./vcfsplit-temporal-directory/97.5_CI_confidence.tweaked.vcf ./
 cp ./vcfsplit-temporal-directory/variants_per_feature_2.5-CI.tabular ./
 cp ./vcfsplit-temporal-directory/variants_per_feature_97.5-CI.tabular ./
 rm -rf vcfsplit-temporal-directory
-
-# invoking vcfstats on tweaked.vcf files
-echo "====> Invoking vcfstats on tweaked.vcf files"
+# invoking vcfstats on tweaked vcf files
+echo "====> Invoking vcfstats on tweaked vcf files"
 echo ""
 echo "====> Working in postprocessing_pi_D_output_files"
 echo ""
@@ -373,6 +372,7 @@ vcfstats --vcf 2.5_CI_confidence.tweaked.vcf \
 	 --formula 'AAF ~ CONTIG' \
 	 --title 'Viral frequency of variants per protein or feature: : 2.5% CI' \
 	 --figtype boxplot
+
 vcfstats --vcf 97.5_CI_confidence.tweaked.vcf \
 	 --outdir postprocessing_pi_D_output_files/ \
 	 --formula 'COUNT(1) ~ CONTIG' \
