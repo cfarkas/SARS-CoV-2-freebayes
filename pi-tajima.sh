@@ -61,7 +61,6 @@ if [ $# -ne 2 ]; then
   echo 1>&2 "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
   exit 3
 fi
-begin=`date +%s`
 
 # Obtaining 95% confidence intervals in Tajima's D and parsing provided VCF file
 echo "====> Obtaining 95% confidence intervals in Tajima's D and parsing provided VCF file"
@@ -316,7 +315,7 @@ paste SARS-CoV-2_proteins variants_per_sample > variants_per_feature
 rm SARS-CoV-2_proteins variants_per_sample variants_per_feature.txt
 mv variants_per_feature variants_per_feature_97.5-CI.tabular
 # Replacing chromosome name with gene names 
-echo "====> Replacing chromosome name with gene names: : outside 97.5% CI"
+echo "====> Replacing chromosome name with gene names: outside 97.5% CI"
 echo ""
 sed -i 's/NC_045512.2/five_prime_utr/'g five_prime_utr.vcfsplit
 sed -i 's/NC_045512.2/leader_protein/'g leader_protein.vcfsplit
@@ -365,23 +364,23 @@ mkdir postprocessing_pi_D_output_files
 vcfstats --vcf 2.5_CI_confidence.tweaked.vcf \
 	 --outdir postprocessing_pi_D_output_files/ \
 	 --formula 'COUNT(1) ~ CONTIG' \
-	 --title 'Number of variants per protein or feature: 2.5% CI'
+	 --title 'Number of variants per protein or feature 2.5 CI'
 
 vcfstats --vcf 2.5_CI_confidence.tweaked.vcf \
 	 --outdir postprocessing_pi_D_output_files/ \
 	 --formula 'AAF ~ CONTIG' \
-	 --title 'Viral frequency of variants per protein or feature: : 2.5% CI' \
+	 --title 'Viral frequency of variants per protein or feature 2.5 CI' \
 	 --figtype boxplot
 
 vcfstats --vcf 97.5_CI_confidence.tweaked.vcf \
 	 --outdir postprocessing_pi_D_output_files/ \
 	 --formula 'COUNT(1) ~ CONTIG' \
-	 --title 'Number of variants per protein or feature: : 97.5% CI'
+	 --title 'Number of variants per protein or feature 97.5 CI'
 
 vcfstats --vcf 97.5_CI_confidence.tweaked.vcf \
 	 --outdir postprocessing_pi_D_output_files/ \
 	 --formula 'AAF ~ CONTIG' \
-	 --title 'Viral frequency of variants per protein or feature: : 97.5% CI' \
+	 --title 'Viral frequency of variants per protein or feature 97.5 CI' \
 	 --figtype boxplot
 # cleaning up
 echo ""
@@ -414,6 +413,3 @@ echo "variants_per_feature_97.5-CI.tabular contain variants falling in bins with
 echo ""
 echo "##################"
 echo "##################"
-end=`date +%s`
-elapsed=`expr $end - $begin`
-echo Time taken: $elapsed
