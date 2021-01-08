@@ -17,10 +17,10 @@ package.check <- lapply(
 bins<-read.table("input.pi.D", header=F)
 names(bins)[names(bins) == "V2"] <- "nucleotide_diversity"
 names(bins)[names(bins) == "V3"] <- "D"
-upper_limit=quantile(bins$D, .025)
-upper_limit
-lower_limit=quantile(bins$D, .975)
+lower_limit=quantile(bins$D, .025)
 lower_limit
+upper_limit=quantile(bins$D, .975)
+upper_limit
 pdf("pi_tajima.pdf")
 gg <- ggplot(bins, aes(x=nucleotide_diversity, y=D))+
 geom_point()+
@@ -35,8 +35,7 @@ gg +
                   point.padding = 0.4,
                   segment.size  = 0.4,
                   segment.color = "grey50",
-                  direction     = "x",
-                  max.overlaps  = Inf) +
+                  direction     = "x") +
   geom_label_repel(aes(label = V1),
                   data         = subset(bins, D < lower_limit),
                   size          = 2.5,
@@ -44,12 +43,10 @@ gg +
                   point.padding = 0.4,
                   segment.size  = 0.4,
                   segment.color = "grey50",
-                  direction     = "x",
-                  max.overlaps  = Inf) +
+                  direction     = "x") +
   theme_classic(base_size = 16)
 plot(gg)
 dev.off()
-
 ### getting 2.5 and 97.5% intervals from data using subset function
 myvars <- c("V1", "nucleotide_diversity", "D")
 upper_bins_subset <- subset(bins, bins$D > upper_limit)
