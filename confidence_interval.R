@@ -35,8 +35,8 @@ gg +
                   point.padding = 0.4,
                   segment.size  = 0.4,
                   segment.color = "grey50",
-                  direction     = "x"
-                  max.overlaps = Inf) +
+                  direction     = "x",
+                  max.overlaps  = Inf) +
   geom_label_repel(aes(label = V1),
                   data         = subset(bins, D < lower_limit),
                   size          = 2.5,
@@ -44,8 +44,8 @@ gg +
                   point.padding = 0.4,
                   segment.size  = 0.4,
                   segment.color = "grey50",
-                  direction     = "x"
-                  max.overlaps = Inf) +
+                  direction     = "x",
+                  max.overlaps  = Inf) +
   theme_classic(base_size = 16)
 plot(gg)
 dev.off()
