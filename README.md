@@ -400,86 +400,51 @@ vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Oceania.50   
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
 ```
 
+## V) π versus Tajima's D values per bin
+50 bp bins containing π and Tajima's D values can be joined by bin for plotting purposes, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005.  As example for π and Tajima's D values in every geographical region:
+```  
+# Africa
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Africa.50.windowed.pi > Africa.50.subset.windowed.pi
+join -j 2 <(sort -k2 Africa.50.subset.windowed.pi) <(sort -k2 Africa.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Africa.50.pi.D && rm joined Africa.50.subset.windowed.pi
 
-## V) inStrain analysis of SRA sequencing cohorts (microdiversity)
-To estimate nucleotide diversity (microdiversity within a sequencing sample), analysis of SNV linkage and coverage analysis, we will employ the inStrain package, written in python (https://instrain.readthedocs.io/en/latest/). To analyze a cohort of Sequence Read Archive datasets from USA, do the following: 
+# Asia
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Asia.50.windowed.pi > Asia.50.subset.windowed.pi
+join -j 2 <(sort -k2 Asia.50.subset.windowed.pi) <(sort -k2 Asia.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Asia.50.pi.D && rm joined Asia.50.subset.windowed.pi
 
-```
-mkdir inStrain_USA
-cd inStrain_USA
+# Europe
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Europe.50.windowed.pi > Europe.50.subset.windowed.pi
+join -j 2 <(sort -k2 Europe.50.subset.windowed.pi) <(sort -k2 Europe.50000.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Europe.50.pi.D && rm joined Europe.50.subset.windowed.pi
 
-# Download and convert to fastq.gz all USA accessions from this repository (inStrain_USA.tabular), using 40 threads (takes ~ 4.36 hrs)
+# North_America
+awk '{print $1"\t"$3"\t"$4"\t"$5}' North_America.50.windowed.pi > North_America.50.subset.windowed.pi
+join -j 2 <(sort -k2 North_America.50.subset.windowed.pi) <(sort -k2 North_America.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > North_America.50.pi.D && rm joined North_America.50.subset.windowed.pi
 
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
-chmod 755 ./SARS-CoV-2-freebayes/*.sh
-cp ./SARS-CoV-2-freebayes/SARS-CoV-2.gb ./
-cp ./SARS-CoV-2-freebayes/covid19-refseq.fasta* ./
-samtools faidx covid19-refseq.fasta
-bash SARS-CoV-2-freebayes/SARS-CoV-2-NGS-freebayes.sh ./SARS-CoV-2-freebayes/inStrain_USA.tabular covid19-refseq.fasta 40
+# South_America
+awk '{print $1"\t"$3"\t"$4"\t"$5}' South_America.50.windowed.pi > South_America.50.subset.windowed.pi
+join -j 2 <(sort -k2 South_America.50.subset.windowed.pi) <(sort -k2 South_America.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > South_America.50.pi.D && rm joined South_America.50.subset.windowed.pi
 
-#############################
-### inStrain_USA analysis ###
-#############################   
+# Oceania
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Oceania.50.windowed.pi > Oceania.50.subset.windowed.pi
+join -j 2 <(sort -k2 Oceania.50.subset.windowed.pi) <(sort -k2 Oceania.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Oceania.50.pi.D && rm joined Oceania.50.subset.windowed.pi
+```  
 
-# Execute inStrain, using 40 threads (take a while)
+Files ended in "50.pi.D" contains π and Tajima's D values by bin and can be plotted in any sofware. We provided in this repository a script called pi-tajima.sh to process these files to obtain regions and variants falling outside 95% confidence interval of Tajima's D, useful for further study. This script requires vcfstats and some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
 
-bam= ls -1 *.bam
-for bam in *.bam; do inStrain profile ${bam} covid19-refseq.fasta --gene_file SARS-CoV-2.gb --processes 40 -o ./${bam}.IS; done
-
-# Copy outputs
-IS= ls -1 *.IS/output/*.bam.IS_genome_info.tsv
-for IS in *.IS/output/*.bam.IS_genome_info.tsv; do cp ${IS} ./ ; done
-
-# Fill empty spaces with asterisks
-IS= ls -1 *.bam.IS_genome_info.tsv
-for IS in *.bam.IS_genome_info.tsv; do sed -i 's/\t\t/\t*\t/' ${IS}; done
-
-# Transpose outputs
-IS= ls -1 *.bam.IS_genome_info.tsv
-for IS in *.bam.IS_genome_info.tsv; do python -c "import sys; print('\n'.join(' '.join(c) for c in zip(*(l.split() for l in sys.stdin.readlines() if l.strip()))))" < ${IS} > ${IS}.transpose
-done
-
-# convert delimiters to tab
-IS= ls -1 *.bam.IS_genome_info.tsv.transpose
-for IS in *.bam.IS_genome_info.tsv.transpose; do sed -i 's/ /\t/'g ${IS}; done
-rm *.bam.IS_genome_info.tsv
-
-# Renaming transposed files
-for filename in *.bam.IS_genome_info.tsv.transpose; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.bam.IS_genome_info.tsv.transpose/.transpose/g')";  done
-
-# add FILENAME inside files and remove extension
-transpose= ls -1 *transpose
-for transpose in *transpose; do sed -i "s/all_scaffolds/${transpose}/"g ${transpose}; done
-transpose= ls -1 *transpose
-for transpose in *transpose; do sed -i 's/.transpose//'g ${transpose}; done
-
-# Join files with a function
-bash ./SARS-CoV-2-freebayes/join_inStrain.sh *.transpose > joined
-sed -i 's/ /\t/'g joined
-
-# transpose merged.tab and generate final file (merged.tabular)
-python -c "import sys; print('\n'.join(' '.join(c) for c in zip(*(l.split() for l in sys.stdin.readlines() if l.strip()))))" < joined > merged.tabular
-rm joined
-sed -i 's/ /\t/'g merged.tabular
-sed -i 's/NULL/*/'g merged.tabular
-
-### Freebayes variants (VF>10%). 
-a= ls -1 *.bam 
-for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py covid19-refseq.fasta.fai 2000) 50 -f covid19-refseq.fasta -F 0.0999 -b ${a} > ${a}.freebayes.vcf
-done 
-
-{
-vcf= ls -1 *.freebayes.vcf
-for vcf in *.freebayes.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
-done
-#
-} | tee logfile_variants_VF_10%_freebayes
-#
-grep ".bam.freebayes.vcf" logfile_variants_VF_10%_freebayes > vcf_files
-grep -v ".bam.freebayes.vcf" logfile_variants_VF_10%_freebayes > variants_per_sample
-paste vcf_files variants_per_sample > logfile_variants_VF_10%_freebayes.tabular
-rm vcf_files variants_per_sample
-sed -i s'/.bam.freebayes.vcf//'g logfile_variants_VF_10%_freebayes.tabular
+For example to process Africa.50.pi.D and merged.GISAID.AF.vcf (from Africa), do the following:
 
 ```
-merged.tabular contain all parameters calculated by inStrain for each genome, aggregated in a single file. logfile_variants_VF_10%_freebayes.tabular contain variants with viral frequency over 10%, per genome.
+./path/to/SARS-CoV-2-freebayes/pi-tajima.sh Africa.50.pi.D merged.GISAID.AF.vcf  
+```
+where /path/to/ is the full path to this repository. merged.GISAID.AF.vcf can be replaced by the annotated SnpEff version of this file as well.
+
+after executing this script, check "postprocessing_pi_D_output_files"  folder, containing:
+- bins outside 2.5 and 97.5% confidence intervals are outliers for further study (check bins_2.5%_confidencce.bed and bins_2.5%_confidencce.bed files). 
+- pi_tajima.pdf plot, for a visual inspection of these regions.
+- 2.5_CI_confidence.recode.vcf.gz and 97.5_CI_confidence.recode.vcf.gz, gzipped vcf files containing variants falling in these regions
+- vcfstats plots and associated data.
