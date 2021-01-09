@@ -32,7 +32,7 @@ By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository
 
 ## Without using conda, program by program:
 
-- see Detailed Installation requirements in our wiki here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#without-using-conda-program-by-program
+- see detailed installation requirements in our wiki here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#without-using-conda-program-by-program
 
 ## Execution:
 
