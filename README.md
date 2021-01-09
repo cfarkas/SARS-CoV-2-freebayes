@@ -32,7 +32,7 @@ By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository
 
 ## Without using conda, program by program:
 
-### 1) Installing minimap2 aligner (for install details, please see: https://github.com/lh3/minimap2)
+#### 1) Installing minimap2 aligner (for install details, please see: https://github.com/lh3/minimap2)
 ```
 ### Installing minimap2
 git clone https://github.com/lh3/minimap2
@@ -42,7 +42,7 @@ cd minimap2 && make
 sudo cp minimap2 /usr/local/bin/
 ```
 
-### 2) Installing fastp: An ultra-fast all-in-one FASTQ preprocessor (for details, please see: https://github.com/OpenGene/fastp)
+#### 2) Installing fastp: An ultra-fast all-in-one FASTQ preprocessor (for details, please see: https://github.com/OpenGene/fastp)
 ```
 git clone https://github.com/OpenGene/fastp.git
 # build fastp
@@ -52,7 +52,7 @@ make
 sudo cp fastp /usr/local/bin/
 ```
 
-### 3) Obtaining and installing Freebayes:
+#### 3) Obtaining and installing Freebayes:
 Clone Freebayes in a specific directory: 
 ```
 git clone --recursive git://github.com/ekg/freebayes.git
@@ -73,7 +73,7 @@ freebayes
 bamleftalign
 ```
 
-### 4) Installing vcflib
+#### 4) Installing vcflib
 ```
 git config --global url.https://github.com/.insteadOf git://github.com/
 git clone --recursive git://github.com/vcflib/vcflib.git
@@ -85,7 +85,7 @@ cp scripts/* /usr/local/bin/
 cp bin/* /usr/local/bin/
 ```
 
-### 5) Obtaining and installing up-to-date SAMtools with htslib (version >= 1.9)
+#### 5) Obtaining and installing up-to-date SAMtools with htslib (version >= 1.9)
 (Old samtools version can also work). Users need to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplished by downloading the three packages, decompressing it, and doing the following:
 ```
 wget https://github.com/samtools/htslib/releases/download/1.10.2/htslib-1.10.2.tar.bz2
@@ -110,7 +110,7 @@ Then in a terminal type
 
 to check 1.10 version (using htslib v1.10)
 
-### 6) Obtaining SRA toolkit from ncbi (for downloading reads from SRA archive).
+#### 6) Obtaining SRA toolkit from ncbi (for downloading reads from SRA archive).
 ```
 ### Installing SRA toolkit from ncbi
 wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.9.6/sratoolkit.2.9.6-ubuntu64.tar.gz
@@ -120,7 +120,7 @@ cp sratoolkit.2.9.6-ubuntu64/bin/fastq-dump /usr/local/bin/
 cp sratoolkit.2.9.6-ubuntu64/bin/prefetch /usr/local/bin/
 ```
 
-### 7) Installing jaqcuard, pyfasta, pyfaidx, inStrain and vcfstats python libraries
+#### 7) Installing jaqcuard, pyfasta, pyfaidx, inStrain and vcfstats python libraries
 ```
 pip install jacquard    # elemental
 pip install pyfasta     # elemental
@@ -130,7 +130,7 @@ pip3 install vcfstats    # optional, but recomended to process tajima's D and pi
 ```
 Note: pip3 requires the use of python >= 3 
 
-### 8) Installing seqkit
+#### 8) Installing seqkit
 SeqKit - a cross-platform and ultrafast toolkit for FASTA/Q file manipulation (https://bioinf.shenwei.me/seqkit/) can be installed from repository as follows:
 ```
 wget https://github.com/shenwei356/seqkit/releases/download/v0.12.1/seqkit_linux_386.tar.gz
@@ -139,7 +139,7 @@ tar -xvf seqkit_linux_386.tar
 sudo cp seqkit /usr/local/bin/
 ```
 
-### 9) Obtaining and Installing VCFtools
+#### 9) Obtaining and Installing VCFtools
 We employed the version of Julien Y. Dutheil https://github.com/jydu/vcftools that includes the --haploid flag. Safe install can be achieved with root (sudo -i) as follows: 
 
 ```
@@ -157,7 +157,7 @@ make install
 exit
 ```
 
-### 10) Install ggplot2, ggrepel and vcfR R libraries 
+#### 10) Install ggplot2, ggrepel and vcfR R libraries 
 ```
 R   # Open R 
 install.packages("ggplot2")
