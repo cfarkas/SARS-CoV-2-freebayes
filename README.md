@@ -16,6 +16,7 @@ cd vcftools
 ./configure
 make
 sudo make install
+cd ..
 ```
 After these steps, a conda enviroment called SARS-CoV-2-freebayes can be managed as follows:
 ```
@@ -29,7 +30,7 @@ After these steps, a conda enviroment called SARS-CoV-2-freebayes can be managed
 ```
 By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository can be executed, without further installations.
 
-## without using conda, program by program:
+## Without using conda, program by program:
 
 ### 1) Installing minimap2 aligner (for install details, please see: https://github.com/lh3/minimap2)
 ```
