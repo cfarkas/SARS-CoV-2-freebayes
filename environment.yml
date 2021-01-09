@@ -1,0 +1,26 @@
+name: SARS-CoV-2-freebayes   # name of environment
+channels:
+- conda-forge
+- bioconda
+- daler
+- default
+dependencies:         # everything under this, installed by conda
+- zlib
+- samtools
+- htslib
+- minimap2
+- fastp
+- freebayes
+- vcflib
+- sratoolkit
+- seqkit
+- r-base
+- r-ggplot2
+- r-ggrepel
+- r-vcfr
+- pip:                # everything under this, installed by pip
+  - jacquard
+  - pyfasta
+  - pyfaidx 
+  - instrain
+  - vcfstats
