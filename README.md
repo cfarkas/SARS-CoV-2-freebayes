@@ -1,9 +1,9 @@
 # SARS-CoV-2-freebayes
 Analysis of SARS-CoV-2 genome variants collected with freebayes variant caller.
 
-## Installation: 
+## Installation:  
 
-### Via conda/pip (recommended)
+### Option 1: Via conda/pip (recommended)
 - requires miniconda, python2.7 and python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git  # clone repository
@@ -30,9 +30,9 @@ After these steps, a conda enviroment called SARS-CoV-2-freebayes can be managed
 ```
 By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository can be executed, without further installations.
 
-### Without using conda, program by program:
+### Option 2: Without using conda, program by program:
 
-- see detailed installation requirements in our wiki here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#without-using-conda-program-by-program
+- see detailed installation steps in our wiki here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#without-using-conda-program-by-program
 
 ## Execution:
 
