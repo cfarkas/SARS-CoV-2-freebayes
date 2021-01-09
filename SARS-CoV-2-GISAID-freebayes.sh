@@ -158,7 +158,7 @@ sed -i 's/|unknown//'g merged.GISAID.left.vcf
 echo "calculating viral frequency with vcflib"
 echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.raw.vcf
-wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+wget https://raw.githubusercontent.com/cfarkas/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
 vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${2} --invert > merged.GISAID.AF.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
