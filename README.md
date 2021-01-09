@@ -342,7 +342,7 @@ From scratch, the whole analysis can be done in a folder (i.e. diversity), as pr
 mkdir diversity
 cd diversity
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
-samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/SARS-CoV-2* ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
+samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/*.sh ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
 
 ### Full analysis, using 10 threads 
 
