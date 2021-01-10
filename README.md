@@ -7,7 +7,9 @@ Analysis of SARS-CoV-2 genome variants collected with freebayes variant caller.
 - requires miniconda, python2.7 and python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git  # clone repository
-cd SARS-CoV-2-freebayes                                        
+cd SARS-CoV-2-freebayes
+conda config --add channels conda-forge                        # add conda-forge channel (if you haven't done so already)
+conda config --add channels bioconda                           # add bioconda channel (if you haven't done so already)
 conda env update --file environment.yml                        # install required programs 
 conda activate SARS-CoV-2-freebayes                            # activate SARS-CoV-2-freebayes enviroment 
 git clone https://github.com/cfarkas/vcftools.git              # install forked vcftools repository
