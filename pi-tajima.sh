@@ -388,9 +388,7 @@ echo "====> Cleaning up .."
 echo ""
 gzip 2.5_CI_confidence.tweaked.vcf 2.5_CI_confidence.recode.vcf 97.5_CI_confidence.tweaked.vcf 97.5_CI_confidence.recode.vcf
 mv 2.5_CI_confidence.tweaked.vcf.gz 2.5_CI_confidence.recode.vcf.gz 97.5_CI_confidence.tweaked.vcf.gz 97.5_CI_confidence.recode.vcf.gz variants_per_feature_2.5-CI.tabular variants_per_feature_97.5-CI.tabular bins_2.5%_confidence.bed bins_97.5%_confidence.bed pi_tajima.pdf ./postprocessing_pi_D_output_files/
-#
-} | tee logfile_tajima_d_postprocessing
-#
+
 echo "##################"
 echo "##################"
 echo ""
@@ -412,3 +410,6 @@ echo "variants_per_feature_97.5-CI.tabular contain variants falling in bins with
 echo ""
 echo "##################"
 echo "##################"
+#
+} | tee logfile_tajima_d_postprocessing
+#
