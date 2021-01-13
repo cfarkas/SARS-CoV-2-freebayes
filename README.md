@@ -269,7 +269,7 @@ vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50     
 ```
 
 ## V) π versus Tajima's D values per bin
-50 bp bins containing π and Tajima's D values can be joined by bin for plotting purposes, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005.  As example for π and Tajima's D values in every geographical region:
+Inside every geographical folder, 50 bp bins containing π and Tajima's D values can be joined by bin for plotting purposes, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005.  As example for π and Tajima's D values from every geographical region:
 ```  
 # Africa
 awk '{print $1"\t"$3"\t"$4"\t"$5}' Africa.50.windowed.pi > Africa.50.subset.windowed.pi
@@ -307,9 +307,9 @@ Files ended in "50.pi.D" contains π and Tajima's D values by bin and can be plo
 For example to process Africa.50.pi.D and merged.GISAID.AF.vcf (from Africa), do the following:
 
 ```
-./path/to/SARS-CoV-2-freebayes/pi-tajima.sh Africa.50.pi.D merged.GISAID.AF.vcf  
+/full/path/to/SARS-CoV-2-freebayes/pi-tajima.sh Africa.50.pi.D merged.GISAID.AF.vcf  
 ```
-where /path/to/ is the full path to this repository. merged.GISAID.AF.vcf can be replaced by the annotated SnpEff version of this file as well.
+where /full/path/to/ is the full path to this repository. merged.GISAID.AF.vcf can be replaced by the annotated SnpEff version of this file as well.
 
 after executing this script, check "postprocessing_pi_D_output_files"  folder, containing:
 - bins outside 2.5 and 97.5% confidence intervals are outliers for further study (check bins_2.5%_confidencce.bed and bins_2.5%_confidencce.bed files). 
