@@ -391,7 +391,6 @@ mv 2.5_CI_confidence.tweaked.vcf.gz 2.5_CI_confidence.recode.vcf.gz 97.5_CI_conf
 #
 } | tee logfile_tajima_d_postprocessing
 #
-mv logfile_tajima_d_postprocessing ./postprocessing_pi_D_output_files/
 echo "##################"
 echo "##################"
 echo ""
