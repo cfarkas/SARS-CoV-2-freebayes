@@ -42,7 +42,7 @@ For a proper performance, check your limits in your machine/workstation as follo
 ulimit -n  # it is requiered 1000000 
 ulimit -s  # it is required 299999 
 ```
-Every script has a "nolimit" version, for users that have unlimited values of -s and -n parameters in their machines. If your machine have limits, you may need to change these values. Check README_ulimit for how to change these values in Ubuntu.
+Every script has a "nolimit" version, for users that have unlimited values of -s and -n parameters in their machines. If your machine have limits, you may need to increase these values. Check README_ulimit for how to change these values in Ubuntu.
 
 ## Execution:
 
