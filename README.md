@@ -75,7 +75,7 @@ This execution will:
 We provided a curated list of 17560 SARS-CoV-2 worldwide datasets until July 28, 2020 (see SRA_Accessions_Jul_28_2020.tabular). We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to increase open file limit and stack size accordingly at the number of genomes to process, otherwise these steps may crush. see README_ulimit for details in Ubuntu. 
 
 ```
-ulimit -n 1000000 && ulimit -s 299999  # chek if you can increase stack size and open file limit, see README_ulimit for details.
+ulimit -n 1000000 && ulimit -s 299999    # check if you can increase stack size and open file limit, see README_ulimit for details.
 ./SARS-CoV-2-NGS-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 0.4999 30
 ```
 will collect variants (VF>=0.5) in each Sample.
