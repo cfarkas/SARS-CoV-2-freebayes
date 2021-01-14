@@ -36,6 +36,14 @@ By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#without-using-conda-program-by-program
 
+### Note of ulimit before using the scripts
+For a proper performance, check your limits in your machine/workstation as follows: 
+```
+ulimit -n  # it is requiered 1000000 
+ulimit -s  # it is required 299999 
+```
+Every script has a "nolimit" version, for users that consider unlimited values of -s and -n parameters. If your machine have limits, you may need to change these values. Check README_ulimit for how to change these values in Ubuntu.
+
 ## Execution:
 
 ## I) Colecting Variants (Sequence Read Archive datasets)
