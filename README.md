@@ -36,13 +36,27 @@ By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#without-using-conda-program-by-program
 
-### Note of ulimit before using the scripts
-For a proper performance, check your limits in your machine/workstation as follows: 
+### Note of performance and ulimit before using the scripts
+For users working with small number of genomes (i.e.: < 60000) or have unlimited values of -s and -n parameters in their machines, use "nolimit" versions of scripts:
 ```
-ulimit -n  # it is requiered 1000000 
-ulimit -s  # it is required 299999 
+SARS-CoV-2-NGS-freebayes-nolimit.sh
+SARS-CoV-2-GISAID-freebayes-nolimit.sh
+SARS-CoV-2-processing-fasta-nolimit.sh
+SARS-CoV-2-merge-variants-nolimit.sh
 ```
-Every script has a "nolimit" version, for users that have unlimited values of -s and -n parameters in their machines. If your machine have limits, you may need to increase these values. Check README_ulimit for how to change these values in Ubuntu.
+For a proper performance working with high number of genomes (i.e. > 60000), use these scripts: 
+```
+SARS-CoV-2-NGS-freebayes.sh
+SARS-CoV-2-GISAID-freebayes.sh
+SARS-CoV-2-processing-fasta.sh
+SARS-CoV-2-merge-variants.sh
+```
+The latter scripts asume you can set these values: 
+```
+ulimit -n 10000000    # Check your machine with: ulimit -n 
+ulimit -s 299999      # Check your machine with: ulimit -s
+```
+Check README_ulimit for how to change these values in Ubuntu.
 
 ## Execution:
 
