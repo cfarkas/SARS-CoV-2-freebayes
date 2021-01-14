@@ -75,7 +75,7 @@ This execution will:
 We provided a curated list of 17560 SARS-CoV-2 worldwide datasets until July 28, 2020 (see SRA_Accessions_Jul_28_2020.tabular). We also provided curated lists in txt format by continent (see July_28_2020_*.txt files). As an example, we will collect variants from July_28_2020_North_America.txt datasets using 30 threads. In Ubuntu it is recommended to increase open file limit and stack size accordingly at the number of genomes to process, otherwise these steps may crush. see README_ulimit for details in Ubuntu. 
 
 ```
-ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit, see README_ulimit for details.
+ulimit -n 1000000 && ulimit -s 299999  # chek if you can increase stack size and open file limit, see README_ulimit for details.
 ./SARS-CoV-2-NGS-freebayes.sh July_28_2020_North_America.txt covid19-refseq.fasta 0.4999 30
 ```
 will collect variants (VF>=0.5) in each Sample.
@@ -85,7 +85,7 @@ will collect variants (VF>=0.5) in each Sample.
 Users can compute the number of variants per genome as follows. Inside SARS-CoV-2 folder containing VCF files, do:
 
 ```
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999    # check if you can set these values
 {
 vcf= ls -1 *.bam.freebayes.vcf
 for vcf in *.bam.freebayes.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
@@ -135,7 +135,7 @@ mkdir GISAID_merge && cd GISAID_merge
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
 
 # Execute the pipeline from SARS-CoV-2-freebayes folder. Using 10 threads:
-ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit, see README_ulimit for details.
+ulimit -n 1000000 && ulimit -s 299999  # check if you can increase stack size and open file limit, see README_ulimit for details.
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 ```
 
@@ -148,7 +148,7 @@ ulimit -n 1000000 && ulimit -s 299999  # increase stack size and open file limit
 Users can compute the number of variants per genome as follows. Inside all_variants folder, do:
 
 ```
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999  # check if you can set these values
 {
 vcf= ls -1 EPI_*.vcf
 for vcf in EPI_*.vcf; do grep -P 'NC_045512.2\t' ${vcf} -c
@@ -225,7 +225,7 @@ samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-C
 ### Africa                                 
 mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999                                           # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50      # 50 bp sliding window
@@ -234,7 +234,7 @@ cd ..
 ### Asia                                 
 mkdir GISAID_Asia && cd GISAID_Asia
 wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz && gunzip gisaid_Asia_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999                                         # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50      # 50 bp sliding window
@@ -243,7 +243,7 @@ cd ..
 ### Europe                                 
 mkdir GISAID_Europe && cd GISAID_Europe
 wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz && gunzip gisaid_Europe_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999                                           # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      # 50 bp sliding window
@@ -252,7 +252,7 @@ cd ..
 ### North_America                                
 mkdir GISAID_North_America && cd GISAID_North_America  
 wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz && gunzip gisaid_North_America_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999                                                  # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50      # 50 bp sliding window
@@ -260,8 +260,8 @@ cd ..
 
 ### South_America                                
 mkdir GISAID_South_America && cd GISAID_South_America
-wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz && gunzip gisaid_South_America_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 299999
+wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz && gunzip gisaid_South_America_08_03_2020.fasta.gz 
+ulimit -n 1000000 && ulimit -s 299999                                                  # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50      # 50 bp sliding window
@@ -270,7 +270,7 @@ cd ..
 ### Oceania                               
 mkdir GISAID_Oceania && cd GISAID_Oceania
 wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz && gunzip gisaid_Oceania_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 299999                                            # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Oceania.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
