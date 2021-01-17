@@ -53,8 +53,8 @@ SARS-CoV-2-merge-variants.sh
 ```
 The latter scripts asume you can set these values: 
 ```
-ulimit -n 10000000    # Check your machine with: ulimit -n 
-ulimit -s 299999      # Check your machine with: ulimit -s
+ulimit -n 1000000    # Check your machine with: ulimit -n 
+ulimit -s 1000000      # Check your machine with: ulimit -s
 ```
 Check README_ulimit for how to change these values in Ubuntu.
 
