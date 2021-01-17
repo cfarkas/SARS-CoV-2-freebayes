@@ -96,7 +96,7 @@ echo ""
 ### Align fasta files to reference (covid19-refseq.fasta, provided in this repository) and call variants with freebayes (option C 1)
 echo "Aligning fasta files to reference and call variants with freebayes (option C 1)"
 echo ""
-ulimit -n 1000000 && ulimit -s 299999
+ulimit -n 1000000 && ulimit -s 1000000
 samtools faidx ${2}
 fasta= ls -1 EPI_ISL_*.fasta
 for fasta in EPI_ISL_*.fasta; do
