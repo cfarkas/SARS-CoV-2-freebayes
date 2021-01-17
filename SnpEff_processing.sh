@@ -9,7 +9,7 @@ if [ "$1" == "-h" ]; then
   echo ""
   echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
-  echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
+  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
   echo ""
   exit 0
 fi
@@ -20,7 +20,7 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
-  echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
+  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
   echo ""
   exit 0
 fi
@@ -30,7 +30,7 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
-  echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
+  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
   echo ""
   exit 0
 fi
@@ -41,7 +41,7 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
   echo ""
-  echo "[SnpEff_vcf] : GISAID genomes in FASTA format"
+  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
   echo ""
   exit 0
 fi
