@@ -53,8 +53,8 @@ upper_bins_subset <- subset(bins, bins$D > upper_limit)
 newdata_upper <- upper_bins_subset[myvars]
 lower_bins_subset <- subset(bins, bins$D < lower_limit)
 newdata_lower <- lower_bins_subset[myvars]
-write.table(newdata_upper, file="bins_2.5%_confidence.tab", sep="\t", quote = FALSE, row.names = FALSE)
-write.table(newdata_lower, file="bins_97.5%_confidence.tab", sep="\t", quote = FALSE, row.names = FALSE)
+write.table(newdata_lower, file="bins_2.5%_confidence.tab", sep="\t", quote = FALSE, row.names = FALSE)
+write.table(newdata_upper, file="bins_97.5%_confidence.tab", sep="\t", quote = FALSE, row.names = FALSE)
 proc.time()
 sessionInfo()
 quit("no")
