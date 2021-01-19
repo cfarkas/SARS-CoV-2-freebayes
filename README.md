@@ -137,7 +137,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 ### Execution
 
-As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes) we can obtain aggregated variants from merged.GISAID.fasta.gz dataset in a folder called "GISAID_merge" in Ubuntu. From scratch:
+As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset in a folder called "GISAID_merge" in Ubuntu. From scratch:
 
 ```
 # Clone repository
@@ -153,9 +153,10 @@ ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size a
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 ```
 
--This operation will obtain aggregated variants per region (merged.GISAID.AF.vcf) and aggregated variants filtered with Viral Frequency > 1% (merged.GISAID.AF_1%.vcf) inside the folder "GISAID_merge". Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). Execution takes 98000 cpu seconds (~27.2 hrs) with a peak of ~ 4GB of RAM.   
+-This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants
+- Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). Execution takes 98000 cpu seconds (~27.2 hrs) with a peak of ~ 4GB of RAM.   
 
--NOTE: It is recommended to process larger FASTA collections by chunks (i.e. chunks of 100000 genomes). We provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020) using ~230000 genomes. Ubuntu users need to change ulimit -s and -n parameters, see README_ulimit file in this repository for details. 
+-NOTE: It is recommended to process larger FASTA collections by chunks (i.e. chunks of 100000 genomes). We provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020) using ~230000 genomes. Ubuntu users need to change ulimit -s and -n parameters, see README_ulimit file in this repository for details.
 
 ### Number of variants per genome
 
@@ -181,7 +182,7 @@ logfile_variants_GISAID file contains the GISAID accession along with the number
 
 
 ## III) Annotate and collect variants per protein on SnpEff-classified VCF variants
-merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip for storage. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. Prior to SnpEff annotation, it is preferable to lightweight these files by selecting one individual sample in the vcf (dropping all the others samples) as follows:
+merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip for storage. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. To speed-up things, prior to SnpEff annotation, it is preferable to lightweight these files by selecting one individual sample in the vcf (dropping all the others samples) or annotate combined_sites.vcf file. We will execute the first option.
 
 ```
 mkdir SnpEff-SARS-CoV-2
