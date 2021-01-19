@@ -57,6 +57,11 @@ fi
 
 begin=`date +%s`
 
+# Merge VCFs using vcfcombine, see combined_sites.raw.vcf file
+echo "Merge VCFs using vcfcombine, see combined_sites.raw.vcf file"
+vcfcombine EPI*.vcf > combined_sites.raw.vcf
+echo ""
+
 ### Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
@@ -98,8 +103,9 @@ vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.raw.vcf
 wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
 vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${1} --invert > merged.GISAID.AF.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf combined_sites.raw.vcf -r ${1} --invert > combined_sites.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
-gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf
+gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf combined_sites.raw.vcf
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
 echo "Filtering variants by Viral Frequency: 0.0099 (1%)"
