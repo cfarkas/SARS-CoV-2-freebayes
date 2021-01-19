@@ -121,6 +121,11 @@ echo "Renaming files in bash"
 echo ""
 for filename in *.fasta.left.vcf; do mv "./$filename" "./$(echo "$filename" | sed -e 's/.fasta.left.vcf/.vcf/g')";  done
 
+# Merge VCFs using vcfcombine, see combined_sites.raw.vcf file
+echo "Merge VCFs using vcfcombine, see combined_sites.raw.vcf file"
+ulimit -n 1000000 && vcfcombine EPI*.vcf > combined_sites.raw.vcf
+echo ""
+
 # Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
@@ -159,11 +164,12 @@ sed -i 's/|unknown//'g merged.GISAID.left.vcf
 echo "calculating viral frequency with vcflib"
 echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.raw.vcf
-wget https://raw.githubusercontent.com/cfarkas/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
 vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${2} --invert > merged.GISAID.AF.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf combined_sites.raw.vcf -r ${2} --invert > combined_sites.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
-gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf
+gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf combined_sites.raw.vcf
 gzip *.fasta 
 
 # Filter variants by Viral Frequency: 0.0099 (1%)
@@ -176,9 +182,11 @@ echo "#######"
 echo "Summary:"
 echo "#######"
 echo ""
-echo "merged.GISAID.AF.raw.vcf.gz contain all merged variants"
+echo "merged.GISAID.AF.raw.vcf.gz contain all merged variants as genotype array, including all samples"
 echo ""
-echo "merged.GISAID.AF.vcf contain merged variants, problematic sites excluded. See https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473."
+echo "combined_sites.raw.vcf.gz contain all merged variants as list"
+echo ""
+echo "merged.GISAID.AF.vcf and combined_sites.vcf contain merged variants, problematic sites excluded. See https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473."
 echo ""
 echo "merged.GISAID.AF_1%.vcf contain merged variants with viral Frequency >=1%."
 echo ""
