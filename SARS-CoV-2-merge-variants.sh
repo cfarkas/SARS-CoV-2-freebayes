@@ -57,11 +57,6 @@ fi
 
 begin=`date +%s`
 
-# Merge VCFs using vcfcombine, see combined_sites.raw.vcf file
-echo "Merge VCFs using vcfcombine, see combined_sites.raw.vcf file"
-ulimit -n 1000000 && vcfcombine EPI*.vcf > combined_sites.raw.vcf
-echo ""
-
 ### Merge VCFs using jacquard
 echo "Merge VCFs using jacquard"
 echo ""
@@ -95,6 +90,11 @@ echo "left-aligning vcf file and fixing names"
 echo ""
 vcfleftalign -r ${1} merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
 sed -i 's/|unknown//'g merged.GISAID.left.vcf
+
+# Merge VCFs using vcfcombine, see combined_sites.raw.vcf file
+echo "Merge VCFs using vcfcombine, see combined_sites.raw.vcf file"
+ulimit -n 1000000 && vcfcombine EPI*.vcf > combined_sites.raw.vcf
+echo ""
 
 # calculate AF
 echo "calculating viral frequency with vcflib"
