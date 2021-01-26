@@ -54,7 +54,7 @@ SARS-CoV-2-merge-variants.sh
 The latter scripts asume you can set these values: 
 ```
 ulimit -n 1000000    # Check your machine with: ulimit -n 
-ulimit -s 1000000      # Check your machine with: ulimit -s
+ulimit -s 1000000    # Check your machine with: ulimit -s
 ```
 Check README_ulimit for how to change these values in Ubuntu.
 
@@ -152,9 +152,10 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 ```
+Execution takes 98000 cpu seconds (~27.2 hrs) in a regular ubuntu workstation with a peak of ~ 4GB of RAM.
 
 -This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants
-- Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). Execution takes 98000 cpu seconds (~27.2 hrs) with a peak of ~ 4GB of RAM.   
+- Users can change the name of the folder (i.e.: GISAID_North_America for North America GISAID genomes). 
 
 -NOTE: It is recommended to process larger FASTA collections by chunks (i.e. chunks of 100000 genomes). We provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020) using ~230000 genomes. Ubuntu users need to change ulimit -s and -n parameters, see README_ulimit file in this repository for details.
 
@@ -285,14 +286,14 @@ cd ..
 ### Oceania                               
 mkdir GISAID_Oceania && cd GISAID_Oceania
 wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz && gunzip gisaid_Oceania_08_03_2020.fasta.gz
-ulimit -n 1000000 && ulimit -s 1000000                                            # check if you can set these values
+ulimit -n 1000000 && ulimit -s 1000000                                           # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Oceania.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
 ```
 
 ## V) π versus Tajima's D values per bin
-Inside every geographical folder, 50 bp bins containing π and Tajima's D values can be joined by bin for plotting purposes, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005.  As example for π and Tajima's D values from every geographical region:
+Inside every geographical folder, 50 bp bins containing π and Tajima's D values can be joined by bin for plotting purposes, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005.  As example in the previous folders, for π and Tajima's D values:
 ```  
 # Africa
 awk '{print $1"\t"$3"\t"$4"\t"$5}' Africa.50.windowed.pi > Africa.50.subset.windowed.pi
