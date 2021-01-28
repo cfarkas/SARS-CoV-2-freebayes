@@ -72,9 +72,8 @@ In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to pr
 Execution (from scratch): 
 ```
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
-cd SARS-CoV-2-freebayes
+cd SARS-CoV-2-freebayes && chmod 755 *
 samtools faidx covid19-refseq.fasta
-chmod 755 SARS-CoV-2* covid19-refseq.fasta* *.sh
 ./SARS-CoV-2-NGS-freebayes.sh SRA_list covid19-refseq.fasta VF Threads
 ```
 This execution will:
@@ -142,7 +141,7 @@ As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes un
 ```
 # Clone repository
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
-samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/*.sh ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
+samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/*
 
 # Create GISAID_merge folder, enter it, download merged.GISAID.fasta.gz and decompress.
 mkdir GISAID_merge && cd GISAID_merge
@@ -206,21 +205,21 @@ Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR40
 # SRA variants
 mkdir SnpEff-Jul-28-2020.SRA && cd SnpEff-Jul-28-2020.SRA                                                               # 1) Create folder and enter it
 wget -O SnpEff-Jul-28-2020.SRA.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5b7e3ff0964c68fa2/display?to_ext=vcf   # 2) Download annotated vcf file
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*.sh                  # 3) Download repo and change permissions
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*                     # 3) Download repo and change permissions
 ./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Jul-28-2020.SRA.vcf                                                  # 4) execute SnpEff_processing.sh 
 cd ..
 
 # GISAID variants: August 03, 2020                        
 mkdir SnpEff-Aug-03-2020.GISAID && cd SnpEff-Aug-03-2020.GISAID                                                          # 1) Create folder and enter it
 wget -O SnpEff-Aug-03-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5117bba070d8c6bca/display?to_ext=vcf # 2) Download annotated vcf file
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*.sh                   # 3) Download repo and change permissions
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*                      # 3) Download repo and change permissions
 ./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Aug-03-2020.GISAID.vcf                                                # 4) execute SnpEff_processing.sh 
 cd ..
 
 # GISAID variants: November 30, 2020
 mkdir SnpEff-Nov-30-2020.GISAID && cd SnpEff-Nov-30-2020.GISAID                                                          # 1) Create folder and enter it
 wget -O SnpEff-Nov-30-2020.GISAID.vcf https://usegalaxy.org/datasets/bbd44e69cb8906b5743f34d0337d9459/display?to_ext=vcf # 2) Download annotated vcf file
-git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*.sh                   # 3) Download repo and change permissions
+git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SARS-CoV-2-freebayes/*                      # 3) Download repo and change permissions
 ./SARS-CoV-2-freebayes/SnpEff_processing.sh SnpEff-Nov-30-2020.GISAID.vcf                                                # 4) execute SnpEff_processing.sh 
 ```
 In each folder, variants_per_protein subfolder contain variants per protein. Files ending in ".SnpEff" contains parsed variants per consequence and ".counts" contains associated counts, respectively. Also, the script computed aminoacid changes (see SnpEff.AAchanges files). We suggest user-provided vcf files should be processed in a likewise manner, placing the vcf file in a specific folder and executing steps 3) and 4).
@@ -234,7 +233,7 @@ From scratch, the whole analysis can be done in a folder (i.e. diversity), as pr
 mkdir diversity
 cd diversity
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
-samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/*.sh ./SARS-CoV-2-freebayes/covid19-refseq.fasta*
+samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/*
 
 ### Full analysis, using 10 threads 
 
@@ -243,8 +242,8 @@ mkdir GISAID_Africa && cd GISAID_Africa
 wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz && gunzip gisaid_Africa_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 1000000                                           # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50    # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50     # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50       # 50 bp sliding window
 cd ..
 
 ### Asia                                 
@@ -252,8 +251,8 @@ mkdir GISAID_Asia && cd GISAID_Asia
 wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz && gunzip gisaid_Asia_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 1000000                                         # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50    # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50     # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50       # 50 bp sliding window
 cd ..
 
 ### Europe                                 
@@ -261,8 +260,8 @@ mkdir GISAID_Europe && cd GISAID_Europe
 wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz && gunzip gisaid_Europe_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 1000000                                           # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50    # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50     # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50       # 50 bp sliding window
 cd ..
 
 ### North_America                                
@@ -270,8 +269,8 @@ mkdir GISAID_North_America && cd GISAID_North_America
 wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz && gunzip gisaid_North_America_08_03_2020.fasta.gz
 ulimit -n 1000000 && ulimit -s 1000000                                                  # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America.50    # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America.50     # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50       # 50 bp sliding window
 cd ..
 
 ### South_America                                
@@ -279,8 +278,8 @@ mkdir GISAID_South_America && cd GISAID_South_America
 wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz && gunzip gisaid_South_America_08_03_2020.fasta.gz 
 ulimit -n 1000000 && ulimit -s 1000000                                                  # check if you can set these values
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
-vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America.50    # 50 bp sliding window
-vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50      # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America.50     # 50 bp sliding window
+vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50       # 50 bp sliding window
 cd ..
 
 ### Oceania                               
