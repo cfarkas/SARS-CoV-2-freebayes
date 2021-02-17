@@ -136,20 +136,20 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 ### Execution
 
-As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset in a folder called "GISAID_merge" in Ubuntu. From scratch:
+As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset. From scratch, in Ubuntu:
 
 ```
-# Clone repository
+# Clone repository, change permissions and enter it
 git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git
 samtools faidx ./SARS-CoV-2-freebayes/covid19-refseq.fasta && chmod 755 ./SARS-CoV-2-freebayes/*
+cd SARS-CoV-2-freebayes
 
-# Create GISAID_merge folder, enter it, download merged.GISAID.fasta.gz and decompress.
-mkdir GISAID_merge && cd GISAID_merge
+# Download merged.GISAID.fasta.gz inside repository and decompress.
 wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
 
 # Execute the pipeline from SARS-CoV-2-freebayes folder. Using 10 threads:
 ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
-../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
+./SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh merged.GISAID.fasta covid19-refseq.fasta 10
 ```
 Execution takes 98000 cpu seconds (~27.2 hrs) in a regular ubuntu workstation with a peak of ~ 4GB of RAM.
 
