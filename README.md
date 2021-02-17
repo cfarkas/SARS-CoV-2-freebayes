@@ -330,7 +330,7 @@ sort -k1 -n joined > Oceania.50.pi.D && rm joined Oceania.50.subset.windowed.pi
 ```
 Files ended in "50.pi.D" contains π and Tajima's D values by bin and can be plotted in any sofware. 
 
-check "postprocessing_pi_D_output_files"  folder, containing:
+check "postprocessing_pi_D_output_files"  subdirectory, containing:
 - bins outside 2.5 and 97.5% confidence intervals are outliers for further study (check bins_2.5%_confidencce.bed and bins_2.5%_confidencce.bed files). 
 - pi_tajima.pdf plot, for a visual inspection of these regions.
 - 2.5_CI_confidence.recode.vcf.gz and 97.5_CI_confidence.recode.vcf.gz, gzipped vcf files containing variants falling in these regions
