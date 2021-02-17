@@ -224,9 +224,12 @@ git clone https://github.com/cfarkas/SARS-CoV-2-freebayes.git && chmod 755 ./SAR
 In each folder, variants_per_protein subfolder contain variants per protein. Files ending in ".SnpEff" contains parsed variants per consequence and ".counts" contains associated counts, respectively. Also, the script computed aminoacid changes (see SnpEff.AAchanges files). We suggest user-provided vcf files should be processed in a likewise manner, placing the vcf file in a specific folder and executing steps 3) and 4).
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
-To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute variant calling and vcftools analysis, using a sliding window of 50 bp (can be changed). An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A .
+- To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). 
+- We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute variant calling and vcftools analysis, using a sliding window of 50 bp across SARS-CoV-2 genome (can be changed). Then, we will we will use the pi-tajima.sh script to create a plot of pi and Tajima's D values per bin, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005
+- An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A. 
+- pi-tajima.sh script requires vcfstats and some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
 
-From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below. If users already executed SARS-CoV-2-GISAID-freebayes.sh, can skip this step and proceed directly to execute the vcftools commands.  
+From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below:
 
 ```
 mkdir diversity
@@ -243,6 +246,12 @@ ulimit -n 1000000 && ulimit -s 1000000                                          
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Africa_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Africa.50     # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Africa.50       # 50 bp sliding window
+
+# joining pi with Tajima's D values and calculate Tajima's D confidence intervals
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Africa.50.windowed.pi > Africa.50.subset.windowed.pi
+join -j 2 <(sort -k2 Africa.50.subset.windowed.pi) <(sort -k2 Africa.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Africa.50.pi.D && rm joined Africa.50.subset.windowed.pi
+../SARS-CoV-2-freebayes/pi-tajima.sh Africa.50.pi.D merged.GISAID.AF.vcf
 cd ..
 
 ### Asia                                 
@@ -252,6 +261,12 @@ ulimit -n 1000000 && ulimit -s 1000000                                         #
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Asia_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Asia.50     # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Asia.50       # 50 bp sliding window
+
+# joining pi with Tajima's D values and calculate Tajima's D confidence intervals
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Asia.50.windowed.pi > Asia.50.subset.windowed.pi
+join -j 2 <(sort -k2 Asia.50.subset.windowed.pi) <(sort -k2 Asia.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Asia.50.pi.D && rm joined Asia.50.subset.windowed.pi
+../SARS-CoV-2-freebayes/pi-tajima.sh Asia.50.pi.D merged.GISAID.AF.vcf
 cd ..
 
 ### Europe                                 
@@ -261,6 +276,12 @@ ulimit -n 1000000 && ulimit -s 1000000                                          
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Europe_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Europe.50     # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50       # 50 bp sliding window
+
+# joining pi with Tajima's D values and calculate Tajima's D confidence intervals
+awk '{print $1"\t"$3"\t"$4"\t"$5}' Europe.50.windowed.pi > Europe.50.subset.windowed.pi
+join -j 2 <(sort -k2 Europe.50.subset.windowed.pi) <(sort -k2 Europe.50000.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > Europe.50.pi.D && rm joined Europe.50.subset.windowed.pi
+../SARS-CoV-2-freebayes/pi-tajima.sh Europe.50.pi.D merged.GISAID.AF.vcf
 cd ..
 
 ### North_America                                
@@ -270,6 +291,12 @@ ulimit -n 1000000 && ulimit -s 1000000                                          
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_North_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out North_America.50     # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out North_America.50       # 50 bp sliding window
+
+# joining pi with Tajima's D values and calculate Tajima's D confidence intervals
+awk '{print $1"\t"$3"\t"$4"\t"$5}' North_America.50.windowed.pi > North_America.50.subset.windowed.pi
+join -j 2 <(sort -k2 North_America.50.subset.windowed.pi) <(sort -k2 North_America.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > North_America.50.pi.D && rm joined North_America.50.subset.windowed.pi
+../SARS-CoV-2-freebayes/pi-tajima.sh North_America.50.pi.D merged.GISAID.AF.vcf
 cd ..
 
 ### South_America                                
@@ -279,6 +306,12 @@ ulimit -n 1000000 && ulimit -s 1000000                                          
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_South_America_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out South_America.50     # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out South_America.50       # 50 bp sliding window
+
+# joining pi with Tajima's D values and calculate Tajima's D confidence intervals
+awk '{print $1"\t"$3"\t"$4"\t"$5}' South_America.50.windowed.pi > South_America.50.subset.windowed.pi
+join -j 2 <(sort -k2 South_America.50.subset.windowed.pi) <(sort -k2 South_America.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
+sort -k1 -n joined > South_America.50.pi.D && rm joined South_America.50.subset.windowed.pi
+../SARS-CoV-2-freebayes/pi-tajima.sh South_America.50.pi.D merged.GISAID.AF.vcf
 cd ..
 
 ### Oceania                               
@@ -288,52 +321,16 @@ ulimit -n 1000000 && ulimit -s 1000000                                          
 ../SARS-CoV-2-freebayes/SARS-CoV-2-GISAID-freebayes.sh gisaid_Oceania_08_03_2020.fasta ../SARS-CoV-2-freebayes/covid19-refseq.fasta 10
 vcftools --vcf merged.GISAID.AF.vcf --window-pi 50 --haploid --out Oceania.50    # 50 bp sliding window
 vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50      # 50 bp sliding window
-```
 
-## V) π versus Tajima's D values per bin
-Inside every geographical folder, 50 bp bins containing π and Tajima's D values can be joined by bin for plotting purposes, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005.  As example in the previous folders, for π and Tajima's D values:
-```  
-# Africa
-awk '{print $1"\t"$3"\t"$4"\t"$5}' Africa.50.windowed.pi > Africa.50.subset.windowed.pi
-join -j 2 <(sort -k2 Africa.50.subset.windowed.pi) <(sort -k2 Africa.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
-sort -k1 -n joined > Africa.50.pi.D && rm joined Africa.50.subset.windowed.pi
-
-# Asia
-awk '{print $1"\t"$3"\t"$4"\t"$5}' Asia.50.windowed.pi > Asia.50.subset.windowed.pi
-join -j 2 <(sort -k2 Asia.50.subset.windowed.pi) <(sort -k2 Asia.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
-sort -k1 -n joined > Asia.50.pi.D && rm joined Asia.50.subset.windowed.pi
-
-# Europe
-awk '{print $1"\t"$3"\t"$4"\t"$5}' Europe.50.windowed.pi > Europe.50.subset.windowed.pi
-join -j 2 <(sort -k2 Europe.50.subset.windowed.pi) <(sort -k2 Europe.50000.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
-sort -k1 -n joined > Europe.50.pi.D && rm joined Europe.50.subset.windowed.pi
-
-# North_America
-awk '{print $1"\t"$3"\t"$4"\t"$5}' North_America.50.windowed.pi > North_America.50.subset.windowed.pi
-join -j 2 <(sort -k2 North_America.50.subset.windowed.pi) <(sort -k2 North_America.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
-sort -k1 -n joined > North_America.50.pi.D && rm joined North_America.50.subset.windowed.pi
-
-# South_America
-awk '{print $1"\t"$3"\t"$4"\t"$5}' South_America.50.windowed.pi > South_America.50.subset.windowed.pi
-join -j 2 <(sort -k2 South_America.50.subset.windowed.pi) <(sort -k2 South_America.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
-sort -k1 -n joined > South_America.50.pi.D && rm joined South_America.50.subset.windowed.pi
-
-# Oceania
+# joining pi with Tajima's D values and calculate Tajima's D confidence intervals
 awk '{print $1"\t"$3"\t"$4"\t"$5}' Oceania.50.windowed.pi > Oceania.50.subset.windowed.pi
 join -j 2 <(sort -k2 Oceania.50.subset.windowed.pi) <(sort -k2 Oceania.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
 sort -k1 -n joined > Oceania.50.pi.D && rm joined Oceania.50.subset.windowed.pi
-```  
-
-Files ended in "50.pi.D" contains π and Tajima's D values by bin and can be plotted in any sofware. We provided in this repository a script called pi-tajima.sh to process these files to obtain regions and variants falling outside 95% confidence interval of Tajima's D, useful for further study. This script requires vcfstats and some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
-
-For example to process Africa.50.pi.D and merged.GISAID.AF.vcf (from Africa), do the following:
-
+../SARS-CoV-2-freebayes/pi-tajima.sh Oceania.50.pi.D merged.GISAID.AF.vcf
 ```
-/full/path/to/SARS-CoV-2-freebayes/pi-tajima.sh Africa.50.pi.D merged.GISAID.AF.vcf  
-```
-where /full/path/to/ is the full path to this repository. merged.GISAID.AF.vcf can be replaced by the annotated SnpEff version of this file as well.
+Files ended in "50.pi.D" contains π and Tajima's D values by bin and can be plotted in any sofware. 
 
-after executing this script, check "postprocessing_pi_D_output_files"  folder, containing:
+check "postprocessing_pi_D_output_files"  folder, containing:
 - bins outside 2.5 and 97.5% confidence intervals are outliers for further study (check bins_2.5%_confidencce.bed and bins_2.5%_confidencce.bed files). 
 - pi_tajima.pdf plot, for a visual inspection of these regions.
 - 2.5_CI_confidence.recode.vcf.gz and 97.5_CI_confidence.recode.vcf.gz, gzipped vcf files containing variants falling in these regions
