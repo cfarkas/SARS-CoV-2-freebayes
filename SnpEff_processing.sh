@@ -1,61 +1,30 @@
 #!/bin/bash
+
 set -e 
+usage="$(basename "$0") [-h] [-v <SnpEff_vcf>]
+This program will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants
+Arguments:
+    -h  show this help text
+    -v  merged GISAID genome variants in vcf format, annotated by SnpEff program."
+options=':hv:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    v) v=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-SnpEff_vcf=${1}
-
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SnpEff_vcf]"
-  echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
-  echo ""
-  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SnpEff_vcf]"
-  echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
-  echo ""
-  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
-  echo ""
-  exit 0
-fi
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SnpEff_vcf]"
-  echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
-  echo ""
-  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SnpEff_vcf]"
-  echo ""
-  echo "This script will parse SnpEff annotated variants per protein and also output synonymous, non-synonymous, frameshift and stop-gained variants"
-  echo ""
-  echo "[SnpEff_vcf] : merged GISAID genome variants in vcf format, annotated by SnpEff program"
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [SnpEff_vcf]"; exit 1; }
-
-if [ $# -ne 1 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [SnpEff_vcf]"
-  exit 3
+# mandatory arguments
+if [ ! "$v" ]; then
+  echo "argument -v must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
 echo "Parsing SnpEff annotated file by protein"
 echo ""
-grep "#" -v ${1} > variants.vcf
+grep "#" -v ${v} > variants.vcf
 awk '{print $1"\t"$2"\t"$4"\t"$5"\t"$8}' variants.vcf > SnpEff.sites
 sed -i 's/|/\t/'g SnpEff.sites
 sed -i 's/Ala/A/'g SnpEff.sites
@@ -128,10 +97,10 @@ cd ..
 echo ""
 echo "Computing the frequencies of synonymous, missense, nonsense and frameshift variants (Overall)"
 echo ""
-grep "missense_variant" ${1} > missense_variant.SnpEff
-grep "stop_gained" ${1} > stop_gained.SnpEff
-grep "synonymous_variant" ${1} > synonymous_variant.SnpEff
-grep "frameshift_variant" ${1} > frameshift_variant.SnpEff
+grep "missense_variant" ${v} > missense_variant.SnpEff
+grep "stop_gained" ${v} > stop_gained.SnpEff
+grep "synonymous_variant" ${v} > synonymous_variant.SnpEff
+grep "frameshift_variant" ${v} > frameshift_variant.SnpEff
 sed -i 's/;/\t/'g missense_variant.SnpEff
 sed -i 's/;/\t/'g stop_gained.SnpEff
 sed -i 's/;/\t/'g synonymous_variant.SnpEff
