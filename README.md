@@ -276,7 +276,7 @@ vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Europe.50      
 awk '{print $1"\t"$3"\t"$4"\t"$5}' Europe.50.windowed.pi > Europe.50.subset.windowed.pi
 join -j 2 <(sort -k2 Europe.50.subset.windowed.pi) <(sort -k2 Europe.50000.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
 sort -k1 -n joined > Europe.50.pi.D && rm joined Europe.50.subset.windowed.pi
-pi-tajima.sh -f Europe.50.pi.D -v merged.GISAID.AF.vcf                                       # Run pi-tajima 
+pi-tajima -f Europe.50.pi.D -v merged.GISAID.AF.vcf                                          # Run pi-tajima 
 cd ..
 
 ### North_America                                
@@ -321,7 +321,7 @@ vcftools --vcf merged.GISAID.AF.vcf --TajimaD 50 --haploid --out Oceania.50     
 awk '{print $1"\t"$3"\t"$4"\t"$5}' Oceania.50.windowed.pi > Oceania.50.subset.windowed.pi
 join -j 2 <(sort -k2 Oceania.50.subset.windowed.pi) <(sort -k2 Oceania.50.Tajima.D) -o 1.2,1.4,2.4> joined && sed -i 's/ /\t/'g joined
 sort -k1 -n joined > Oceania.50.pi.D && rm joined Oceania.50.subset.windowed.pi
-pi-tajima.sh -f Oceania.50.pi.D -v merged.GISAID.AF.vcf                                      # Run pi-tajima 
+pi-tajima -f Oceania.50.pi.D -v merged.GISAID.AF.vcf                                         # Run pi-tajima 
 ```
 Files ended in "50.pi.D" contains π and Tajima's D values by bin and can be plotted in any sofware. 
 
