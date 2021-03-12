@@ -69,8 +69,8 @@ Check README_ulimit for how to change these values in Ubuntu.
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to provide:  
 
-- l: SRA_list: Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, containing curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
-- g: SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
+- l: path to SRA_list, Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, containing curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
+- g: path to SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - a: viral frequency threshold for variant calling (a number between 0-1). As example 0.5, would mean 50% viral frequency variants as threshold. 
 - t: number of threads for calculations 
 
@@ -140,7 +140,8 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 ### Execution
 
-As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset. Assuming binaries are in ```/usr/local/bin``` and users previously did ```samtools faidx covid19-refseq.fasta```:
+- As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset.
+- Assuming binaries are in ```/usr/local/bin``` and users previously runned ```samtools faidx covid19-refseq.fasta```:
 
 ```
 # In a given folder, download merged.GISAID.fasta.gz and decompress.
@@ -199,7 +200,7 @@ vcfkeepsamples merged.GISAID.Nov-30-2020.vcf EPI_ISL_402119 > merged.GISAID.Nov-
 gzip merged.GISAID.Nov-30-2020.vcf
 ```
 - Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (default mode), outputting an annotated VCF file including an associated HTML file. As example, SnpEff-annotated VCF outputs are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2 and can be processed as follows. 
-- Assuming binaries are in ```/usr/local/bin``` and users previously did ```samtools faidx covid19-refseq.fasta```:
+- Assuming binaries are in ```/usr/local/bin``` and users previously runned ```samtools faidx covid19-refseq.fasta```:
 ```
 # SRA variants
 mkdir SnpEff-Jul-28-2020.SRA && cd SnpEff-Jul-28-2020.SRA                                                               # 1) Create folder and enter it
@@ -226,7 +227,7 @@ In each folder, variants_per_protein subfolder contain variants per protein. Fil
 - An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A. 
 - pi-tajima.sh script requires vcfstats and some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
 
-From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below. Assuming binaries are in ```/usr/local/bin``` and users previously did ```samtools faidx covid19-refseq.fasta```: 
+From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below. Assuming binaries are in ```/usr/local/bin``` and users previously runned ```samtools faidx covid19-refseq.fasta```: 
 
 ```
 mkdir diversity
