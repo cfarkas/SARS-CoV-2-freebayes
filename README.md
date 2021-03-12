@@ -35,7 +35,6 @@ cd vcftools
 ./configure
 make                                                    # make
 sudo make install                                       # requires sudo privileges
-cd ..
 ```
 
 ### Option 2: Without using conda, program by program:
