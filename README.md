@@ -12,13 +12,7 @@ conda config --add channels conda-forge                        # add conda-forge
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda env update --file environment.yml                        # install required programs 
 conda activate SARS-CoV-2-freebayes                            # activate SARS-CoV-2-freebayes enviroment 
-git clone https://github.com/cfarkas/vcftools.git              # install forked vcftools repository
-cd vcftools
-./autogen.sh
-./configure
-make
-sudo make install
-cd ..
+bash makefile.sh                                               # make & install
 ```
 After these steps, a conda enviroment called SARS-CoV-2-freebayes can be managed as follows:
 ```
@@ -31,6 +25,17 @@ After these steps, a conda enviroment called SARS-CoV-2-freebayes can be managed
 #     $ conda deactivate
 ```
 By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository can be executed, without further installations.
+
+Now we need to install vcftools as follows:
+```
+git clone https://github.com/cfarkas/vcftools.git              # install forked vcftools repository
+cd vcftools
+./autogen.sh
+./configure
+make                                                           # make
+sudo make install                                              # requires sudo privileges
+cd ..
+```
 
 ### Option 2: Without using conda, program by program:
 
