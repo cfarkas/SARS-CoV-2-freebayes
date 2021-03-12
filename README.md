@@ -226,7 +226,7 @@ In each folder, variants_per_protein subfolder contain variants per protein. Fil
 - An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A. 
 - pi-tajima.sh script requires vcfstats and some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
 
-From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below. Assuming that binaries are in ```/usr/local/bin```:  
+From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below. Assuming binaries are in ```/usr/local/bin``` and users previously did ```samtools faidx covid19-refseq.fasta```: 
 
 ```
 mkdir diversity
