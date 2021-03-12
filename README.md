@@ -140,7 +140,7 @@ wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b
 
 ### Execution
 
-As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset. Assuming binaries are in ```/usr/local/bin``` and users previously run ```samtools faidx covid19-refseq.fasta```:
+As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset. Assuming binaries are in ```/usr/local/bin``` and users previously did ```samtools faidx covid19-refseq.fasta```:
 
 ```
 # In a given folder, download merged.GISAID.fasta.gz and decompress.
@@ -199,7 +199,7 @@ vcfkeepsamples merged.GISAID.Nov-30-2020.vcf EPI_ISL_402119 > merged.GISAID.Nov-
 gzip merged.GISAID.Nov-30-2020.vcf
 ```
 - Then, merged.GISAID.Aug-03-2020.EPI_ISL_402119.vcf, merged.SRA.Jul-28-2020.ERR4082713.vcf and merged.GISAID.Nov-30-2020.EPI_ISL_402119.vcf files can be uploaded here: https://usegalaxy.org/ and annotated using the tool SnpEff eff: annotate variants for SARS-CoV-2 (default mode), outputting an annotated VCF file including an associated HTML file. As example, SnpEff-annotated VCF outputs are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2 and can be processed as follows. 
-- Assuming SnpEff_processing binary is in ```/usr/local/bin```, execute as follows:
+- Assuming binaries are in ```/usr/local/bin``` and users previously did ```samtools faidx covid19-refseq.fasta```:
 ```
 # SRA variants
 mkdir SnpEff-Jul-28-2020.SRA && cd SnpEff-Jul-28-2020.SRA                                                               # 1) Create folder and enter it
