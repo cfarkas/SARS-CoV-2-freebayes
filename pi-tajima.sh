@@ -1,65 +1,28 @@
 #!/bin/bash
-set -e
+
+set -e 
 {
-pi_tajima=${1}
-merged_vcf_file=${2}
+usage="$(basename "$0") [-h] [-f <pi_tajima>] [-v <merged.vcf>]
+This program will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin.
+Arguments:
+    -h  show this help text
+    -f binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D
+    -v  merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
+options=':hf:v:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    f) f=$OPTARG;;
+    v) v=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
-  echo ""
-  echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
-  echo ""
-  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
-  echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
-  echo ""
-  echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
-  echo ""
-  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
-  echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
-  echo ""
-  exit 0
-fi
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
-  echo ""
-  echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
-  echo ""
-  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
-  echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
-  echo ""
-  echo "This script will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin."
-  echo ""
-  echo "[pi_tajima]: Provide binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D"
-  echo ""
-  echo "[merged_vcf_file]: Provide merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"; exit 1; }
-
-if [ $# -ne 2 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [pi_tajima] [merged_vcf_file]"
-  exit 3
+# mandatory arguments
+if [ ! "$f" ] || [ ! "$v" ]; then
+  echo "arguments -f and -v must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
 # Obtaining 95% confidence intervals in Tajima's D and parsing provided VCF file
@@ -69,7 +32,7 @@ dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "====> The working directory is the following: ${dir1}/"
 echo ""
 wget https://raw.githubusercontent.com/cfarkas/SARS-CoV-2-freebayes/master/confidence_interval.R
-cp ${1} input.pi.D
+cp ${f} input.pi.D
 grep -v "nan" input.pi.D > input.pi.D.clean && rm input.pi.D
 mv input.pi.D.clean input.pi.D
 Rscript confidence_interval.R input.pi.D && rm input.pi.D
@@ -81,8 +44,8 @@ tail -n +2 bins_2.5%_confidence.bed > bins_2.5%_conf_interval.bed && rm bins_2.5
 tail -n +2 bins_97.5%_confidence.bed > bins_97.5%_conf_interval.bed && rm bins_97.5%_confidence.tab bins_97.5%_confidence.bed
 mv bins_2.5%_conf_interval.bed bins_2.5%_confidence.bed
 mv bins_97.5%_conf_interval.bed bins_97.5%_confidence.bed
-vcftools --vcf ${2} --bed bins_2.5%_confidence.bed --out 2.5_CI_confidence --recode --keep-INFO-all
-vcftools --vcf ${2} --bed bins_97.5%_confidence.bed --out 97.5_CI_confidence --recode --keep-INFO-all
+vcftools --vcf ${v} --bed bins_2.5%_confidence.bed --out 2.5_CI_confidence --recode --keep-INFO-all
+vcftools --vcf ${v} --bed bins_97.5%_confidence.bed --out 97.5_CI_confidence --recode --keep-INFO-all
 echo ""
 # making temporal directory and parsing vcf file by protein or feature
 echo "====> Making temporal directory and parsing vcf file by protein or feature: outside 2.5% CI"
