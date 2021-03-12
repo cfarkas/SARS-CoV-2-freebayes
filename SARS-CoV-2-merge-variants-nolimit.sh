@@ -1,58 +1,26 @@
 #!/bin/bash
+
 set -e 
-
 {
+usage="$(basename "$0") [-h] [-g <reference_genome.fasta>]
+This script will merge variants using jacquard and will calculate viral frequencies.
+Arguments:
+    -h  show this help text
+    -g  PATH where SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
+options=':hg:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    g) g=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-Reference=${1}
-
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [Reference]"
-  echo ""
-  echo "This script will merge variants using jacquard and the calculate viral frequencies"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [Reference]"
-  echo ""
-  echo "This script will merge variants using jacquard and the calculate viral frequencies"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
-  echo ""
-  exit 0
-fi
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [Reference]"
-  echo ""
-  echo "This script will merge variants using jacquard and the calculate viral frequencies"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [Reference]"
-  echo ""
-  echo "This script will merge variants using jacquard and the calculate viral frequencies"
-  echo ""
-  echo "[Reference]: Full PATH where the SARS-CoV-2 reference genome (in fasta format) is located."
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [Reference]"; exit 1; }
-
-if [ $# -ne 1 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [Reference]"
-  exit 3
+# mandatory arguments
+if [ ! "$g" ]; then
+  echo "argument -g must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
 begin=`date +%s`
@@ -88,7 +56,7 @@ sed -i 's/NC_04551202/NC_045512.2/'g merged.GISAID.fixed.vcf
 # left-align vcf file and fixing names
 echo "left-aligning vcf file and fixing names"
 echo ""
-vcfleftalign -r ${1} merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
+vcfleftalign -r ${g} merged.GISAID.fixed.vcf > merged.GISAID.left.vcf
 sed -i 's/|unknown//'g merged.GISAID.left.vcf
 
 # Merge VCFs using vcfcombine, see combined_sites.raw.vcf file
@@ -102,8 +70,8 @@ echo ""
 vcffixup merged.GISAID.left.vcf > merged.GISAID.AF.raw.vcf
 wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
-vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${1} --invert > merged.GISAID.AF.vcf
-vcfintersect -i problematic_sites_sarsCov2.vcf combined_sites.raw.vcf -r ${1} --invert > combined_sites.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf merged.GISAID.AF.raw.vcf -r ${g} --invert > merged.GISAID.AF.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf combined_sites.raw.vcf -r ${g} --invert > combined_sites.vcf
 rm merged.GISAID.fixed.vcf merged.GISAID.left.vcf
 gzip merged.GISAID.vcf merged.GISAID.AF.raw.vcf combined_sites.raw.vcf
 
