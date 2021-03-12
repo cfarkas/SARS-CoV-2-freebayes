@@ -329,4 +329,3 @@ check "postprocessing_pi_D_output_files"  subdirectory, containing:
 - bins outside 2.5 and 97.5% confidence intervals are outliers for further study (check bins_2.5%_confidencce.bed and bins_2.5%_confidencce.bed files). 
 - pi_tajima.pdf plot, for a visual inspection of these regions.
 - 2.5_CI_confidence.recode.vcf.gz and 97.5_CI_confidence.recode.vcf.gz, gzipped vcf files containing variants falling in these regions
-- vcfstats plots and associated data.
