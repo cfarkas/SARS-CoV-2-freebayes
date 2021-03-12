@@ -6,7 +6,7 @@ usage="$(basename "$0") [-h] [-f <pi_tajima>] [-v <merged.vcf>]
 This program will invoke R, several R libraries and vcfstats to process merged pi and Tajima's D values per bin.
 Arguments:
     -h  show this help text
-    -f binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D
+    -f  binned pi and Tajima's D values, in tabular format. As example: Europe.50.pi.D
     -v  merged VCF file with viral frequency values per variant. As example: merged.GISAID.AF.vcf"
 options=':hf:v:'
 while getopts $options option; do
