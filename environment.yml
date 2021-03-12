@@ -22,5 +22,3 @@ dependencies:         # everything under this, installed by conda
   - jacquard
   - pyfasta
   - pyfaidx 
-  - instrain
-  - vcfstats
