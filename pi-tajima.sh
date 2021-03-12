@@ -324,27 +324,6 @@ echo ""
 echo "====> Working in postprocessing_pi_D_output_files"
 echo ""
 mkdir postprocessing_pi_D_output_files
-vcfstats --vcf 2.5_CI_confidence.tweaked.vcf \
-	 --outdir postprocessing_pi_D_output_files/ \
-	 --formula 'COUNT(1) ~ CONTIG' \
-	 --title 'Number of variants per protein or feature 2.5 CI'
-
-vcfstats --vcf 2.5_CI_confidence.tweaked.vcf \
-	 --outdir postprocessing_pi_D_output_files/ \
-	 --formula 'AAF ~ CONTIG' \
-	 --title 'Viral frequency of variants per protein or feature 2.5 CI' \
-	 --figtype boxplot
-
-vcfstats --vcf 97.5_CI_confidence.tweaked.vcf \
-	 --outdir postprocessing_pi_D_output_files/ \
-	 --formula 'COUNT(1) ~ CONTIG' \
-	 --title 'Number of variants per protein or feature 97.5 CI'
-
-vcfstats --vcf 97.5_CI_confidence.tweaked.vcf \
-	 --outdir postprocessing_pi_D_output_files/ \
-	 --formula 'AAF ~ CONTIG' \
-	 --title 'Viral frequency of variants per protein or feature 97.5 CI' \
-	 --figtype boxplot
 # cleaning up
 echo ""
 echo "====> Cleaning up .."
