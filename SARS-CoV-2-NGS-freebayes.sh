@@ -1,89 +1,37 @@
 #!/bin/bash
+
+set -e 
 {
+usage="$(basename "$0") [-h] [-l <SRA_list>] [-g <reference_genome.fasta>] [-a <Frequency>] [-t <threads>]
+This program will call variants using freebayes in given SRA NGS sequences files to obtain major viral variants.
+    -h  show this help text
+    -l  File or path to SRA accession list in tabular format
+    -g  PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name.
+    -a  A number between (0-1) indicating Viral Frequency for Freebayes variant calling (i.e.: 0.5 = 50% viral frequency).
+    -t  Number of CPU processors"
+options=':hl:g:a:t:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    l) l=$OPTARG;;
+    g) g=$OPTARG;;
+    a) a=$OPTARG;;
+    t) t=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-SRA_list=${1}
-Reference=${2}
-Frequency=${3}
-Threads=${4}
-
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"
-  echo ""
-  echo "This program will call variants using freebayes in given SRA NGS sequences files to obtain major viral variants."
-  echo ""
-  echo "[SRA_list]: File or path to SRA accession list in tabular format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Frequency]: A number between (0-1) indicating Viral Frequency for Freebayes variant calling (i.e.: 0.5 = 50% viral frequency)."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"
-  echo ""
-  echo "This program will call variants using freebayes in given SRA NGS sequences files to obtain major viral variants."
-  echo ""
-  echo "[SRA_list]: File or path to SRA accession list in tabular format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Frequency]: A number between (0-1) indicating Viral Frequency for Freebayes variant calling (i.e.: 0.5 = 50% viral frequency)."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
-  echo ""
-  exit 0
-fi
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"
-  echo ""
-  echo "This program will call variants using freebayes in given SRA NGS sequences files to obtain major viral variants."
-  echo ""
-  echo "[SRA_list]: File or path to SRA accession list in tabular format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Frequency]: A number between (0-1) indicating Viral Frequency for Freebayes variant calling (i.e.: 0.5 = 50% viral frequency)."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"
-  echo ""
-  echo "This program will call variants using freebayes in given SRA NGS sequences files to obtain major viral variants."
-  echo ""
-  echo "[SRA_list]: File or path to SRA accession list in tabular format"
-  echo ""
-  echo "[Reference]: PATH where the SARS-CoV-2 reference genome (in fasta format) is located. If the genome is located in the working folder, just specify the name."
-  echo ""
-  echo "[Frequency]: A number between (0-1) indicating Viral Frequency for Freebayes variant calling (i.e.: 0.5 = 50% viral frequency)."
-  echo ""
-  echo "[Threads]: Number of CPUs for the task (integer)"
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"; exit 1; }
-
-if [ $# -ne 4 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [SRA_list] [Reference] [Frequency] [Threads]"
-  exit 3
+# mandatory arguments
+if [ ! "$l" ] || [ ! "$g" ] || [ ! "$a" ] || [ ! "$t" ]; then
+  echo "arguments -l, -g, -a and -t must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
 begin=`date +%s`
 
 echo "Downloading SRA files from the given list of accessions"
-prefetch --max-size 800G -O ./ --option-file ${1}
+prefetch --max-size 800G -O ./ --option-file ${l}
 echo "SRA files were downloaded in current directory"
 echo ""
 echo "Done"
@@ -100,9 +48,9 @@ done
 echo "Trimming downloaded Illumina datasets with fastp."
 echo ""
 
-a= ls -1 *.fastq.gz
-for a in *.fastq.gz; do fastp -w ${4} -i ${a} -o ${a}.fastp
-gzip ${a}.fastp
+z= ls -1 *.fastq.gz
+for z in *.fastq.gz; do fastp -w ${t} -i ${z} -o ${z}.fastp
+gzip ${z}.fastp
 done
 
 ###########################################################################################
@@ -112,8 +60,8 @@ done
 echo "Aligning illumina datasets againts reference with minimap, using n threads."
 echo ""
 b= ls -1 *.fastq.gz.fastp.gz
-for b in *.fastq.gz.fastp.gz; do minimap2 -ax sr ${2} ${b} > ${b}.sam -t ${4}
-samtools sort ${b}.sam > ${b}.sam.sorted.bam -@ ${4}
+for b in *.fastq.gz.fastp.gz; do minimap2 -ax sr ${g} ${b} > ${b}.sam -t ${t}
+samtools sort ${b}.sam > ${b}.sam.sorted.bam -@ ${t}
 rm ${b}.sam
 rm ${b}
 done
@@ -143,8 +91,8 @@ for f in *.bam; do samtools index ${f}; done
 echo "Performing Variant Calling with freebayes:"
 echo ""
 
-a= ls -1 *.bam
-for a in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${2}.fai 2000) ${4} -f ${2} -F ${3} -b ${a} > ${a}.freebayes.vcf
+x= ls -1 *.bam
+for x in *.bam; do freebayes-parallel <(fasta_generate_regions.py ${g}.fai 2000) ${t} -f ${g} -F ${a} -b ${x} > ${x}.freebayes.vcf
 done
 
 #######################################
@@ -183,7 +131,7 @@ sed -i 's/NC_04551202/NC_045512.2/'g merged.fixed.vcf
 
 echo "left-aligning vcf file and fixing names"
 echo ""
-vcfleftalign -r ${2} merged.fixed.vcf > merged.left.vcf
+vcfleftalign -r ${g} merged.fixed.vcf > merged.left.vcf
 sed -i 's/|unknown//'g merged.left.vcf
 
 # Calculating Viral Frequencies
@@ -192,7 +140,7 @@ echo ""
 vcffixup merged.left.vcf > merged.AF.raw.vcf
 wget https://raw.githubusercontent.com/cfarkas/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
 sed -i 's/MN908947.3/NC_045512.2/'g problematic_sites_sarsCov2.vcf
-vcfintersect -i problematic_sites_sarsCov2.vcf merged.AF.raw.vcf -r ${2} --invert > merged.AF.vcf
+vcfintersect -i problematic_sites_sarsCov2.vcf merged.AF.raw.vcf -r ${g} --invert > merged.AF.vcf
 rm merged.fixed.vcf merged.left.vcf
 gzip merged.vcf merged.AF.raw.vcf
 
