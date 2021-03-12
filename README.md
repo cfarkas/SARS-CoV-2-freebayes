@@ -26,7 +26,7 @@ After these steps, a conda enviroment called SARS-CoV-2-freebayes can be managed
 ```
 By activating the enviroment, all scripts in the SARS-CoV-2-freebayes repository can be executed, without further installations.
 
-- Now we need to install a vcftools version that includes the --haploid flag as follows:
+- Finally, we need to install a vcftools version that includes the --haploid flag as follows:
 ```
 git clone https://github.com/cfarkas/vcftools.git       # Forked Julien Y. Dutheil version: https://github.com/jydu/vcftools
 cd vcftools
