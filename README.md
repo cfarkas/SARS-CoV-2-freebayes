@@ -165,5 +165,5 @@ SnpEff_processing -v SnpEff-Nov-30-2020.GISAID.vcf
 ```
 In each folder, variants_per_protein subfolder contain variants per protein. Files ending in ".SnpEff" contains parsed variants per consequence and ".counts" contains associated counts, respectively. Also, the script computed aminoacid changes (see SnpEff.AAchanges files). We suggest user-provided vcf files should be processed in a likewise manner, placing the vcf file in a specific folder and executing steps 3) and 4).
 
-### More examples?
-please visit our wiki page here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki
+## More than 100000 GISAID sequences to analyze?
+please visit our wiki page here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki#i-two-step-full-pipeline
