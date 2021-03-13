@@ -129,7 +129,7 @@ Execution takes 98000 cpu seconds (~27.2 hrs) in a regular ubuntu workstation wi
 - An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A. 
 - pi-tajima.sh script requires some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
 
-Assuming users previously did ```samtools faidx /full/path/to/covid19-refseq.fasta``` and binaries are in ```/usr/local/bin```, do the following: 
+Assuming users previously runned  ```samtools faidx /full/path/to/covid19-refseq.fasta``` and binaries are in ```/usr/local/bin```, do: 
 
 ```
 ulimit -n 1000000 && ulimit -s 1000000                                                       # check if you can set these values
