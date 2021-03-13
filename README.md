@@ -117,45 +117,24 @@ rm vcf_files variants_per_sample logfile_variants_NGS_freebayes
 ```
 
 ## II) Collecting Variants (GISAID FASTA genomes)
-- By using freebayes we can call variants from GISAID SARS-CoV-2 FASTA genomes and merge these variants in a single VCF containing all sample names. The fasta collections from GISAID are the following:
--  gisaid_Africa_08_03_2020.fasta
--  gisaid_Asia_08_03_2020.fasta
--  gisaid_Europe_08_03_2020.fasta
--  gisaid_North_America_08_03_2020.fasta
--  gisaid_Oceania_08_03_2020.fasta
--  gisaid_South_America_08_03_2020.fasta
--  merged.GISAID.fasta.gz (merge)
-
-all these fasta files are available for download here: https://usegalaxy.org/u/carlosfarkas/h/sars-cov-2-variants-gisaid-august-03-2020 and can be downloaded with wget: 
-
-```
-wget -O gisaid_Africa_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5df5a9de556b60745/display?to_ext=fasta.gz
-wget -O gisaid_Asia_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5c7bff6a669e318dc/display?to_ext=fasta.gz
-wget -O gisaid_Europe_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b507b027e055bf2df9/display?to_ext=fasta.gz
-wget -O gisaid_North_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ee919645a4a97d76/display?to_ext=fasta.gz
-wget -O gisaid_Oceania_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5ad62fc70fed0a55b/display?to_ext=fasta.gz
-wget -O gisaid_South_America_08_03_2020.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5134c7103a63c1db1/display?to_ext=fasta.gz
-wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz
-```
+- By using freebayes, we can call variants from GISAID SARS-CoV-2 FASTA genomes (contained in a single file) and aggregate these variants into a single VCF for downstream analysis. 
 
 ### Execution
 
-- As an example for merged.GISAID.fasta.gz (containing worldwide GISAID genomes until August 03, 2020) we can obtain aggregated variants from merged.GISAID.fasta.gz FASTA dataset.
-- Assuming binaries are in ```/usr/local/bin``` and users previously runned ```samtools faidx covid19-refseq.fasta```:
+In order to obtain SARS-CoV-2 variants from FASTA GISAID genomes, users need to provide:  
+
+- f: GISAID genomes in FASTA format
+- g: path to SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
+- t: number of threads for calculations 
 
 ```
-# In a given folder, download merged.GISAID.fasta.gz and decompress.
-wget -O merged.GISAID.fasta.gz https://usegalaxy.org/datasets/bbd44e69cb8906b50b3becb49899ed42/display?to_ext=fasta.gz && gunzip merged.GISAID.fasta.gz
-
 # Execute the pipeline, providing full path to merged.GISAID.fasta and covid19-refseq.fasta sequences:
 ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
 SARS-CoV-2-GISAID-freebayes -f merged.GISAID.fasta -g covid19-refseq.fasta -t 10 
 ```
 Execution takes 98000 cpu seconds (~27.2 hrs) in a regular ubuntu workstation with a peak of ~ 4GB of RAM.
 
--This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants
-
--NOTE: It is recommended to process larger FASTA collections by chunks (i.e. chunks of 100000 genomes). We provide up to date analysis of GISAID genomes here: https://github.com/cfarkas/SARS-CoV-2-freebayes/wiki (November 2020) using ~230000 genomes. Ubuntu users need to change ulimit -s and -n parameters, see README_ulimit file in this repository for details.
+-This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants. 
 
 ### Number of variants per genome
 
@@ -181,7 +160,7 @@ logfile_variants_GISAID file contains the GISAID accession along with the number
 
 
 ## III) Annotate and collect variants per protein on SnpEff-classified VCF variants
-merged.GISAID.AF.vcf files can weight several gigabytes and therefore we compress it with gzip for storage. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. To speed-up things, prior to SnpEff annotation, it is preferable to lightweight these files by selecting one individual sample in the vcf (dropping all the others samples) or annotate combined_sites.vcf file. We will execute the first option.
+merged.GISAID.AF.vcf files can weight several gigabytes depending on the number of SARS-CoV-2 FASTA sequence analyzed, and therefore we compress it with gzip for storage. Compressed merged VCF files from GISAID genomes and SRA, including effect annotation are available here: https://usegalaxy.org/u/carlosfarkas/h/snpeffsars-cov-2. To speed-up things, prior to SnpEff annotation, it is preferable to lightweight these files by selecting one individual sample in the vcf (dropping all the others samples) or annotate combined_sites.vcf file. We will execute the first option.
 
 ```
 mkdir SnpEff-SARS-CoV-2
@@ -223,9 +202,9 @@ In each folder, variants_per_protein subfolder contain variants per protein. Fil
 
 ## IV) Nucleotide diversity and Tajima's D test calculation per geographical region
 - To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). 
-- We will download with wget FASTA genomes from each continent submitted to GISAID until August 03, 2020 and we will execute variant calling and vcftools analysis, using a sliding window of 50 bp across SARS-CoV-2 genome (can be changed). Then, we will we will use the pi-tajima.sh script to create a plot of pi and Tajima's D values per bin, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005
+- As an example, We will execute variant calling and vcftools analysis on GISAID FASTA sequences, using a sliding window of 50 bp across SARS-CoV-2 genome (can be changed). Then, we will we will use the pi-tajima.sh script to create a plot of pi and Tajima's D values per bin, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005
 - An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A. 
-- pi-tajima.sh script requires vcfstats and some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
+- pi-tajima.sh script requires some R libraries installed, as depicted here: https://github.com/cfarkas/SARS-CoV-2-freebayes#10-install-ggplot2-ggrepel-and-vcfr-r-libraries. 
 
 From scratch, the whole analysis can be done in a folder (i.e. diversity), as presented below. Assuming binaries are in ```/usr/local/bin``` and users previously runned ```samtools faidx covid19-refseq.fasta```: 
 
