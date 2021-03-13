@@ -123,7 +123,7 @@ Execution takes 98000 cpu seconds (~27.2 hrs) in a regular ubuntu workstation wi
 -This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants.  
 
 
-## III) Nucleotide diversity and Tajima's D test calculation per geographical region
+## III) Nucleotide diversity and Tajima's D test calculation with pi-tajima
 - To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). 
 - As an example, we will execute variant calling and vcftools analysis on GISAID FASTA sequences (i.e. merged.GISAID.fasta), using a sliding window of 50 bp across SARS-CoV-2 genome (can be changed). Then, we will we will use the pi-tajima binary to create a plot of pi and Tajima's D values per bin, as depicted here: https://doi.org/10.1016/j.tig.2006.06.005
 - An excellent explanation of Tajima's D test can be found here: https://www.youtube.com/watch?v=wiyay4YMq2A. 
