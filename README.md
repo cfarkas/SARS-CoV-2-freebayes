@@ -118,9 +118,7 @@ samtools faidx /full/path/to/covid19-refseq.fasta
 ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
 SARS-CoV-2-GISAID-freebayes -f merged.GISAID.fasta -g covid19-refseq.fasta -t 10 
 ```
-Execution takes 98000 cpu seconds (~27.2 hrs) in a regular ubuntu workstation with a peak of ~ 4GB of RAM.
-
--This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants.  
+- This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants.  
 
 
 ## III) Nucleotide diversity and Tajima's D test calculation with pi-tajima
