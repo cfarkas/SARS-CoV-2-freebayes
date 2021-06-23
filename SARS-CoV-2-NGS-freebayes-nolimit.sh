@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e 
 {
 usage="$(basename "$0") [-h] [-l <SRA_list>] [-g <reference_genome.fasta>] [-a <Frequency>] [-t <threads>]
 This program will call variants using freebayes in given SRA NGS sequences files to obtain major viral variants.
