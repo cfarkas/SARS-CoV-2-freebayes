@@ -83,7 +83,7 @@ SARS-CoV-2-NGS-freebayes -l <SRA_list> -g <covid19-refseq.fasta> -a <VF> -t <Thr
 ```
 This execution will:
 
-- Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list
+- Download SRA datasets from the provided list, convert to fastq, trim adaptors and gzip reads, for each line of the provided list. If the sequencing datasets are already in place, the pipeline will continue, still the SRA_list needs to be provided. 
 - Align trimmed reads against SARS-CoV-2 reference genome (NC_045512.2) by using minimap2
 - Call variants at a certain viral frequency by using freebayes as frequency-based pooled caller
 - Merge all variants in a single VCF file by using jacquard. This VCF file also contains viral frequencies in the AF field (AF=AO/AO+RO). See AO and RO fields for alternative and reference allele counts.
