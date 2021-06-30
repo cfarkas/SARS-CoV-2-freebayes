@@ -36,7 +36,7 @@ cd vcftools
 make                                                    # make
 sudo make install                                       # requires sudo privileges
 ```
-- and sra toolkit. Please see instructions here: https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
+### and the latest version of sra toolkit. Please see instructions here: https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
 
 ### Option 2: Without using conda, program by program:
 
