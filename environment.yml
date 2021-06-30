@@ -17,6 +17,7 @@ dependencies:         # everything under this, installed by conda
 - r-ggplot2
 - r-ggrepel
 - r-vcfr
+- pip
 - pip:                # everything under this, installed by pip
   - jacquard
   - pyfasta
