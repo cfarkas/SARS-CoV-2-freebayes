@@ -12,7 +12,6 @@ dependencies:         # everything under this, installed by conda
 - fastp
 - freebayes
 - vcflib
-- sratoolkit
 - seqkit
 - r-base
 - r-ggplot2
