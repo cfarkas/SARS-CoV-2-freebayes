@@ -73,8 +73,8 @@ Check README_ulimit for how to change these values in Ubuntu.
 
 In order to obtain SARS-CoV-2 variants (viral frequency >= 0.5) users need to use SARS-CoV-2-NGS-freebayes and provide:  
 
-- l: path to SRA_list, Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, containing curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
-- g: path to SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
+- l: full path to SRA_list, Sequence read archive accessions of each datasets (SRR prefix list, in tabular format or txt format). As example, see SRA_Accessions_Aug_03_2020.tabular, containing curated SARS-CoV-2 accessions from SRA until August 03, 2020, provided in this repository.
+- g: full path to SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - a: viral frequency threshold for variant calling (a number between 0-1). As example 0.5, would mean 50% viral frequency variants as threshold. 
 - t: number of threads for calculations 
 
@@ -110,8 +110,8 @@ will collect variants (VF>=0.5) in each Sample.
 
 In order to obtain SARS-CoV-2 variants from FASTA GISAID genomes, users need to use SARS-CoV-2-GISAID-freebayes and provide:  
 
-- f: GISAID genomes in FASTA format
-- g: path to SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
+- f: full path to GISAID genomes in FASTA format
+- g: full path to SARS-CoV-2 reference in fasta format (covid19-refseq.fasta, provided in this repository)
 - t: number of threads for calculations 
 
 Assuming that binaries are in ```/usr/local/bin```, do the following: 
@@ -120,7 +120,7 @@ Assuming that binaries are in ```/usr/local/bin```, do the following:
 samtools faidx /full/path/to/covid19-refseq.fasta
 # Execute the pipeline, providing full path to merged.GISAID.fasta and covid19-refseq.fasta sequences:
 ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
-SARS-CoV-2-GISAID-freebayes -f merged.GISAID.fasta -g covid19-refseq.fasta -t 10 
+SARS-CoV-2-GISAID-freebayes -f /full/path/to/merged.GISAID.fasta -g /full/path/to/covid19-refseq.fasta -t 10 
 ```
 - This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants.  
 
