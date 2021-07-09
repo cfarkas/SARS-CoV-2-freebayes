@@ -1,5 +1,5 @@
 # SARS-CoV-2-freebayes
-Analysis of SARS-CoV-2 genome variants collected with freebayes variant caller.
+Analysis of SARS-CoV-2 genome variants collected with freebayes variant caller, relevant to this publication: https://doi.org/10.3389/fmicb.2021.665041.
 
 ## Installation:  
 
