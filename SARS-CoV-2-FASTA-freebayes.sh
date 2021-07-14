@@ -32,7 +32,7 @@ begin=`date +%s`
 ### Split fasta files
 echo "fixing names in FASTA file"
 echo ""
-fasta_name=$(echo ${f} | sed "s/.fasta//")
+fasta_name=$(echo ${f} | sed "s/.fa*//")
 cp ${f} ./merged.sequence.fasta
 #
 echo "Splitting fasta files with faidx (python)"
