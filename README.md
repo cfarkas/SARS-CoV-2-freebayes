@@ -126,7 +126,7 @@ SARS-CoV-2-GISAID-freebayes -f /full/path/to/merged.GISAID.fasta -g /full/path/t
 ```
 - This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants. 
 
-### To collect variants from non GISAID FASTA genomes (or FASTA genomes with header different as GISAID FASTA genomes), use SARS-CoV-2-FASTA-freebayes binary, as follows:
+#### To collect variants from non GISAID FASTA genomes (or FASTA genomes with header different as GISAID FASTA genomes), use SARS-CoV-2-FASTA-freebayes binary, as follows:
 ```
 samtools faidx /full/path/to/covid19-refseq.fasta
 # Execute the pipeline, providing full path to merged.GISAID.fasta and covid19-refseq.fasta sequences:
