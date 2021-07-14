@@ -50,6 +50,7 @@ For users working with small number of genomes (i.e.: < 60000) or have unlimited
 ```
 SARS-CoV-2-NGS-freebayes-nolimit
 SARS-CoV-2-GISAID-freebayes-nolimit
+SARS-CoV-2-FASTA-freebayes-nolimit ("Agnostic" FASTA variant caller)
 SARS-CoV-2-processing-fasta-nolimit
 SARS-CoV-2-merge-variants-nolimit
 ```
@@ -57,6 +58,7 @@ For a proper performance working with high number of genomes (i.e. > 60000), use
 ```
 SARS-CoV-2-NGS-freebayes
 SARS-CoV-2-GISAID-freebayes
+SARS-CoV-2-FASTA-freebayes ("Agnostic" FASTA variant caller)
 SARS-CoV-2-processing-fasta
 SARS-CoV-2-merge-variants
 ```
@@ -122,8 +124,17 @@ samtools faidx /full/path/to/covid19-refseq.fasta
 ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
 SARS-CoV-2-GISAID-freebayes -f /full/path/to/merged.GISAID.fasta -g /full/path/to/covid19-refseq.fasta -t 10 
 ```
-- This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants.  
+- This operation will obtain joint calls in a single vcf containing all samples (merged.GISAID.AF.vcf). In this matrix, zeros indicate absence of variant and ones indicate the presence of the variant, per sample. Viral frequencies (AF field) were also added. An intermediate file will be also generated: combined_sites.vcf containing just merged variants. 
 
+### To collect variants from non GISAID FASTA genomes (or FASTA genomes with header different as GISAID FASTA genomes), use SARS-CoV-2-FASTA-freebayes binary, as follows:
+```
+samtools faidx /full/path/to/covid19-refseq.fasta
+# Execute the pipeline, providing full path to merged.GISAID.fasta and covid19-refseq.fasta sequences:
+ulimit -n 1000000 && ulimit -s 1000000  # check if you can increase stack size and open file limit, see README_ulimit for details.
+SARS-CoV-2-FASTA-freebayes -f /full/path/to/merged.fasta -g /full/path/to/covid19-refseq.fasta -t 10 
+```
+in which merged.fasta file contains all sequences in a single file. To produce this file, users can place in a folder all FASTA genomes to analyze and do:
+``` cat *.fasta > merged.fasta ```
 
 ## III) Nucleotide diversity and Tajima's D test calculation with pi-tajima
 - To estimate nucleotide diversity (π) and Tajima's D test, we will employ vcftools program version from Julien Y. Dutheil (accepting --haploid flag) (https://github.com/jydu/vcftools). 
