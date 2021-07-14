@@ -13,6 +13,9 @@ cd ..
 echo ""
 echo "make done. Continue with install"
 # Install
+
+./shc/src/shc -f ./bash_scripts/SARS-CoV-2-FASTA-freebayes.sh -o ./SARS-CoV-2-FASTA-freebayes
+./shc/src/shc -f ./bash_scripts/SARS-CoV-2-FASTA-freebayes-nolimit.sh -o ./SARS-CoV-2-FASTA-freebayes-nolimit
 ./shc/src/shc -f ./bash_scripts/SARS-CoV-2-GISAID-freebayes.sh -o ./SARS-CoV-2-GISAID-freebayes
 ./shc/src/shc -f ./bash_scripts/SARS-CoV-2-GISAID-freebayes-nolimit.sh -o ./SARS-CoV-2-GISAID-freebayes-nolimit
 ./shc/src/shc -f ./bash_scripts/SARS-CoV-2-merge-variants.sh -o ./SARS-CoV-2-merge-variants
