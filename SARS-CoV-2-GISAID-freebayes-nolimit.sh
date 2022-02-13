@@ -33,6 +33,7 @@ begin=`date +%s`
 echo "fixing names in FASTA file"
 echo ""
 sed -i 's/ /-/'g ${f}
+sed -i "s|hCoV-19/.*./2022||"g ${f}
 sed -i "s|hCoV-19/.*./2021||"g ${f}
 sed -i "s|hCoV-19/.*./2020||"g ${f}
 sed -i "s|hCoV-19/.*./2019||"g ${f}
