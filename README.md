@@ -167,13 +167,11 @@ check "postprocessing_pi_D_output_files"  subdirectory, containing:
 ## IV) Annotate and collect variants per protein on SnpEff-classified VCF variants
 
 - merged.GISAID.AF.vcf files, containing aggregated variants, can be annotated by SnpEff here in Galaxy: https://usegalaxy.org/root?tool_id=toolshed.g2.bx.psu.edu/repos/iuc/snpeff_sars_cov_2/snpeff_sars_cov_2/4.5covid19. These files can be further processed to obtain a summary of variants per viral gene. As an example, we will analyze worldwide GISAID variants until November 30, 2020 as follows: 
-- Assuming binaries are in ```/usr/local/bin``` and users previously runned ```samtools faidx covid19-refseq.fasta```:
+- Assuming binaries are in ```/usr/local/bin```, users previously runned ```samtools faidx covid19-refseq.fasta``` and they are working with a file called ```SnpEff-Nov-30-2020.GISAID.vcf``` :
 
 ```
 mkdir SnpEff-SARS-CoV-2
 cd SnpEff-SARS-CoV-2
-wget -O merged.GISAID.Nov-30-2020.vcf.gz https://usegalaxy.org/datasets/bbd44e69cb8906b5509c81bce034b0a2/display?to_ext=gff3.gz
-gunzip merged.GISAID.Nov-30-2020.vcf.gz # ~ 17 GB
 SnpEff_processing -v SnpEff-Nov-30-2020.GISAID.vcf    
 ```
 In each folder, variants_per_protein subfolder contain variants per protein. Files ending in ".SnpEff" contains parsed variants per consequence and ".counts" contains associated counts, respectively. Also, the script computed aminoacid changes (see SnpEff.AAchanges files). We suggest user-provided vcf files should be processed in a likewise manner, placing the vcf file in a specific folder and executing steps 3) and 4).
