@@ -166,8 +166,9 @@ check "postprocessing_pi_D_output_files"  subdirectory, containing:
 
 ## IV) Annotate and collect variants per protein on SnpEff-classified VCF variants
 
-- merged.GISAID.AF.vcf files, containing aggregated variants, can be annotated by SnpEff here in Galaxy: https://usegalaxy.org/root?tool_id=toolshed.g2.bx.psu.edu/repos/iuc/snpeff_sars_cov_2/snpeff_sars_cov_2/4.5covid19. These files can be further processed to obtain a summary of variants per viral gene. As an example, we will analyze worldwide GISAID variants until November 30, 2020 as follows: 
-- Assuming binaries are in ```/usr/local/bin```, users previously runned ```samtools faidx covid19-refseq.fasta``` and the VCF input file is called ```SnpEff-Nov-30-2020.GISAID.vcf``` :
+- merged.GISAID.AF.vcf files, containing aggregated variants, can be annotated by SnpEff here in Galaxy: https://toolshed.g2.bx.psu.edu/repository?repository_id=ec3193dd441340fc. These files can be further processed to obtain a summary of variants per viral gene. As an example, we will analyze worldwide GISAID variants until November 30, 2020 as follows: 
+
+- Assuming binaries are in ```/usr/local/bin```, users previously runned ```samtools faidx covid19-refseq.fasta``` and the merged VCF input file is called ```SnpEff-Nov-30-2020.GISAID.vcf``` :
 
 ```
 mkdir SnpEff-SARS-CoV-2
